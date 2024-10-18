@@ -1,0 +1,7 @@
+*.class*
+pom.xmxl.*
+target/
+
+*.jar
+.idea
+.vscode
