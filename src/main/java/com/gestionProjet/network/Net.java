@@ -1,18 +1,21 @@
 package com.gestionProjet.network;
 
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+
 import com.gestionProjet.ui.Log;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
-
 public class Net {
-    private MainServer mainServer;
+    private ClientServerSocket mainServer;
+    private DatagramSocket broadcastSocket = null;
+    static public final int broadcastPort = 11572;
+
     public Net() {
-        mainServer = new MainServer();
+        mainServer = new ClientServerSocket();
         mainServer.start();
     }
 
@@ -21,71 +24,42 @@ public class Net {
     }
 
     private void broadcast(String msg) {
-
-    }
-
-    private class MainServer extends Thread {
-        private ServerSocket serverSocket;
-        private int port = 12971;
-
-        @Override
-        public void run() {
+        if(broadcastSocket==null) {
             try {
-                serverSocket = new ServerSocket(port);
-            } catch (IOException e) {
-                Log.l("[ERR] invalid port number " + port + "\nTry with another port.", Log.ERROR);
+                broadcastSocket = new DatagramSocket(broadcastPort,InetAddress.getLocalHost());
+            } catch (SocketException e) {
+                e.printStackTrace();
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
             }
             try {
-                while (true) {
-                    new ClientHandler(serverSocket.accept()).start();
-                }
-            } catch (IOException e) {
-                Log.l("[ERR] could not accept connection." + e, Log.ERROR);
+                broadcastSocket.setBroadcast(true);
+            } catch (SocketException e) {
+                e.printStackTrace();
             }
         }
 
-        public void setPort(int port) {
-            this.port = port;
+        byte[] buff = new byte[256];
+        buff = msg == null ? "plz connect uwu".getBytes() : msg.getBytes();
+        
+        InetAddress address = null;
+        try {
+            address = InetAddress.getByName("255.255.255.255");
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
         }
-
-        public void close() {
-            try {
-                serverSocket.close();
-            } catch (Exception e) {
-                Log.l("[LOG] " + e, Log.ERROR);
-            }
+        
+        DatagramPacket request;
+        if(address!=null)
+            request = new DatagramPacket(buff, buff.length, address ,broadcastPort);
+        else
+            return;
+        try {
+            broadcastSocket.send(request);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        public int getPort() { return port; }
-
-        private static class ClientHandler extends Thread {
-            private final Socket socket;
-            private BufferedReader in;
-            private PrintWriter out;
-
-            public ClientHandler(Socket socket) {
-                this.socket = socket;
-                Log.l("New client connected: " + socket.toString(), Log.LOG);
-            }
-
-            @Override
-            public void run() {
-                try {
-                    in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    out = new PrintWriter(socket.getOutputStream(), true);
-                    while (true) {
-                        String str = in.readLine();
-                        String[] parsedMsg = str.split(" ");
-                        Log.l("Msg received from " + socket.getInetAddress().toString() + ": " + str, Log.LOG);
-                        switch (parsedMsg[0]) {
-                            default -> Log.l("Unkown command: " + parsedMsg[0]);
-                        }
-                    }
-
-                } catch (Exception e) {
-                    Log.l("Exception in ClientHandler: " + e, Log.ERROR);
-                }
-            }
-        }
+        broadcastSocket.close();
+        //TODO: SET RECEIVING SOCKET FOR CONNECTION !
     }
 }
