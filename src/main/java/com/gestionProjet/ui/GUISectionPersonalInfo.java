@@ -32,10 +32,11 @@ public class GUISectionPersonalInfo extends GUISection {
             // super();
             super(new BorderLayout());
 
-            setLayout(new GridLayout(3, 1));
-            add(new JLabel("You are a " + window.user.getType()));
-            add(new JLabel("Nom:" + window.user.getNom()));
-            add(new JLabel("Prenom:" + window.user.getPrenom()));
+            // setLayout(new GridLayout(3, 1));
+            add(new JLabel("Welcome " + window.username));
+            // add(new JLabel("You are a " + window.user.getType()));
+            // add(new JLabel("Nom:" + window.user.getNom()));
+            // add(new JLabel("Prenom:" + window.user.getPrenom()));
         }
     }
 

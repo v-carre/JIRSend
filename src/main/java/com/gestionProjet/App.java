@@ -1,12 +1,7 @@
 package com.gestionProjet;
 
-import com.gestionProjet.db.GenericDatabase;
-import com.gestionProjet.db.Row;
 import com.gestionProjet.ui.Log;
 import com.gestionProjet.ui.MainWindow;
-import com.sun.tools.javac.Main;
-
-import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) {

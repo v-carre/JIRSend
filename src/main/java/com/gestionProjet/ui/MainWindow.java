@@ -1,5 +1,6 @@
 package com.gestionProjet.ui;
 
+import com.gestionProjet.network.Net;
 import com.gestionProjet.users.Admin;
 import com.gestionProjet.users.BaseUser;
 import com.gestionProjet.users.User;
@@ -12,7 +13,12 @@ public class MainWindow {
         notInit, waitConnection, personal
     }
 
+    private boolean noPanel;
+
     protected BaseUser user;
+    protected Net net;
+    protected String lastError;
+    protected String username;
     private State state;
     private JFrame frame;
     private GUISection currentSection;
@@ -20,7 +26,10 @@ public class MainWindow {
 
     public MainWindow() {
         this.state = State.notInit;
+        this.noPanel = true;
         this.currentSection = new GUISectionConnection(this, frame);
+        this.lastError = "";
+        this.net = new Net();
     }
 
     public void open() {
@@ -44,32 +53,32 @@ public class MainWindow {
     }
 
     protected void switchToNextSection() {
-        if (state != State.notInit)
-            frame.remove(currentPanel);
-
         if (state == State.notInit) {
             state = State.waitConnection;
-            currentSection = new GUISectionConnection(this, frame);
         } else if (state == State.waitConnection) {
             state = State.personal;
+        }
+        refreshSection();
+    }
+
+    protected void refreshSection() {
+        if (state == State.notInit) {
+            return;
+        } else if (!noPanel) {
+            frame.remove(currentPanel);
+        }
+
+        if (state == State.waitConnection) {
+            currentSection = new GUISectionConnection(this, frame);
+        } else if (state == State.personal) {
             currentSection = new GUISectionPersonalInfo(this, frame);
         }
 
+        noPanel = false;
         System.out.println(currentSection.getSectionName());
         currentPanel = currentSection.createPanel();
         frame.add(currentPanel);
         frame.revalidate();
         frame.repaint();
-    }
-
-    protected void setUser(String firstName, String lastName, String userType) {
-        switch (userType) {
-            case "User" -> this.user = new User(firstName, lastName);
-            case "Volontaire" -> this.user = new Volunteer(firstName, lastName);
-            case "El Decidor" -> this.user = new Admin(firstName, lastName);
-            default -> {
-                return;
-            }
-        }
     }
 }
