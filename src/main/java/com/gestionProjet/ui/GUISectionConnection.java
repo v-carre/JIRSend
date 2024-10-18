@@ -3,7 +3,7 @@ package com.gestionProjet.ui;
 import java.awt.event.*;
 import javax.swing.*;
 
-import com.gestionProjet.users.User;
+import com.gestionProjet.users.*;
 
 import java.awt.*;
 

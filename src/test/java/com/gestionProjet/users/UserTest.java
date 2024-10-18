@@ -6,7 +6,7 @@ public class UserTest {
     @Test
     private static void main()
     {
-        User userTest = new User("nom","prenom");
+        User userTest = new User("johnson");
 
     }
 }
