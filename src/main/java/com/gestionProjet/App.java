@@ -1,13 +1,17 @@
 package com.gestionProjet;
 
+import com.gestionProjet.db.GenericDatabase;
+import com.gestionProjet.db.Row;
+import com.gestionProjet.network.Net;
 import com.gestionProjet.ui.Log;
 import com.gestionProjet.ui.MainWindow;
 
 public class App {
     public static void main(String[] args) {
-        Log.setVerbose(true);
-        Log.l("Starting Client...");
+        Log.setVerbose(true,Log.ALL);
+        Log.l("Starting Client...",Log.LOG);
 
+        Net net = new Net();
         new MainWindow().open();
 
         /*

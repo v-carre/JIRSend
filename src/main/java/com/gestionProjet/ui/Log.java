@@ -1,6 +1,12 @@
 package com.gestionProjet.ui;
 
 public class Log {
+    public static int ERROR_ONLY = 0;
+    public static int ERROR_AND_WARNING = 1;
+    public static int ALL = 2;
+    public static int ERROR = 0;
+    public static int WARNING = 1;
+    public static int LOG = 2;
     private static boolean verbose = false;
     private static int displayTreshold = Integer.MAX_VALUE;
     
