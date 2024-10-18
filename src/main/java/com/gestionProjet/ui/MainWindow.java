@@ -1,10 +1,7 @@
 package com.gestionProjet.ui;
 
 import com.gestionProjet.network.Net;
-import com.gestionProjet.users.Admin;
 import com.gestionProjet.users.BaseUser;
-import com.gestionProjet.users.User;
-import com.gestionProjet.users.Volunteer;
 
 import javax.swing.*;
 
@@ -41,12 +38,10 @@ public class MainWindow {
     }
 
     private void createWindow() {
-        frame = new JFrame("A.C.L.V.");// Aide Centralisée pour La Vie
+        frame = new JFrame("JIRSend");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         switchToNextSection();
-        // frame.remove(frame);
-        // frame.add(currentSection.createPanel());
 
         frame.pack();
         frame.setVisible(true);
