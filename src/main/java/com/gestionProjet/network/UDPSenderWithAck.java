@@ -22,7 +22,7 @@ public class UDPSenderWithAck {
             while (!ackReceived && tries < maxTries) {
                 // create message with sent timestamp
                 String timestamp = String.valueOf(Instant.now().toEpochMilli());
-                String message = "" + timestamp + ":" + value;
+                String message = NetworkIO.APP_HEADER + "|" + timestamp + ":" + value;
                 byte[] buffer = value.getBytes();
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length, receiverAddress, destPort);
                 // Send message

@@ -3,14 +3,32 @@ package com.gestionProjet.network;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
+
+import com.gestionProjet.ui.Log;
 
 public class UDPReceiver {
-    private NetCallback callback;
-    private int port;
+    private final NetCallback callback;
+    private final int port;
+    private Thread rcvThread;
+
     public UDPReceiver(int port, NetCallback callback) {
         this.port = port;
         this.callback = callback;
+    }
+
+    public void start() {
+        this.rcvThread = new Thread(() -> {
+            Log.l("Listening on port " + port + "...", Log.LOG);
+            recverLoop();
+        });
+    }
+
+    public void stop() {
+        try {
+            rcvThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private void recverLoop() {
