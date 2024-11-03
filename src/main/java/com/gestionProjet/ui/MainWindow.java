@@ -1,7 +1,11 @@
 package com.gestionProjet.ui;
 
 import com.gestionProjet.network.Net;
+import com.gestionProjet.network.NetCallback;
+import com.gestionProjet.network.NetworkIO;
 import com.gestionProjet.users.BaseUser;
+
+import java.net.InetAddress;
 
 import javax.swing.*;
 
@@ -21,6 +25,9 @@ public class MainWindow {
     private GUISection currentSection;
     private JPanel currentPanel;
 
+        NetworkCallback callback = new NetworkCallback();
+        NetworkIO network = new NetworkIO(callback);
+
     public MainWindow() {
         this.state = State.notInit;
         this.noPanel = true;
@@ -32,6 +39,8 @@ public class MainWindow {
     public void open() {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
+                network.send("192.168.22.96", "Test");
+                Log.l("Starting window !");
                 createWindow();
             }
         });
@@ -75,5 +84,15 @@ public class MainWindow {
         frame.add(currentPanel);
         frame.revalidate();
         frame.repaint();
+    }
+
+    public class NetworkCallback extends NetCallback {
+
+        @Override
+        public void execute(InetAddress senderAddress, int senderPort, String value) {
+            // TODO Auto-generated method stub
+            Log.l("[" + senderAddress.getHostAddress() + ":" + senderPort + "] RECEIVED: " + value);
+        }
+
     }
 }

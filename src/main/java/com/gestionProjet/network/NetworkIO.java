@@ -24,11 +24,13 @@ public class NetworkIO {
     private final UDPCallback onReceive = new UDPCallback();
     private final UDPReceiver rcv;
     private final UDPSender snd;
+    private final NetCallback callback;
 
     public NetworkIO(NetCallback callback) {
         this.rcv = new UDPReceiver(RECV_PORT, onReceive);
         this.snd = new UDPSender();
         this.rcv.start();
+        this.callback = callback;
     }
 
     public boolean send(String destAddress, String value) {
@@ -50,7 +52,7 @@ public class NetworkIO {
                 return;
             }
             sendAck(senderAddress, senderPort, messageParts[0]);
-
+            callback.execute(senderAddress, senderPort, messageParts[1]);
         }
 
     }
