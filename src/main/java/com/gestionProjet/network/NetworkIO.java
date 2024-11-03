@@ -1,13 +1,17 @@
 package com.gestionProjet.network;
 
+import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
+
+import com.gestionProjet.ui.Log;
 
 /**
  * ioUDP is a package that commmunicates in UDP with recovery of losses
  * 
  * Communication template
  * 
- * -JIRSENDPACK>$TYPE$<$TIMESTAMP$:$PAYLOAD$
+ * -JIRSENDPACK>$TYPE$<$TIMESTAMP$|$PAYLOAD$
  * $TYPE$ = (A:Ack|B:Broadcast|M:Message)
  */
 public class NetworkIO {
@@ -35,11 +39,31 @@ public class NetworkIO {
 
         @Override
         public void execute(InetAddress senderAddress, int senderPort, String value) {
+            String[] messageParts = value.split("|", 1);
+            // if we receive an ack we ignore it
+            if (messageParts[0].startsWith(APP_HEADER + "A<"))
+                return;
+            // if we receive a broadcasted message
+            if (messageParts[0].startsWith(APP_HEADER + "B<")) {
+                // TODO: handle broadcasted messages
+                Log.e("CAS DE MESSAGE NON IMPLEMENTÉ");
+                return;
+            }
+            sendAck(senderAddress, senderPort, messageParts[0]);
+
         }
 
     }
 
     private void sendAck(InetAddress sAddress, int sPort, String rcvdHeader) {
-        snd.send(sAddress, sPort, rcvdHeader);
+        String sentTimestamp = rcvdHeader.split("<", 1)[1];
+
+        try {
+            String ackMsg = APP_HEADER + "A<" + sentTimestamp + "|" + Inet4Address.getLocalHost().getHostAddress();
+            snd.send(sAddress, sPort, ackMsg);
+        } catch (UnknownHostException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 }
