@@ -6,12 +6,40 @@ import java.net.InetAddress;
 import java.net.SocketTimeoutException;
 import java.time.Instant;
 
-public class UDPSenderWithAck {
-    public boolean send(String destAddressName, int destPort, String value, int timeout, int maxTries) {
+import com.gestionProjet.ui.Log;
+
+public class UDPSender {
+    /**
+     * Raw sender
+     * 
+     * @warning no header !
+     * 
+     * @param destAddress
+     * @param destPort
+     * @param message
+     */
+    protected void send(InetAddress destAddress, int destPort, String message) {
+        try (DatagramSocket socket = new DatagramSocket()) {
+            byte[] buffer = message.getBytes();
+            DatagramPacket packet = new DatagramPacket(buffer, buffer.length, destAddress, destPort);
+
+            socket.send(packet);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean sendAndWaitForAck(String destAddressName, int destPort, String value, int timeout, int maxTries) {
         try (DatagramSocket socket = new DatagramSocket()) {
             socket.setSoTimeout(timeout);
 
+            // create message with sent timestamp
+
+            String timestamp = String.valueOf(Instant.now().toEpochMilli());
             InetAddress receiverAddress = InetAddress.getByName(destAddressName);
+            String message = NetworkIO.APP_HEADER + "M<" + timestamp + ":" + value;
+            byte[] buffer = message.getBytes();
+            DatagramPacket packet = new DatagramPacket(buffer, buffer.length, receiverAddress, destPort);
 
             // Wait for ACK
             byte[] ackBuffer = new byte[1024];
@@ -20,11 +48,7 @@ public class UDPSenderWithAck {
             boolean ackReceived = false;
             int tries = 0;
             while (!ackReceived && tries < maxTries) {
-                // create message with sent timestamp
-                String timestamp = String.valueOf(Instant.now().toEpochMilli());
-                String message = NetworkIO.APP_HEADER + "|" + timestamp + ":" + value;
-                byte[] buffer = value.getBytes();
-                DatagramPacket packet = new DatagramPacket(buffer, buffer.length, receiverAddress, destPort);
+
                 // Send message
                 socket.send(packet);
                 System.out.println("Sent message: " + message);
@@ -32,11 +56,13 @@ public class UDPSenderWithAck {
                     socket.receive(ackPacket);
                     String ackMessage = new String(ackPacket.getData(), 0, ackPacket.getLength());
                     System.out.println("Received ACK: " + ackMessage);
+
                     return true;
                 } catch (SocketTimeoutException e) {
                     System.out.println("No ACK received within the timeout period.");
                 }
             }
+            Log.l("No ack received");
             return false;
         } catch (Exception e) {
             e.printStackTrace();
