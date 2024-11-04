@@ -1,7 +1,10 @@
 package com.JIRSend.network;
 
+import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.UnknownHostException;
+import java.util.Enumeration;
 import java.util.HashMap;
 
 import com.JIRSend.ui.Log;
@@ -49,20 +52,9 @@ public class Net {
         return true;
     }
 
-    private boolean isFirst = true; //🤫🤫🤫🤫🤫
     private class NetworkCallback extends NetCallback {
         @Override
         public void execute(InetAddress senderAddress, int senderPort, String value, boolean isBroadcast) {
-            if (isFirst) {
-                System.out.println("First msg ignored");
-                isFirst = false;
-                return;
-            }
-            try {
-                if(senderAddress.getHostAddress().equals(InetAddress.getLocalHost().getHostAddress())) return;
-            } catch (UnknownHostException e) { 
-                return;
-            } 
             final String senderIP = senderAddress.getHostAddress();
             Log.l("[" + senderIP + ":" + senderPort + "] " + value,Log.LOG);
             final String command;
