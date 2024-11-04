@@ -2,6 +2,7 @@ package com.JIRSend.network;
 
 import java.net.InetAddress;
 import java.util.HashMap;
+import java.util.Map;
 
 import com.JIRSend.ui.Log;
 import com.JIRSend.ui.MainWindow;
@@ -37,6 +38,7 @@ public class Net {
             if (entry.username.equals(username))
                 return false;
         broadcast("NewUser " + username);
+        printHashMap();
         return true;
     }
 
@@ -117,7 +119,14 @@ public class Net {
     }
 
     public void printHashMap() {
-        System.out.println(ipToUserEntry.toString());
+        if(ipToUserEntry.isEmpty()) {
+            System.out.println("{}");
+            return;
+        }
+        System.out.println("{");
+        for(Map.Entry<String,UserEntry> e : ipToUserEntry.entrySet()) {
+            System.out.println("\t"+e.getKey()+":"+e.getValue() );
+        }
     }
 
     public class UserEntry {
@@ -127,6 +136,11 @@ public class Net {
         public UserEntry(boolean online, String username) {
             this.online = online;
             this.username = username;
+        }
+
+        @Override
+        public String toString() {
+            return username + (online ? "(online)" : "(offline)");
         }
     }
 
