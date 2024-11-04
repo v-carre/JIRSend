@@ -69,18 +69,18 @@ public class UDPSender {
 
                 // Send message
                 socket.send(packet);
-                System.out.println("Sent message: " + message);
+                //System.out.println("Sent message: " + message);
                 try {
                     socket.receive(ackPacket);
                     String ackMessage = new String(ackPacket.getData(), 0, ackPacket.getLength());
-                    System.out.println("Received ACK: " + ackMessage);
+                    //System.out.println("Received ACK: " + ackMessage);
 
                     return true;
                 } catch (SocketTimeoutException e) {
-                    System.out.println("No ACK received within the timeout period.");
+                    Log.l("No ACK received within the timeout period.",Log.WARNING);
                 }
             }
-            Log.l("No ack received");
+            Log.l("No ack received",Log.ERROR);
             return false;
         } catch (Exception e) {
             e.printStackTrace();

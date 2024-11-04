@@ -44,7 +44,6 @@ public class MainWindow {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         ImageIcon img = new ImageIcon("assets/jirsend_logo.png");
-        System.out.println("iconWidth" + img.getIconWidth());
 
         switchToNextSection();
 
@@ -78,7 +77,7 @@ public class MainWindow {
         }
 
         noPanel = false;
-        System.out.println(currentSection.getSectionName());
+        Log.l("New window selection: "+currentSection.getSectionName(),Log.LOG);
         currentPanel = currentSection.createPanel();
         frame.add(currentPanel);
         frame.revalidate();

@@ -47,7 +47,6 @@ public class UDPReceiver {
             this.socket = new DatagramSocket(port);
 
             byte[] receiveBuffer = new byte[1024];
-            System.out.println("Receiver is listening on port " + port);
 
             while (isRunning) {
                 // Receive message
@@ -57,11 +56,11 @@ public class UDPReceiver {
                 String message = new String(receivePacket.getData(), 0, receivePacket.getLength());
 
                 if (receivePacket.getAddress().getHostAddress().equals(local)) {
-                    System.out.println("Received message from self");
+                    Log.l("Received message from self",Log.DEBUG);
                     continue;
                 }
                 
-                System.out.println("Received message: " + message);
+                //System.out.println("Received message: " + message);
                 
                 // broadcast is false only because it is not seen at the
                 callback.execute(receivePacket.getAddress(), receivePacket.getPort(), message, false);

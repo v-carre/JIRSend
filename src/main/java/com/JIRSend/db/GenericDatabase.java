@@ -48,7 +48,7 @@ public class GenericDatabase {
             if (connection == null)
                 return false;
 
-            System.out.println("Connected.");
+            Log.l("Database connected",Log.LOG);
             catalog = connection.getCatalog();
             schema = connection.getSchema();
             DatabaseMetaData dbmd = connection.getMetaData();
