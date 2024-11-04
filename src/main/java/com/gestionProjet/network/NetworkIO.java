@@ -41,7 +41,12 @@ public class NetworkIO {
 
         @Override
         public void execute(InetAddress senderAddress, int senderPort, String value) {
-            String[] messageParts = value.split("|", 1);
+            String[] messageParts = value.split("\\|", 2);
+            // if the message is not a valid request
+            if (!value.startsWith(APP_HEADER) || messageParts.length != 2 || messageParts[0].split("\\<", 2).length != 2) {
+                Log.l("Received an unknown message '" + value + "' sent by " + senderAddress.getHostAddress() + ":" + senderPort + "");
+                return;
+            }
             // if we receive an ack we ignore it
             if (messageParts[0].startsWith(APP_HEADER + "A<"))
                 return;
@@ -58,7 +63,7 @@ public class NetworkIO {
     }
 
     private void sendAck(InetAddress sAddress, int sPort, String rcvdHeader) {
-        String sentTimestamp = rcvdHeader.split("<", 1)[1];
+        String sentTimestamp = rcvdHeader.split("\\<", 2)[1];
 
         try {
             String ackMsg = APP_HEADER + "A<" + sentTimestamp + "|" + Inet4Address.getLocalHost().getHostAddress();

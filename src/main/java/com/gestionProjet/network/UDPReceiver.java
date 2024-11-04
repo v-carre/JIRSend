@@ -24,6 +24,7 @@ public class UDPReceiver {
             Log.l("Listening on port " + port + "...", Log.LOG);
             recverLoop();
         });
+        this.rcvThread.start();
     }
 
     public void stop() {

@@ -37,7 +37,7 @@ public class UDPSender {
 
             String timestamp = String.valueOf(Instant.now().toEpochMilli());
             InetAddress receiverAddress = InetAddress.getByName(destAddressName);
-            String message = NetworkIO.APP_HEADER + "M<" + timestamp + ":" + value;
+            String message = NetworkIO.APP_HEADER + "M<" + timestamp + "|" + value;
             byte[] buffer = message.getBytes();
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length, receiverAddress, destPort);
 
