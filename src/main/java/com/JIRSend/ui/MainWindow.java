@@ -46,10 +46,16 @@ public class MainWindow {
         frame = new JFrame("JIRSend");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        ImageIcon img = new ImageIcon("assets/jirsend_logo.jpg");
+        System.out.println("iconWidth" + img.getIconWidth());
+
         switchToNextSection();
 
         frame.pack();
         frame.setVisible(true);
+        frame.setIconImage(img.getImage());
+        // frame.revalidate();
+        // frame.repaint();
     }
 
     protected void switchToNextSection() {
