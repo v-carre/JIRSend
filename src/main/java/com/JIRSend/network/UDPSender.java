@@ -1,14 +1,33 @@
 package com.JIRSend.network;
 
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.time.Instant;
 
 import com.JIRSend.ui.Log;
 
 public class UDPSender {
+
+    private DatagramSocket socket;
+    private InetAddress localAddress;
+    private int receiversPort;
+
+    public UDPSender(int broadcastPort, int receiversPort) {
+        try {
+            this.socket = new DatagramSocket(broadcastPort);
+            this.socket.setBroadcast(true);
+            this.localAddress = InetAddress.getByName("255.255.255.255");
+            this.receiversPort = receiversPort;
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Raw sender
      * 
@@ -67,6 +86,18 @@ public class UDPSender {
         } catch (Exception e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public void broadcast(String value) {
+        byte[] buffer = value.getBytes();
+
+        DatagramPacket packet = new DatagramPacket(buffer, buffer.length, localAddress, this.receiversPort);
+        try {
+            socket.send(packet);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 }

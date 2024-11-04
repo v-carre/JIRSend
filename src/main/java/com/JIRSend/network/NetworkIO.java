@@ -16,8 +16,9 @@ import com.JIRSend.ui.Log;
  */
 public class NetworkIO {
     public static final String APP_HEADER = "-JIRSENDPACKET>";
-    public static final int RECV_PORT = 24671;
-    // public static final int sendPort = 24672;
+    public static final int RECV_PORT = 11572;
+    // public static final int SEND_PORT = 11573;
+    public static final int BRDC_PORT = 11574;
     public static final int TIMEOUT = 2000; // milliseconds
     public static final int MAX_TRIES = 10;
 
@@ -28,7 +29,7 @@ public class NetworkIO {
 
     public NetworkIO(NetCallback callback) {
         this.rcv = new UDPReceiver(RECV_PORT, onReceive);
-        this.snd = new UDPSender();
+        this.snd = new UDPSender(BRDC_PORT, RECV_PORT);
         this.rcv.start();
         this.callback = callback;
     }
@@ -37,10 +38,14 @@ public class NetworkIO {
         return snd.sendAndWaitForAck(destAddress, RECV_PORT, value, TIMEOUT, MAX_TRIES);
     }
 
+    public void broadcast(String message) {
+        snd.broadcast(message);
+    }
+
     protected class UDPCallback extends NetCallback {
 
         @Override
-        public void execute(InetAddress senderAddress, int senderPort, String value) {
+        public void execute(InetAddress senderAddress, int senderPort, String value, boolean isBroadcast) {
             String[] messageParts = value.split("\\|", 2);
             // if the message is not a valid request
             if (!value.startsWith(APP_HEADER) || messageParts.length != 2 || messageParts[0].split("\\<", 2).length != 2) {
@@ -48,8 +53,10 @@ public class NetworkIO {
                 return;
             }
             // if we receive an ack we ignore it
-            if (messageParts[0].startsWith(APP_HEADER + "A<"))
+            if (messageParts[0].startsWith(APP_HEADER + "A<")) {
+                callback.execute(senderAddress, senderPort, messageParts[1], true);
                 return;
+            }
             // if we receive a broadcasted message
             if (messageParts[0].startsWith(APP_HEADER + "B<")) {
                 // TODO: handle broadcasted messages
@@ -57,7 +64,7 @@ public class NetworkIO {
                 return;
             }
             sendAck(senderAddress, senderPort, messageParts[0]);
-            callback.execute(senderAddress, senderPort, messageParts[1]);
+            callback.execute(senderAddress, senderPort, messageParts[1], false);
         }
 
     }

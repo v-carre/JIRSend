@@ -39,6 +39,7 @@ public class MainWindow {
     public void open() {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
+                network.broadcast("BROAIFHEJOIFJIOZFJEOIJ");
                 network.send("192.168.22.96", "Test");
                 // network.send("192.168.22.59", "Test");
                 Log.l("Starting window !");
@@ -90,7 +91,7 @@ public class MainWindow {
     public class NetworkCallback extends NetCallback {
 
         @Override
-        public void execute(InetAddress senderAddress, int senderPort, String value) {
+        public void execute(InetAddress senderAddress, int senderPort, String value, boolean isBroadcast) {
             // TODO Auto-generated method stub
             Log.l("[" + senderAddress.getHostAddress() + ":" + senderPort + "] RECEIVED: " + value);
         }

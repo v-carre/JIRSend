@@ -50,7 +50,8 @@ public class UDPReceiver {
                 String message = new String(receivePacket.getData(), 0, receivePacket.getLength());
                 System.out.println("Received message: " + message);
 
-                callback.execute(receivePacket.getAddress(), receivePacket.getPort(), message);
+                // broadcast is false only because it is not seen at the 
+                callback.execute(receivePacket.getAddress(), receivePacket.getPort(), message, false);
 
                 // String ack = "ACK: " + message;
                 // byte[] ackBuffer = ack.getBytes();
