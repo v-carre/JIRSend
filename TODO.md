@@ -3,12 +3,12 @@
 ## Victor's tasks
 ### /!\
 - [ ] Implement Net class
-- [ ] Define App protocols
-- [ ] Define Connection Protocol
 
 ### Later
 
 ### Completed
+- [X] Define App protocols
+- [X] Define Connection Protocol
 
 
 ## MagicTINTIN's tasks

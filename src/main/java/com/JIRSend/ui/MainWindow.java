@@ -1,10 +1,9 @@
 package com.JIRSend.ui;
 
 import com.JIRSend.network.Net;
-import com.JIRSend.network.NetCallback;
 import com.JIRSend.users.BaseUser;
 
-import java.net.InetAddress;
+import java.lang.reflect.Executable;
 
 import javax.swing.*;
 
@@ -19,6 +18,7 @@ public class MainWindow {
     protected Net net;
     protected String lastError;
     protected String username;
+
     private State state;
     private JFrame frame;
     private GUISection currentSection;
@@ -29,7 +29,7 @@ public class MainWindow {
         this.noPanel = true;
         this.currentSection = new GUISectionConnection(this, frame);
         this.lastError = "";
-        this.net = new Net();
+        this.net = new Net(this);
     }
 
     public void open() {
@@ -87,13 +87,7 @@ public class MainWindow {
         frame.repaint();
     }
 
-    public class NetworkCallback extends NetCallback {
-
-        @Override
-        public void execute(InetAddress senderAddress, int senderPort, String value, boolean isBroadcast) {
-            // TODO Auto-generated method stub
-            Log.l("[" + senderAddress.getHostAddress() + ":" + senderPort + "] RECEIVED: " + value);
-        }
-
+    public String getUsername() {
+        return username;
     }
 }
