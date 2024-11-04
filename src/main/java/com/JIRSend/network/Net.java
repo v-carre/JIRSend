@@ -1,6 +1,7 @@
 package com.JIRSend.network;
 
 import java.net.InetAddress;
+import java.util.HashMap;
 
 import com.JIRSend.ui.Log;
 
@@ -23,11 +24,12 @@ import java.net.UnknownHostException;
 *      - GetUserResponse username
 *      - NewUser username
 *      - SetOfflineUser username
-*      - UpdateUsername old:new
-*      - SendMessage username:msg
+*      - UpdateUsername new
+*      - SendMessage msg
  */
 public class Net {
     private NetworkIO netIO;
+    private HashMap<String,UserEntry> ipToUserEntry;
 
 
     public Net() {
@@ -36,8 +38,11 @@ public class Net {
     }
 
     public boolean usernameAvailable(String username) {
-        if (username.contains(":"))
+        if (!isUsernameValid(username))
             return false;
+        for( UserEntry entry : ipToUserEntry.values())
+            if(entry.username.equals(username))
+                return false;
         netIO.broadcast("NewUser "+username);
         return true;
     }
@@ -45,9 +50,80 @@ public class Net {
     private class NetworkCallback extends NetCallback {
         @Override
         public void execute(InetAddress senderAddress, int senderPort, String value, boolean isBroadcast) {
-            Log.l("[" + senderAddress.getHostAddress() + ":" + senderPort + "] " + value,Log.LOG);
+            final String senderIP = senderAddress.getHostAddress();
+            Log.l("[" + senderIP + ":" + senderPort + "] " + value,Log.LOG);
+            final String[] splited = value.split(" ",2);
+            if (splited.length != 2) {
+                Log.e("Wrong message format: "+value);
+                return;
+            }
+            final String command = splited[0];
+            final String args = splited[1];
+            switch (command) {
+                case "GetUser":
+                    netIO.send(senderIP, "GetUserResponse placeholderMyUsername");
+                    break;
+                case "GetUserResponse":
+                    if (!isUsernameValid(args))
+                        Log.l("Forbidden username: "+args,Log.WARNING);
+                    else
+                        ipToUserEntry.put(senderIP,new UserEntry(true, args));
+                    break;
+                case "NewUser":
+                    if(!isUsernameValid(args)) 
+                        Log.l("Forbidden username: "+args,Log.WARNING);
+                    else
+                        ipToUserEntry.put(senderIP,new UserEntry(true, args));
+                    break;
+                case "SetOfflineUser":
+                    if (ipToUserEntry.containsKey(senderIP)) {
+                        ipToUserEntry.get(senderIP).online = false;
+                    } else {
+                        if (isUsernameValid(args))
+                            ipToUserEntry.put(senderIP,new UserEntry(false, args));
+                        else
+                            Log.l("Forbidden username: " + args);
+                    }
+                    break;
+                case "UpdateUsername":
+                    if(!isUsernameValid(args))
+                        Log.l("Forbidden username: "+args,Log.WARNING);
+                    else
+                        if(ipToUserEntry.containsKey(senderIP))
+                            ipToUserEntry.get(senderIP).username = args;
+                        else
+                            ipToUserEntry.put(senderIP,new UserEntry(true, args));
+                    break;
+                case "SendMessage":
+                    if(ipToUserEntry.containsKey(senderIP)) //Maybe set user to online = true
+                        System.out.println("["+ipToUserEntry.get(senderIP).username + "] " + args);
+                    else {
+                        // FIXME Message was lost
+                        netIO.send(senderIP, "GetUser");
+                        System.out.println("[Unkown user] "+args); 
+                    }
+                        break;
+                default:
+                    Log.l("Unkown command: " + command + " " + value,Log.LOG);
+                    break;
+            }
+        }
+
+    }
+
+    public class UserEntry {
+        public boolean online;
+        public String username;
+        UserEntry(boolean online,String username) {
+            this.online = online;
+            this.username = username;
         }
     }
+
+    public boolean isUsernameValid(String username) {
+        return !username.contains(":");
+    }
+    
     /*
     private ClientServerSocket mainServer;
     private DatagramSocket broadcastSocket = null;
