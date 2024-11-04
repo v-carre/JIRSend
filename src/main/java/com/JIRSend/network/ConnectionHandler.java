@@ -22,6 +22,7 @@ public class ConnectionHandler extends Thread {
         try {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
+            out.flush();
             while (true) {
                 String str = in.readLine();
                 String[] parsedMsg = str.split(" ");

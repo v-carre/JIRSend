@@ -7,6 +7,8 @@ public class UserTest {
     private static void main()
     {
         User userTest = new User("johnson");
+        int i = userTest.id;
+        if(i==0);
 
     }
 }

@@ -59,9 +59,9 @@ public class GenericDatabase {
 
             while (tablesRes.next()) {
                 columnsMap.put(tablesRes.getString(3), new ArrayList<>());
-                Log.ll("|" + tablesRes.getString(3), 9);
+                //Log.ll("|" + tablesRes.getString(3), 9);
             }
-            Log.ll("|\n", 9);
+            //Log.ll("|\n", 9);
 
             // FOR EACH TABLE
             for (String t : columnsMap.keySet()) {

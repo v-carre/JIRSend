@@ -2,7 +2,6 @@ package com.JIRSend.ui;
 
 import com.JIRSend.network.Net;
 import com.JIRSend.network.NetCallback;
-import com.JIRSend.network.NetworkIO;
 import com.JIRSend.users.BaseUser;
 
 import java.net.InetAddress;

@@ -2,8 +2,10 @@ package com.JIRSend.network;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.Inet4Address;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.net.NetworkInterface;
+import java.util.Enumeration;
 
 import com.JIRSend.ui.Log;
 
@@ -13,21 +15,13 @@ public class UDPReceiver {
     private DatagramSocket socket;
     private Thread rcvThread;
     private boolean isRunning;
-    private String local; 
+    private final String local;
 
     public UDPReceiver(int port, NetCallback callback) {
         this.port = port;
         this.callback = callback;
         this.isRunning = false;
-
-        try {
-            InetAddress localhost = InetAddress.getLocalHost();
-            this.local = (localhost.getHostAddress()).trim();
-            
-        } catch (UnknownHostException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        this.local = getLocalAddr();
     }
 
     public void start() {
@@ -51,6 +45,7 @@ public class UDPReceiver {
     private void recverLoop() {
         try {
             this.socket = new DatagramSocket(port);
+
             byte[] receiveBuffer = new byte[1024];
             System.out.println("Receiver is listening on port " + port);
 
@@ -60,14 +55,15 @@ public class UDPReceiver {
                 socket.receive(receivePacket);
 
                 String message = new String(receivePacket.getData(), 0, receivePacket.getLength());
-                System.out.println("Received message: " + message);
 
                 if (receivePacket.getAddress().getHostAddress().equals(local)) {
                     System.out.println("Received message from self");
                     continue;
                 }
-
-                // broadcast is false only because it is not seen at the 
+                
+                System.out.println("Received message: " + message);
+                
+                // broadcast is false only because it is not seen at the
                 callback.execute(receivePacket.getAddress(), receivePacket.getPort(), message, false);
 
                 // String ack = "ACK: " + message;
@@ -82,5 +78,26 @@ public class UDPReceiver {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private String getLocalAddr() {
+        try {
+            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+            while (interfaces.hasMoreElements()) {
+                NetworkInterface i = interfaces.nextElement();
+                if (i.isLoopback() || !i.isUp())
+                    continue;
+                Enumeration<InetAddress> addresses = i.getInetAddresses();
+                while (addresses.hasMoreElements()) {
+                    InetAddress addr = addresses.nextElement();
+                    if (!(addr instanceof Inet4Address))
+                        continue;
+                    return addr.getHostAddress();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "127.0.0.1"; //rip...
     }
 }
