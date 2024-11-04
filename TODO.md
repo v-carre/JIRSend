@@ -16,9 +16,10 @@
 - [x] Add header in requests
 - [ ] Better headers
 - [ ] Check received acks
-- [ ] Send ack
+- [x] Send ack
 - [x] Really stopping receiver
-- [ ] Broadcast
+- [x] Broadcast
+- [ ] Use TCP
 ### Later
 - [ ] Log.e can take error in param
 

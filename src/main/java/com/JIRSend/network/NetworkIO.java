@@ -15,7 +15,7 @@ import com.JIRSend.ui.Log;
  * $TYPE$ = (A:Ack|B:Broadcast|M:Message)
  */
 public class NetworkIO {
-    public static final String APP_HEADER = "-JIRSENDPACKET>";
+    public static final String APP_HEADER = "-ConnaissezVousJIRSend?>";
     public static final int RECV_PORT = 11572;
     // public static final int SEND_PORT = 11573;
     public static final int BRDC_PORT = 11574;
