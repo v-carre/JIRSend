@@ -72,7 +72,7 @@ public class UDPSender {
                 //System.out.println("Sent message: " + message);
                 try {
                     socket.receive(ackPacket);
-                    String ackMessage = new String(ackPacket.getData(), 0, ackPacket.getLength());
+                    //String ackMessage = new String(ackPacket.getData(), 0, ackPacket.getLength());
                     //System.out.println("Received ACK: " + ackMessage);
 
                     return true;

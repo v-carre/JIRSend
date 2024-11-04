@@ -33,7 +33,7 @@ public class MainWindow {
     public void open() {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                Log.l("Starting window !");
+                Log.l("Starting window !", Log.LOG);
                 createWindow();
             }
         });
@@ -77,7 +77,7 @@ public class MainWindow {
         }
 
         noPanel = false;
-        Log.l("New window selection: "+currentSection.getSectionName(),Log.LOG);
+        Log.l("New window selection: " + currentSection.getSectionName(), Log.LOG);
         currentPanel = currentSection.createPanel();
         frame.add(currentPanel);
         frame.revalidate();

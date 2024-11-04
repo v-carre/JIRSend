@@ -67,7 +67,7 @@ public class GUISectionConnection extends GUISection {
 
         public void actionPerformed(ActionEvent action) {
             String usernameAsked = username.getText();
-            Log.l("Connection de '" + usernameAsked + "'");
+            Log.l("Connecting as '" + usernameAsked + "'",Log.LOG);
 
             if (window.net.usernameAvailable(usernameAsked)) {
                 window.username = usernameAsked;
