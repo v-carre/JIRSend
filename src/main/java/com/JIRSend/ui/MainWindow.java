@@ -39,8 +39,7 @@ public class MainWindow {
     public void open() {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                network.broadcast("BROAIFHEJOIFJIOZFJEOIJ");
-                network.send("192.168.22.96", "Test");
+                network.send("127.0.0.1", "Test");
                 // network.send("192.168.22.59", "Test");
                 Log.l("Starting window !");
                 createWindow();

@@ -1,5 +1,16 @@
 # JIRSend Todo
 
+## Victor's tasks
+### /!\
+- [ ] Implement Net class
+- [ ] Define App protocols
+- [ ] Define Connection Protocol
+
+### Later
+
+### Completed
+
+
 ## MagicTINTIN's tasks
 ### /!\
 - [x] Add header in requests
