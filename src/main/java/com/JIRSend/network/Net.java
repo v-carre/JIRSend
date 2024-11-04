@@ -32,19 +32,19 @@ public class Net {
 
     public Net() {
         netIO = new NetworkIO(new NetworkCallback());
-        //netIO.broadcast("GetUser");
+        netIO.broadcast("GetUser");
     }
 
     public boolean usernameAvailable(String username) {
         if (username.contains(":"))
             return false;
-        //netIO.broadcast("NewUser "+username);
+        netIO.broadcast("NewUser "+username);
         return true;
     }
 
     private class NetworkCallback extends NetCallback {
         @Override
-        public void execute(InetAddress senderAddress, int senderPort, String value) {
+        public void execute(InetAddress senderAddress, int senderPort, String value, boolean isBroadcast) {
             Log.l("[" + senderAddress.getHostAddress() + ":" + senderPort + "] " + value,Log.LOG);
         }
     }
