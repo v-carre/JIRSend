@@ -33,6 +33,19 @@
 </dependencies>
 
 <build>
+    <finalName>JIRSend</finalName>
+    <resources>
+        <resource>
+            <directory>assets</directory>
+            <targetPath>assets</targetPath> <!-- Specifies where to place the assets in the JAR -->
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </resource>
+        <!-- <resource>
+            <directory>src/main/resources</directory>
+        </resource> -->
+    </resources>
     <plugins>
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
@@ -68,7 +81,33 @@
                 </archive>
             </configuration>
         </plugin>
-    </plugins>
+
+        <!-- Maven Assembly Plugin for creating an uber/fat JAR with dependencies -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>3.3.0</version>
+            <configuration>
+            <descriptorRefs>
+                <descriptorRef>jar-with-dependencies</descriptorRef>
+            </descriptorRefs>
+            <archive>
+                <manifest>
+                <mainClass>com.JIRSend.App</mainClass>
+                </manifest>
+            </archive>
+            </configuration>
+            <executions>
+            <execution>
+                <id>make-assembly</id>
+                <phase>package</phase>
+                <goals>
+                <goal>single</goal>
+                </goals>
+            </execution>
+            </executions>
+        </plugin>
+        </plugins>
 </build>
 
 </project>
