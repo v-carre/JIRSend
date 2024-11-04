@@ -3,8 +3,6 @@ package com.JIRSend.ui;
 import com.JIRSend.network.Net;
 import com.JIRSend.users.BaseUser;
 
-import java.lang.reflect.Executable;
-
 import javax.swing.*;
 
 public class MainWindow {
@@ -45,7 +43,7 @@ public class MainWindow {
         frame = new JFrame("JIRSend");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        ImageIcon img = new ImageIcon("assets/jirsend_logo.jpg");
+        ImageIcon img = new ImageIcon("assets/jirsend_logo.png");
         System.out.println("iconWidth" + img.getIconWidth());
 
         switchToNextSection();
