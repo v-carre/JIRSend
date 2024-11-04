@@ -60,19 +60,8 @@ public class UDPReceiver {
                     continue;
                 }
                 
-                //System.out.println("Received message: " + message);
-                
                 // broadcast is false only because it is not seen at the
                 callback.execute(receivePacket.getAddress(), receivePacket.getPort(), message, false);
-
-                // String ack = "ACK: " + message;
-                // byte[] ackBuffer = ack.getBytes();
-                // InetAddress senderAddress = receivePacket.getAddress();
-                // int senderPort = receivePacket.getPort();
-                // DatagramPacket ackPacket = new DatagramPacket(ackBuffer, ackBuffer.length,
-                // senderAddress, senderPort);
-                // socket.send(ackPacket);
-                // System.out.println("Sent ACK for message: " + message);
             }
         } catch (Exception e) {
             e.printStackTrace();

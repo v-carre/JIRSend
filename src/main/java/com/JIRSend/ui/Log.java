@@ -84,13 +84,13 @@ public class Log {
 
     private static String levelToString(int indicationLevel) {
         switch (indicationLevel) {
-            case 0:
+            case ERROR:
                 return "❌ERROR";
-            case 1:
+            case WARNING:
                 return "⚠️WARNING";
-            case 2:
+            case LOG:
                 return "LOG";
-            case 3:
+            case DEBUG:
                 return "DEBUG";
             default:
                 return "OTHER";
