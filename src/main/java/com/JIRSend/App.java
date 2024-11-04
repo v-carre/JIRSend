@@ -1,9 +1,5 @@
 package com.JIRSend;
 
-import java.net.InetAddress;
-
-import javax.naming.NoInitialContextException;
-
 import com.JIRSend.ui.Log;
 import com.JIRSend.ui.MainWindow;
 

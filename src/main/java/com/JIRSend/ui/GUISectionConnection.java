@@ -3,8 +3,6 @@ package com.JIRSend.ui;
 import java.awt.event.*;
 import javax.swing.*;
 
-import com.JIRSend.users.*;
-
 import java.awt.*;
 
 public class GUISectionConnection extends GUISection {
