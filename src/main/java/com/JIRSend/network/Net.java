@@ -26,7 +26,7 @@ public class Net {
     public Net(MainWindow mainWindwow) {
         window = mainWindwow;
         netIO = new NetworkIO(new NetworkCallback());
-        netIO.broadcast("GetUser");
+        broadcast("GetUser");
         ipToUserEntry = new HashMap<>();
     }
 
@@ -36,7 +36,7 @@ public class Net {
         for (UserEntry entry : ipToUserEntry.values())
             if (entry.username.equals(username))
                 return false;
-        netIO.broadcast("NewUser " + username);
+        broadcast("NewUser " + username);
         return true;
     }
 
@@ -63,7 +63,7 @@ public class Net {
                 case "GetUser":
                     String username = window.getUsername();
                     username = username == null ? "placeholderUsername" : username;
-                    netIO.send(senderIP, "GetUserResponse " + username);
+                    send(senderIP, "GetUserResponse " + username);
                     break;
                 case "GetUserResponse":
                     if (!isUsernameValid(args))
@@ -100,7 +100,7 @@ public class Net {
                         System.out.println("[" + ipToUserEntry.get(senderIP).username + "] " + args);
                     else {
                         // FIXME Message was lost
-                        netIO.send(senderIP, "GetUser");
+                        send(senderIP, "GetUser");
                         System.out.println("[Unkown user] " + args);
                     }
                     break;
@@ -132,6 +132,16 @@ public class Net {
 
     public boolean isUsernameValid(String username) {
         return !username.contains(":");
+    }
+
+    private void send(String address, String string) {
+        Log.l("Sending: "+string,Log.LOG);
+        netIO.send(address, string);
+    }
+
+    private void broadcast(String string) {
+        Log.l("Broadcasting: "+string,Log.LOG);
+        netIO.broadcast(string);
     }
 
     /*
