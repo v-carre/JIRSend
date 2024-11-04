@@ -2,6 +2,8 @@ package com.JIRSend.network;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import com.JIRSend.ui.Log;
 
@@ -11,11 +13,21 @@ public class UDPReceiver {
     private DatagramSocket socket;
     private Thread rcvThread;
     private boolean isRunning;
+    private String local; 
 
     public UDPReceiver(int port, NetCallback callback) {
         this.port = port;
         this.callback = callback;
         this.isRunning = false;
+
+        try {
+            InetAddress localhost = InetAddress.getLocalHost();
+            this.local = (localhost.getHostAddress()).trim();
+            
+        } catch (UnknownHostException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public void start() {
@@ -49,6 +61,11 @@ public class UDPReceiver {
 
                 String message = new String(receivePacket.getData(), 0, receivePacket.getLength());
                 System.out.println("Received message: " + message);
+
+                if (receivePacket.getAddress().getHostAddress().equals(local)) {
+                    System.out.println("Received message from self");
+                    continue;
+                }
 
                 // broadcast is false only because it is not seen at the 
                 callback.execute(receivePacket.getAddress(), receivePacket.getPort(), message, false);
