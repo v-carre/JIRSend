@@ -7,6 +7,8 @@ public class App {
     public static void main(String[] args) {
         Log.setVerbose(true, Log.ALL);
         Log.l("Starting Client...", Log.LOG);
+        Log.e("AIE COUP DUR");
+        Log.l("Test");
 
         new MainWindow().open();
 
