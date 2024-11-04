@@ -54,13 +54,12 @@ public class NetworkIO {
             }
             // if we receive an ack we ignore it
             if (messageParts[0].startsWith(APP_HEADER + "A<")) {
-                callback.execute(senderAddress, senderPort, messageParts[1], true);
                 return;
             }
             // if we receive a broadcasted message
             if (messageParts[0].startsWith(APP_HEADER + "B<")) {
                 // TODO: handle broadcasted messages
-                Log.e("CAS DE MESSAGE NON IMPLEMENTÉ");
+                callback.execute(senderAddress, senderPort, messageParts[1], true);
                 return;
             }
             sendAck(senderAddress, senderPort, messageParts[0]);

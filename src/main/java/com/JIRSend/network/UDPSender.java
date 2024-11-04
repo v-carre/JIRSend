@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.time.Instant;
 
@@ -90,11 +89,14 @@ public class UDPSender {
     }
 
     public void broadcast(String value) {
-        byte[] buffer = value.getBytes();
+
+        String timestamp = String.valueOf(Instant.now().toEpochMilli());
+        String message = NetworkIO.APP_HEADER + "B<" + timestamp + "|" + value;
+        byte[] buffer = message.getBytes();
 
         DatagramPacket packet = new DatagramPacket(buffer, buffer.length, localAddress, this.receiversPort);
         try {
-            socket.send(packet);
+            this.socket.send(packet);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

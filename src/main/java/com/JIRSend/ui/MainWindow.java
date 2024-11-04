@@ -25,9 +25,6 @@ public class MainWindow {
     private GUISection currentSection;
     private JPanel currentPanel;
 
-    protected NetworkCallback callback = new NetworkCallback();
-    protected NetworkIO network = new NetworkIO(callback);
-
     public MainWindow() {
         this.state = State.notInit;
         this.noPanel = true;
@@ -39,8 +36,6 @@ public class MainWindow {
     public void open() {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                network.send("127.0.0.1", "Test");
-                // network.send("192.168.22.59", "Test");
                 Log.l("Starting window !");
                 createWindow();
             }
