@@ -1,6 +1,7 @@
 package com.JIRSend.network;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 
 import com.JIRSend.ui.Log;
@@ -35,6 +36,7 @@ public class Net {
     public Net() {
         netIO = new NetworkIO(new NetworkCallback());
         netIO.broadcast("GetUser");
+        ipToUserEntry = new HashMap<>();
     }
 
     public boolean usernameAvailable(String username) {
@@ -47,18 +49,39 @@ public class Net {
         return true;
     }
 
+    private boolean isFirst = true; //🤫🤫🤫🤫🤫
     private class NetworkCallback extends NetCallback {
         @Override
         public void execute(InetAddress senderAddress, int senderPort, String value, boolean isBroadcast) {
-            final String senderIP = senderAddress.getHostAddress();
-            Log.l("[" + senderIP + ":" + senderPort + "] " + value,Log.LOG);
-            final String[] splited = value.split(" ",2);
-            if (splited.length != 2) {
-                Log.e("Wrong message format: "+value);
+            if (isFirst) {
+                System.out.println("First msg ignored");
+                isFirst = false;
                 return;
             }
-            final String command = splited[0];
-            final String args = splited[1];
+            try {
+                if(senderAddress.getHostAddress().equals(InetAddress.getLocalHost().getHostAddress())) return;
+            } catch (UnknownHostException e) { 
+                return;
+            } 
+            final String senderIP = senderAddress.getHostAddress();
+            Log.l("[" + senderIP + ":" + senderPort + "] " + value,Log.LOG);
+            final String command;
+            final String args;
+            if(value.equals("GetUser"))
+            {
+                command = value;
+                args = null;
+            }
+            else
+            {
+                final String[] splited = value.split(" ",2);
+                if (splited.length != 2 ) {
+                    Log.e("Wrong message format: "+value);
+                    return;
+                }
+                command = splited[0];
+                args = splited[1];
+            }
             switch (command) {
                 case "GetUser":
                     netIO.send(senderIP, "GetUserResponse placeholderMyUsername");
