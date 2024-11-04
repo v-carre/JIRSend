@@ -1,10 +1,6 @@
 package com.JIRSend.network;
 
-import java.net.Inet4Address;
 import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.UnknownHostException;
-import java.util.Enumeration;
 import java.util.HashMap;
 
 import com.JIRSend.ui.Log;

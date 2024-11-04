@@ -40,16 +40,8 @@ public class Log {
      * @param indicationLevel (default 0)
      */
     public static void l(String string, int indicationLevel) {
-        if (verbose && indicationLevel <= displayTreshold) System.out.println(string);
-    }
-
-    /**
-     * Will print out string if verbose is active and if indicationLevel <= displayThreshold = Integer.MAX_VALUE
-     * @param string
-     * @param indicationLevel (default 0)
-     */
-    public static void ll(String string, int indicationLevel) {
-        if (verbose && indicationLevel <= displayTreshold) System.out.print(string);
+        printWithStack(string, indicationLevel, Thread.currentThread().getStackTrace()[2]);
+        //if (verbose && indicationLevel <= displayTreshold) System.out.println("["+caller.getClassName() + "." + caller.getMethodName() +"] "+string);
     }
 
     /**
@@ -57,15 +49,7 @@ public class Log {
      * @param string
      */
     public static void l(String string) {
-        l(string, 0);
-    }
-
-    /**
-     * Will print out string if displayThreshold >= 0
-     * @param string
-     */
-    public static void ll(String string) {
-        ll(string, 0);
+        printWithStack(string, 0, Thread.currentThread().getStackTrace()[2]);
     }
 
     /**
@@ -101,5 +85,19 @@ public class Log {
      */
     public static void err(String err) {
         e(err, 0);
+    }
+
+    private static String levelToString(int indicationLevel) {
+        switch (indicationLevel) {
+            case 0: return "ERROR";
+            case 1: return "WARNING";
+            case 2: return "LOG";
+            default: return "OTHER";
+        }
+    }
+
+    private static void printWithStack(String string, int indicationLevel, StackTraceElement stack) {
+        if (verbose && indicationLevel <= displayTreshold)
+            System.out.println("["+levelToString(indicationLevel)+"] ("+stack.getClassName()+"->"+stack.getMethodName()+") "+string);
     }
 }
