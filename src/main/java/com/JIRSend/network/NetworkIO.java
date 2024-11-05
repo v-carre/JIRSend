@@ -35,6 +35,11 @@ public class NetworkIO {
     }
 
     public boolean send(String destAddress, String value) {
+        // TODO: TCP
+        return snd.sendAndWaitForAck(destAddress, RECV_PORT, value, TIMEOUT, MAX_TRIES);
+    }
+
+    public boolean sendUDP(String destAddress, String value) {
         return snd.sendAndWaitForAck(destAddress, RECV_PORT, value, TIMEOUT, MAX_TRIES);
     }
 
@@ -43,9 +48,8 @@ public class NetworkIO {
     }
 
     protected class UDPCallback extends NetCallback {
-
         @Override
-        public void execute(InetAddress senderAddress, int senderPort, String value, boolean isBroadcast) {
+        public void execute(InetAddress senderAddress, int senderPort, String value, boolean isBroadcast,boolean isUDP) {
             String[] messageParts = value.split("\\|", 2);
             // if the message is not a valid request
             if (!value.startsWith(APP_HEADER) || messageParts.length != 2 || messageParts[0].split("\\<", 2).length != 2) {
@@ -58,12 +62,11 @@ public class NetworkIO {
             }
             // if we receive a broadcasted message
             if (messageParts[0].startsWith(APP_HEADER + "B<")) {
-                // TODO: handle broadcasted messages
-                callback.execute(senderAddress, senderPort, messageParts[1], true);
+                callback.execute(senderAddress, senderPort, messageParts[1], true,true);
                 return;
             }
             sendAck(senderAddress, senderPort, messageParts[0]);
-            callback.execute(senderAddress, senderPort, messageParts[1], false);
+            callback.execute(senderAddress, senderPort, messageParts[1], false,true);
         }
 
     }

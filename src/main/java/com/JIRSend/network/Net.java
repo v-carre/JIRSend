@@ -44,7 +44,7 @@ public class Net {
 
     private class NetworkCallback extends NetCallback {
         @Override
-        public void execute(InetAddress senderAddress, int senderPort, String value, boolean isBroadcast) {
+        public void execute(InetAddress senderAddress, int senderPort, String value, boolean isBroadcast,boolean isUDP) {
             final String senderIP = senderAddress.getHostAddress();
             Log.l("[" + senderIP + ":" + senderPort + "] " + value, Log.LOG);
             final String command;
