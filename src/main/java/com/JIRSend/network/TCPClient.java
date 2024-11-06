@@ -4,13 +4,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.Socket;
 
 import com.JIRSend.ui.Log;
 
-public class TCPSender {
+public class TCPClient {
     public final String hostname;
     public final int port;
     private Socket socket;
@@ -19,7 +17,7 @@ public class TCPSender {
     private NetCallback callback;
     private MessageHandlerThread thread;
 
-    public TCPSender(String hostname, int port, NetCallback callback) {
+    public TCPClient(String hostname, int port, NetCallback callback) {
         this.hostname = hostname;
         this.port = port;
         this.callback = callback;
@@ -61,13 +59,13 @@ public class TCPSender {
         @Override
         public void run() {
             while (doRun) {
-                // TODO meillleur condition d'arret ^^'
+                // TODO meillleur condition d'arret ^^' (or not)
                 try {
                     String string = receiver.readLine();
                     callback.execute(null, port, string, false, false);
                 } catch (IOException e) {
                     doRun = false;
-                    Log.e("Error in receive in socket to " + hostname + ":" + port + " : " + e.getStackTrace());
+                    Log.l("Msg receiver closed for " + hostname + ":" + port);
                 }
             }
         }
