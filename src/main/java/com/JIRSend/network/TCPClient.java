@@ -35,6 +35,23 @@ public class TCPClient {
         }
     }
 
+    protected TCPClient(Socket socket, NetCallback callback) {
+        this.hostname = socket.getInetAddress().getHostAddress();
+        this.port = socket.getPort();
+        this.callback = callback;
+        this.socket = socket;
+        try {
+            sender = socket.getOutputStream();
+            receiver = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            thread = new MessageHandlerThread();
+            thread.start();
+        } catch (IOException e) {
+            sender = null;
+            receiver = null;
+            Log.e("Failed to create socket IO (" + hostname + ":" + port + ") " + e);
+        }
+    }
+
     public boolean send(String string) {
         byte[] data = string.getBytes();
         try {
@@ -56,6 +73,7 @@ public class TCPClient {
 
     private class MessageHandlerThread extends Thread {
         private boolean doRun = true;
+
         @Override
         public void run() {
             while (doRun) {
