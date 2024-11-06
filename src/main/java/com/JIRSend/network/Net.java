@@ -44,7 +44,8 @@ public class Net {
 
     private class NetworkCallback extends NetCallback {
         @Override
-        public void execute(InetAddress senderAddress, int senderPort, String value, boolean isBroadcast,boolean isUDP) {
+        public void execute(InetAddress senderAddress, int senderPort, String value, boolean isBroadcast,
+                boolean isUDP) {
             final String senderIP = senderAddress.getHostAddress();
             Log.l("[" + senderIP + ":" + senderPort + "] " + value, Log.LOG);
             final String command;
@@ -114,18 +115,18 @@ public class Net {
 
     }
 
-    public HashMap<String,UserEntry> getHashMap() {
+    public HashMap<String, UserEntry> getHashMap() {
         return ipToUserEntry;
     }
 
     public void printHashMap() {
-        if(ipToUserEntry.isEmpty()) {
+        if (ipToUserEntry.isEmpty()) {
             System.out.println("{}");
             return;
         }
         System.out.println("{");
-        for(Map.Entry<String,UserEntry> e : ipToUserEntry.entrySet()) {
-            System.out.println("\t"+e.getKey()+":"+e.getValue() );
+        for (Map.Entry<String, UserEntry> e : ipToUserEntry.entrySet()) {
+            System.out.println("\t" + e.getKey() + ":" + e.getValue());
         }
     }
 
@@ -149,12 +150,12 @@ public class Net {
     }
 
     private void send(String address, String string) {
-        Log.l("Sending: "+string,Log.LOG);
+        Log.l("Sending: " + string, Log.LOG);
         netIO.send(address, string);
     }
 
     private void broadcast(String string) {
-        Log.l("Broadcasting: "+string,Log.LOG);
+        Log.l("Broadcasting: " + string, Log.LOG);
         netIO.broadcast(string);
     }
 
