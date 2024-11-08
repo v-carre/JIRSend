@@ -62,6 +62,7 @@ public class Net {
                 command = splited[0];
                 args = splited[1];
             }
+            Log.l("received: \""+command+"\" \""+args+"\"",Log.LOG);
             switch (command) {
                 case "GetUser":
                     String username = window.getUsername();
@@ -128,6 +129,7 @@ public class Net {
         for (Map.Entry<String, UserEntry> e : ipToUserEntry.entrySet()) {
             System.out.println("\t" + e.getKey() + ":" + e.getValue());
         }
+        System.out.println("}");
     }
 
     public class UserEntry {

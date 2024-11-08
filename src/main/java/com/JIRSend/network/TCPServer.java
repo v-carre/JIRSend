@@ -41,7 +41,7 @@ public class TCPServer {
         @Override
         public void run() {
             try {
-                socket = new ServerSocket();
+                socket = new ServerSocket(port);
             } catch (IOException e) {
                 Log.e("Error in server socket creation: " + e);
             }
@@ -51,6 +51,8 @@ public class TCPServer {
                     table.put(newClient.hostname, newClient);
                 } catch (IOException e) {
                     Log.l("Server socket closed (probably)", Log.LOG);
+                    e.printStackTrace();
+                    break;
                 }
             }
         }

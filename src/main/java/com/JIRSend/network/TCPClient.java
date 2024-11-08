@@ -72,18 +72,20 @@ public class TCPClient {
     }
 
     private class MessageHandlerThread extends Thread {
-        private boolean doRun = true;
-
         @Override
         public void run() {
-            while (doRun) {
-                // TODO meillleur condition d'arret ^^' (or not)
+            while (true) {
+                // TODO meilleure condition d'arret ^^' (or not)
                 try {
                     String string = receiver.readLine();
-                    callback.execute(null, port, string, false, false);
+                    if (string == null) {
+                        Log.l("Connection ended by "+hostname+":"+port);
+                        break;
+                    }
+                    callback.execute(socket.getInetAddress(), port, string, false, false);
                 } catch (IOException e) {
-                    doRun = false;
                     Log.l("Msg receiver closed for " + hostname + ":" + port);
+                    break;
                 }
             }
         }
