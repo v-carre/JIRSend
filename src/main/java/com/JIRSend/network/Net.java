@@ -4,7 +4,7 @@ import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.JIRSend.controler.MainController;
+import com.JIRSend.controller.MainController;
 import com.JIRSend.ui.Log;
 import com.JIRSend.ui.MainWindow;
 
@@ -23,10 +23,10 @@ import com.JIRSend.ui.MainWindow;
 public class Net {
     private NetworkIO netIO;
     private HashMap<String, UserEntry> ipToUserEntry;
-    private final MainController controler;
+    private final MainController controller;
 
-    public Net(MainController controler) {
-        this.controler = controler;
+    public Net(MainController controller) {
+        this.controller = controller;
         this.netIO = new NetworkIO(new NetworkCallback());
         broadcast("GetUser");
         ipToUserEntry = new HashMap<>();
@@ -66,7 +66,7 @@ public class Net {
             Log.l("received: \""+command+"\" \""+args+"\"",Log.LOG);
             switch (command) {
                 case "GetUser":
-                    String username = controler.getUsername();
+                    String username = controller.getUsername();
                     username = username == null ? "placeholderUsername" : username;
                     send(senderIP, "GetUserResponse " + username);
                     break;

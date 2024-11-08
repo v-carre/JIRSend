@@ -1,6 +1,6 @@
 package com.JIRSend;
 
-import com.JIRSend.controler.MainController;
+import com.JIRSend.controller.MainController;
 import com.JIRSend.ui.Log;
 
 public class App {
@@ -8,7 +8,7 @@ public class App {
         Log.setVerbose(true, Log.ALL);
         Log.l("Starting Client...", Log.LOG);
 
-        MainController controler = new MainController();
-        controler.startWindow();
+        MainController controller = new MainController();
+        controller.startWindow();
     };
 }

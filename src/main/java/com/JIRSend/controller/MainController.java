@@ -1,25 +1,29 @@
 
-package com.JIRSend.controler;
+package com.JIRSend.controller;
 
 import com.JIRSend.network.Net;
 import com.JIRSend.ui.MainWindow;
 import com.JIRSend.users.BaseUser;
+import com.JIRSend.users.User;
 
 public class MainController {
-    private String controlerName;
+    private String controllerName;
 
     // View objects
     private MainWindow view;
     
     // Model objects
-    protected String username;
     protected BaseUser user;
     protected Net net;
 
+    // Pipes
+    public static Pipe<String> localUsernameChange = new Pipe<>("localUsernameChanged");
+
     public MainController(String name) {
-        this.controlerName = name;
+        this.controllerName = name;
         this.view = new MainWindow(this);
         this.net = new Net(this);
+        this.user = new User(this);
     }
 
     public MainController() {
@@ -31,16 +35,22 @@ public class MainController {
     }
 
     public String getName() {
-        return controlerName;
+        return controllerName;
     }
 
     //////// VIEW
     /// Setters
-    public boolean checkUsername(String username) {
-        return this.net.isUsernameValid(username);
+    public boolean changeUsername(String username) {
+        if (this.net.isUsernameValid(username))
+        {
+            this.user.setUsername(username);
+            return true;
+        }
+        return false; 
     }
+
     /// Getters
     public String getUsername() {
-        return this.username;
+        return this.user.getUsername();
     }
 }

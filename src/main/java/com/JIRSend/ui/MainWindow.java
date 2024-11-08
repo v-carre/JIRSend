@@ -1,17 +1,15 @@
 package com.JIRSend.ui;
 
-import com.JIRSend.controler.MainController;
-import com.JIRSend.network.Net;
-import com.JIRSend.users.BaseUser;
-
 import javax.swing.*;
+
+import com.JIRSend.controller.MainController;
 
 public class MainWindow {
     private enum State {
         notInit, waitConnection, personal
     }
 
-    protected MainController controler;
+    protected MainController controller;
 
     private boolean noPanel;
 
@@ -22,8 +20,8 @@ public class MainWindow {
     private GUISection currentSection;
     private JPanel currentPanel;
 
-    public MainWindow(MainController controler) {
-        this.controler = controler;
+    public MainWindow(MainController controller) {
+        this.controller = controller;
         this.state = State.notInit;
         this.noPanel = true;
         this.currentSection = new GUISectionConnection(this, frame);

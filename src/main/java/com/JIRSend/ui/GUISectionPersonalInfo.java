@@ -33,7 +33,7 @@ public class GUISectionPersonalInfo extends GUISection {
             super(new BorderLayout());
 
             // setLayout(new GridLayout(3, 1));
-            add(new JLabel("Welcome " + window.controler.getUsername()));
+            add(new JLabel("Welcome " + window.controller.getUsername()));
             // add(new JLabel("You are a " + window.user.getType()));
             // add(new JLabel("Nom:" + window.user.getNom()));
             // add(new JLabel("Prenom:" + window.user.getPrenom()));
