@@ -21,6 +21,7 @@ public class TCPServer {
     }
 
     public boolean send(String address, String string) {
+        //FIXME not working when connecting to new user
         if (table.contains(address))
             return table.get(address).send(string);
         table.put(address, new TCPClient(address, port, callback));
