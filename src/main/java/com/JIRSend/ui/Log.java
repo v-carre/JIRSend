@@ -3,7 +3,7 @@ package com.JIRSend.ui;
 public class Log {
     public final static int ERROR_ONLY = 0;
     public final static int ERROR_AND_WARNING = 1;
-    public final static int ALL = 2;
+    public final static int ALL = 99;
     public final static int ERROR = 0;
     public final static int WARNING = 1;
     public final static int LOG = 2;
