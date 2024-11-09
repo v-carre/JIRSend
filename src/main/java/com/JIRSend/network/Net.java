@@ -66,7 +66,7 @@ public class Net {
             Log.l("received: \""+command+"\" \""+args+"\"",Log.LOG);
             switch (command) {
                 case "GetUser":
-                    String username = window.getUsername();
+                    String username = controller.getUsername();
                     if(username != null)
                         send(senderIP, "GetUserResponse " + username);
                     break;
