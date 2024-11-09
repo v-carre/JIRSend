@@ -3,9 +3,6 @@ package com.JIRSend.ui;
 import java.awt.event.*;
 import javax.swing.*;
 import java.awt.*;
-import javax.swing.plaf.FontUIResource;
-import javax.swing.text.StyleContext;
-import java.util.Locale;
 
 public class GUISectionMain extends GUISection {
     // private JComboBox<String> userType;
@@ -16,12 +13,15 @@ public class GUISectionMain extends GUISection {
     // our icons for the actions
     // ImageIcon cutIcon, copyIcon, pasteIcon;
 
+    private GuiPanelMainChatSystem mainPanel;
+
     public GUISectionMain(MainWindow window, Frame frame) {
         super(window, frame, "Personnal Information");
+        this.mainPanel = new GuiPanelMainChatSystem(window.controller);
     }
 
     public JPanel createPanel() {
-        return null; //new PersonalPanel();
+        return mainPanel.getPanel(); //new PersonalPanel();
     }
 
     protected void createActions() {

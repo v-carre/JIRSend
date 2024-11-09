@@ -6,7 +6,7 @@ import com.JIRSend.controller.MainController;
 
 public class MainWindow {
     private enum State {
-        notInit, waitConnection, personal
+        notInit, waitConnection, chat, personal
     }
 
     protected MainController controller;
@@ -48,6 +48,7 @@ public class MainWindow {
         frame.pack();
         frame.setVisible(true);
         frame.setIconImage(img.getImage());
+        frame.setSize(550, 300);
         // frame.revalidate();
         // frame.repaint();
     }
@@ -56,6 +57,10 @@ public class MainWindow {
         if (state == State.notInit) {
             state = State.waitConnection;
         } else if (state == State.waitConnection) {
+            state = State.chat;
+        }
+        else {
+            // we should not arrive in that case
             state = State.personal;
         }
         refreshSection();
@@ -72,6 +77,9 @@ public class MainWindow {
             currentSection = new GUISectionConnection(this, frame);
         } else if (state == State.personal) {
             currentSection = new GUISectionPersonalInfo(this, frame);
+        } else if (state == State.chat) {
+            frame.setSize(800, 400);
+            currentSection = new GUISectionMain(this, frame);
         }
 
         noPanel = false;
