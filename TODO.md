@@ -15,13 +15,10 @@
 ### /!\
 - [x] Add header in requests
 - [ ] Better headers
-- [ ] Check received acks
-- [x] Send ack
-- [x] Really stopping receiver
-- [x] Broadcast
 - [ ] Use TCP
 ### Later
 - [ ] Log.e can take error in param
+- [ ] Check received acks
 
 ## Completed
 - [x] Create a basic GUI

@@ -87,7 +87,7 @@ public class Log {
             case ERROR:
                 return "❌ERROR";
             case WARNING:
-                return "⚠️WARNING";
+                return "⚠️ WARNING";
             case LOG:
                 return "LOG";
             case DEBUG:
