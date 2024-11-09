@@ -1,4 +1,4 @@
-package com.JIRSend.controler;
+package com.JIRSend.controller;
 
 public class InfinitePipeRecursion extends Exception { 
     public InfinitePipeRecursion(String errorMessage) {

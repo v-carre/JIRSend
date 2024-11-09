@@ -1,33 +1,31 @@
 package com.JIRSend.ui;
 
-import com.JIRSend.network.Net;
-import com.JIRSend.users.BaseUser;
-
 import javax.swing.*;
+
+import com.JIRSend.controller.MainController;
 
 public class MainWindow {
     private enum State {
         notInit, waitConnection, personal
     }
 
+    protected MainController controller;
+
     private boolean noPanel;
 
-    protected BaseUser user;
-    protected Net net;
     protected String lastError;
-    protected String username;
 
     private State state;
     private JFrame frame;
     private GUISection currentSection;
     private JPanel currentPanel;
 
-    public MainWindow() {
+    public MainWindow(MainController controller) {
+        this.controller = controller;
         this.state = State.notInit;
         this.noPanel = true;
         this.currentSection = new GUISectionConnection(this, frame);
         this.lastError = "";
-        this.net = new Net(this);
     }
 
     public void open() {
@@ -82,9 +80,5 @@ public class MainWindow {
         frame.add(currentPanel);
         frame.revalidate();
         frame.repaint();
-    }
-
-    public String getUsername() {
-        return username;
     }
 }

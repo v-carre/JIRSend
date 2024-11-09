@@ -69,8 +69,8 @@ public class GUISectionConnection extends GUISection {
             String usernameAsked = username.getText();
             Log.l("Connecting as '" + usernameAsked + "'",Log.LOG);
 
-            if (window.net.usernameAvailable(usernameAsked)) {
-                window.username = usernameAsked;
+            if (window.controller.changeUsername(usernameAsked)) {
+                // window.username = usernameAsked;
                 window.switchToNextSection();
             } else {
                 String usernameError = "'" + usernameAsked + "' is not available";

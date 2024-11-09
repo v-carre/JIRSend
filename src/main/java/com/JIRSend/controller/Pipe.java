@@ -1,4 +1,4 @@
-package com.JIRSend.controler;
+package com.JIRSend.controller;
 
 import java.util.ArrayList;
 

@@ -6,9 +6,9 @@ public class UserTest {
     @Test
     private static void main()
     {
-        User userTest = new User("johnson");
-        int i = userTest.id;
-        if(i==0);
+        // User userTest = new User("johnson");
+        // int i = userTest.id;
+        // if(i==0);
 
     }
 }

@@ -4,6 +4,7 @@ import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.JIRSend.controller.MainController;
 import com.JIRSend.ui.Log;
 import com.JIRSend.ui.MainWindow;
 
@@ -22,11 +23,11 @@ import com.JIRSend.ui.MainWindow;
 public class Net {
     private NetworkIO netIO;
     private HashMap<String, UserEntry> ipToUserEntry;
-    private final MainWindow window;
+    private final MainController controller;
 
-    public Net(MainWindow mainWindwow) {
-        window = mainWindwow;
-        netIO = new NetworkIO(new NetworkCallback());
+    public Net(MainController controller) {
+        this.controller = controller;
+        this.netIO = new NetworkIO(new NetworkCallback());
         broadcast("GetUser");
         ipToUserEntry = new HashMap<>();
     }
