@@ -1,7 +1,12 @@
 package com.JIRSend.network;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.Hashtable;
 
 import com.JIRSend.ui.Log;
@@ -21,6 +26,7 @@ public class TCPServer {
     }
 
     public boolean send(String address, String string) {
+        //FIXME not working when connecting to new user
         if (table.contains(address))
             return table.get(address).send(string);
         table.put(address, new TCPClient(address, port, callback));
@@ -55,6 +61,30 @@ public class TCPServer {
                     break;
                 }
             }
+        }
+    }
+
+    private static class TestServerReceiver {
+        public TestServerReceiver(Socket socket) throws IOException {
+            var sender = new PrintStream(socket.getOutputStream(),true);
+            var receiver = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            System.out.println(receiver.readLine());
+            sender.println("REPONSE");
+            socket.close();
+        }
+    }
+    public static void main(String[] args) throws IOException {
+        ServerSocket server = new ServerSocket(11573);
+        while(true) {
+            new TCPClient(server.accept(),new NetCallback() {
+
+                @Override
+                public void execute(InetAddress senderAddress, int senderPort, String value, boolean isBroadcast,
+                        boolean isUDP) {
+                    System.err.println(senderAddress.toString()+" "+senderPort+" "+value);
+                    
+                }
+            });
         }
     }
 }

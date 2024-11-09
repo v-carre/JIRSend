@@ -56,11 +56,11 @@ public class UDPReceiver {
                 String message = new String(receivePacket.getData(), 0, receivePacket.getLength());
 
                 if (receivePacket.getAddress().getHostAddress().equals(local)) {
-                    Log.l("Received message from self", Log.DEBUG);
+                    Log.l("Received message from self: "+message, Log.DEBUG);
                     continue;
                 }
-
-                // broadcast is false only because it is not seen at the
+                Log.l("recv: " + message,Log.DEBUG);
+                // broadcast is false because it is handled somewhere else (NetworkIO)
                 callback.execute(receivePacket.getAddress(), receivePacket.getPort(), message, false, true);
             }
         } catch (Exception e) {

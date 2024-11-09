@@ -22,8 +22,7 @@ public class UDPSender {
             this.localAddress = InetAddress.getByName("255.255.255.255");
             this.receiversPort = receiversPort;
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            Log.e("Failed to create UDP Sender: " + e);
         }
     }
 
@@ -89,7 +88,6 @@ public class UDPSender {
     }
 
     public void broadcast(String value) {
-
         String timestamp = String.valueOf(Instant.now().toEpochMilli());
         String message = NetworkIO.APP_HEADER + "B<" + timestamp + "|" + value;
         byte[] buffer = message.getBytes();
@@ -98,8 +96,19 @@ public class UDPSender {
         try {
             this.socket.send(packet);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            Log.l("Failed to send broadcast msg: " + e);
+        }
+    }
+
+    public void broadcastNoHeader(String value) {
+        String message = value;
+        byte[] buffer = message.getBytes();
+
+        DatagramPacket packet = new DatagramPacket(buffer, buffer.length, localAddress, this.receiversPort);
+        try {
+            this.socket.send(packet);
+        } catch (IOException e) {
+            Log.l("Failed to send broadcast msg: " + e);
         }
     }
 }

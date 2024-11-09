@@ -4,7 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 import com.JIRSend.ui.Log;
 
@@ -21,6 +24,8 @@ public class TCPClient {
         this.hostname = hostname;
         this.port = port;
         this.callback = callback;
+        Log.l("Creating socket for "+hostname+":"+port,Log.DEBUG);
+        //System.out.println("Creating socket for "+hostname+":"+port);
         try {
             socket = new Socket(hostname, port);
             sender = socket.getOutputStream();
@@ -33,6 +38,7 @@ public class TCPClient {
             thread = null;
             Log.e("Error at socket creation (" + hostname + ":" + port + "): " + e);
         }
+        Log.l("Socket created "+hostname+":"+port,Log.DEBUG);
     }
 
     protected TCPClient(Socket socket, NetCallback callback) {
@@ -56,6 +62,7 @@ public class TCPClient {
         byte[] data = string.getBytes();
         try {
             sender.write(data);
+            sender.flush();
             return true;
         } catch (IOException e) {
             Log.e("Could not send data " + string + " to " + hostname + ":" + port);
@@ -90,5 +97,31 @@ public class TCPClient {
             }
         }
 
+    }
+
+    public static void main(String[] args) throws InterruptedException, UnknownHostException, IOException {
+        //TCPClient client = new TCPClient("10.1.5.47",11573,new NetCallback() {
+        //    @Override
+        //    public void execute(InetAddress senderAddress, int senderPort, String value, boolean isBroadcast,
+        //        boolean isUDP) {
+        //            System.err.println(senderAddress.toString() +" "+ senderPort +" "+ value +" "+ isBroadcast +" "+ isUDP);
+        //        }
+        //});
+        //client.send("GetUser");
+        //System.out.println("sent...");
+        //client.thread.join();
+        Socket socket = new Socket("10.1.5.44", 11573);
+        System.out.println("created");
+        var sender = new PrintWriter(socket.getOutputStream(),true);
+        sender.println("GetUser");
+        System.out.println("sent");
+        var recv = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        String string = "";
+        while(string != null) {
+            System.out.println("receiving");
+            string = recv.readLine();
+            System.out.println(string);
+        }
+        socket.close();
     }
 }
