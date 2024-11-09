@@ -6,7 +6,6 @@ import java.util.Map;
 
 import com.JIRSend.controller.MainController;
 import com.JIRSend.ui.Log;
-import com.JIRSend.ui.MainWindow;
 
 /*
 *  Protocols:
