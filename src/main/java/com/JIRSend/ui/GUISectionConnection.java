@@ -47,14 +47,18 @@ public class GUISectionConnection extends GUISection {
             usernameLabel.setForeground(GuiPanelMainChatSystem.almostWhiteColor);
             JLabel errorMessage = new JLabel(
                     "<html><body><p style=\"width:180px; background:red; padding:10px; border-radius:10px; text-align:center;\">"
-                            + window.lastError + "</p></body></html>");
+                            + window.lastError + "</p></body></html>",
+                    SwingConstants.CENTER);
             // errorMessage.setEditable(false);
+            // errorMessage.setBorder(new GuiRoundedBorder(0));
             errorMessage.setOpaque(false);
+            // errorMessage.setAlignmentX(0);
             // errorMessage.setUI(MultilineLabelUI.labelUI);
             errorMessage.setForeground(new Color(255, 255, 255));
             // errorMessage.setBackground();
             // errorMessage.setBorder(new GuiRoundedBorder(20));
             username = new RoundJTextField(17);
+            username.setHorizontalAlignment(SwingConstants.CENTER);
             username.setBorder(new GuiRoundedBorder(10));
             Font normalFont = GuiTools.getFont("Monospaced", Font.PLAIN, 16, username.getFont());
             username.setFont(normalFont);
@@ -74,6 +78,7 @@ public class GUISectionConnection extends GUISection {
             ui.setPressedColor(connect.getBackground().darker());
             connect.setUI(ui);
             connect.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            connect.setHorizontalAlignment(SwingConstants.CENTER);
 
             JPanel panel0 = new JPanel();
             panel0.setOpaque(false);
@@ -92,17 +97,25 @@ public class GUISectionConnection extends GUISection {
             panel1.setOpaque(false);
 
             JPanel panel2 = new JPanel();
-            panel2.add(connect);
             panel2.setOpaque(false);
 
-            setLayout(new GridLayout(4, 1));
-            add(JIRSendLogo);
+            setLayout(new GridLayout(3, 0));
+
+            add(JIRSendLogo);// , BorderLayout.CENTER);
+            // panel2.setLayout(new BoxLayout(panel2, BoxLayout.Y_AXIS));
+            panel2.add(connect);
             if (window.lastError != "") {
-                add(panel0);
+                // add(errorMessage);
+                panel2.add(errorMessage);// , BorderLayout.NORTH);
+                errorMessage.setVisible(true);
                 window.lastError = "";
+            } else {
+                // errorMessage.setVisible(false);
+                // setLayout(new GridLayout(3, 1));
             }
-            add(panel1);
-            add(panel2);
+            // panel2.setHorizontalAlignment(SwingConstants.CENTER);
+            add(panel1);// , BorderLayout.SOUTH);
+            add(panel2);// , BorderLayout.SOUTH);
         }
     }
 
