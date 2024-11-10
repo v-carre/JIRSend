@@ -45,10 +45,15 @@ public class GUISectionConnection extends GUISection {
             Font boldFont = GuiTools.getFont("Monospaced", Font.BOLD, 16, usernameLabel.getFont());
             usernameLabel.setFont(boldFont);
             usernameLabel.setForeground(GuiPanelMainChatSystem.almostWhiteColor);
-            JLabel notAvailableLabel = new JLabel(window.lastError);
-            notAvailableLabel.setOpaque(true);
-            notAvailableLabel.setForeground(new Color(255, 255, 255));
-            notAvailableLabel.setBackground(new Color(255, 0, 0));
+            JLabel errorMessage = new JLabel(
+                    "<html><body><p style=\"width:180px; background:red; padding:10px; border-radius:10px; text-align:center;\">"
+                            + window.lastError + "</p></body></html>");
+            // errorMessage.setEditable(false);
+            errorMessage.setOpaque(false);
+            // errorMessage.setUI(MultilineLabelUI.labelUI);
+            errorMessage.setForeground(new Color(255, 255, 255));
+            // errorMessage.setBackground();
+            // errorMessage.setBorder(new GuiRoundedBorder(20));
             username = new RoundJTextField(17);
             username.setBorder(new GuiRoundedBorder(10));
             Font normalFont = GuiTools.getFont("Monospaced", Font.PLAIN, 16, username.getFont());
@@ -66,11 +71,15 @@ public class GUISectionConnection extends GUISection {
             connect.setFont(boldFont);
             // connect.setSize(200,200);
             final JSButtonUI ui = new JSButtonUI();
-            ui.setSelectColor(connect.getBackground().darker());
+            ui.setPressedColor(connect.getBackground().darker());
             connect.setUI(ui);
+            connect.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
             JPanel panel0 = new JPanel();
-            panel0.add(notAvailableLabel);
+            panel0.setOpaque(false);
+            // panel0.setOpaque(false);
+            panel0.add(errorMessage);
+            // panel0.set
 
             JPanel panel1 = new JPanel();
             JPanel innerPanel1 = new JPanel();
@@ -86,12 +95,12 @@ public class GUISectionConnection extends GUISection {
             panel2.add(connect);
             panel2.setOpaque(false);
 
-            setLayout(new GridLayout(3, 1));
+            setLayout(new GridLayout(4, 1));
+            add(JIRSendLogo);
             if (window.lastError != "") {
                 add(panel0);
                 window.lastError = "";
             }
-            add(JIRSendLogo);
             add(panel1);
             add(panel2);
         }
@@ -104,6 +113,14 @@ public class GUISectionConnection extends GUISection {
 
         public void actionPerformed(ActionEvent action) {
             String usernameAsked = username.getText();
+            if (usernameAsked.length() < 2) {
+                String usernameError = "Username should have at least 2 characters.";
+                ErrorPopup.show("Connection impossible", usernameError);
+                window.lastError = usernameError;
+                window.refreshSection();
+                return;
+            }
+
             Log.l("Connecting as '" + usernameAsked + "'", Log.LOG);
 
             if (window.controller.changeUsername(usernameAsked)) {
@@ -111,7 +128,7 @@ public class GUISectionConnection extends GUISection {
                 window.switchToNextSection();
             } else {
                 String usernameError = "'" + usernameAsked + "' is not available";
-                ErrorPopup.show("Connexion impossible", usernameError);
+                ErrorPopup.show("Connection impossible", usernameError);
                 window.lastError = usernameError;
                 window.refreshSection();
             }

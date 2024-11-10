@@ -50,7 +50,9 @@ public class MainWindow {
         frame.pack();
         frame.setVisible(true);
         frame.setIconImage(img.getImage());
-        frame.setSize(550, 300);
+        frame.setSize(400, 500);
+        // frame.setResizable(false);
+        // frame.isResizable()
         // frame.revalidate();
         // frame.repaint();
     }
