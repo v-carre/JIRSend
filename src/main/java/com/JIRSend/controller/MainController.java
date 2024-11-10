@@ -41,7 +41,7 @@ public class MainController {
     //////// VIEW
     /// Setters
     public boolean changeUsername(String username) {
-        if (this.net.isUsernameValid(username))
+        if (this.net.usernameAvailable(username))
         {
             this.user.setUsername(username);
             return true;

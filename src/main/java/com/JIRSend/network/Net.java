@@ -147,7 +147,7 @@ public class Net {
         }
     }
 
-    public boolean isUsernameValid(String username) {
+    private boolean isUsernameValid(String username) {
         return !username.contains(":");
     }
 
