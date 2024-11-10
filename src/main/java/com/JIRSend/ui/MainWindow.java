@@ -1,5 +1,7 @@
 package com.JIRSend.ui;
 
+import java.awt.Dimension;
+
 import javax.swing.*;
 
 import com.JIRSend.controller.MainController;
@@ -79,6 +81,7 @@ public class MainWindow {
             currentSection = new GUISectionPersonalInfo(this, frame);
         } else if (state == State.chat) {
             frame.setSize(800, 400);
+            frame.setMinimumSize(new Dimension(800, 400));
             currentSection = new GUISectionMain(this, frame);
         }
 

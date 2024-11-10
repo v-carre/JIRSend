@@ -16,7 +16,7 @@ public class GUISectionMain extends GUISection {
     private GuiPanelMainChatSystem mainPanel;
 
     public GUISectionMain(MainWindow window, Frame frame) {
-        super(window, frame, "Personnal Information");
+        super(window, frame, "JIRSend main");
         this.mainPanel = new GuiPanelMainChatSystem(window.controller);
     }
 
