@@ -27,8 +27,8 @@ public class Net {
     public Net(MainController controller) {
         this.controller = controller;
         this.netIO = new NetworkIO(new NetworkCallback());
-        broadcast("GetUser");
         ipToUserEntry = new HashMap<>();
+        broadcast("GetUser");
     }
 
     public boolean usernameAvailable(String username) {
