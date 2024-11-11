@@ -3,10 +3,8 @@ package com.JIRSend.network;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 import com.JIRSend.ui.Log;
 
@@ -24,10 +22,8 @@ public class TCPClient {
         this.port = port;
         this.callback = callback;
         Log.l("Creating socket for "+hostname+":"+port,Log.DEBUG);
-        //System.out.println("Creating socket for "+hostname+":"+port);
         try {
             socket = new Socket(hostname, port);
-            // sender = socket.getOutputStream();
             sender = new PrintWriter(socket.getOutputStream(), true);
             receiver = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             thread = new MessageHandlerThread();
@@ -47,7 +43,6 @@ public class TCPClient {
         this.callback = callback;
         this.socket = socket;
         try {
-            // sender = socket.getOutputStream();
             sender = new PrintWriter(socket.getOutputStream(), true);
             receiver = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             thread = new MessageHandlerThread();
@@ -60,11 +55,8 @@ public class TCPClient {
     }
 
     public boolean send(String string) {
-        // sender.write(data);
-        // sender.flush();
         sender.println(string);
         return true;
-        // return false;
     }
 
     public void close() {
@@ -79,7 +71,6 @@ public class TCPClient {
         @Override
         public void run() {
             this.setName(hostname + "-ClientHandler");
-            Log.e("NTM ?" + hostname + ":" + port);
             while (true) {
                 // TODO meilleure condition d'arret ^^' (or not)
                 try {
@@ -96,31 +87,5 @@ public class TCPClient {
             }
         }
 
-    }
-
-    public static void main(String[] args) throws InterruptedException, UnknownHostException, IOException {
-        //TCPClient client = new TCPClient("10.1.5.47",11573,new NetCallback() {
-        //    @Override
-        //    public void execute(InetAddress senderAddress, int senderPort, String value, boolean isBroadcast,
-        //        boolean isUDP) {
-        //            System.err.println(senderAddress.toString() +" "+ senderPort +" "+ value +" "+ isBroadcast +" "+ isUDP);
-        //        }
-        //});
-        //client.send("GetUser");
-        //System.out.println("sent...");
-        //client.thread.join();
-        Socket socket = new Socket("10.1.5.44", 11573);
-        System.out.println("created");
-        var sender = new PrintWriter(socket.getOutputStream(),true);
-        sender.println("GetUser");
-        System.out.println("sent");
-        var recv = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        String string = "";
-        while(string != null) {
-            System.out.println("receiving");
-            string = recv.readLine();
-            System.out.println(string);
-        }
-        socket.close();
     }
 }
