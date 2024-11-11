@@ -1,4 +1,4 @@
-package com.JIRSend.db;
+package com.JIRSend.model.db;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;

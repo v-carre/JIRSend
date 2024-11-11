@@ -1,4 +1,4 @@
-package com.JIRSend.users;
+package com.JIRSend.model.user;
 
 import com.JIRSend.controller.MainController;
 

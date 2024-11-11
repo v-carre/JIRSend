@@ -1,6 +1,7 @@
 package com.JIRSend.view.cli;
 
 public class Log {
+    public final static int NOTHING = -1;
     public final static int ERROR_ONLY = 0;
     public final static int ERROR_AND_WARNING = 1;
     public final static int ALL = 99;

@@ -1,4 +1,4 @@
-package com.JIRSend.network;
+package com.JIRSend.model.network;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;

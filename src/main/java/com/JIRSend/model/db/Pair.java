@@ -1,4 +1,4 @@
-package com.JIRSend.db;
+package com.JIRSend.model.db;
 
 public class Pair<T> {
     public T left, right;

@@ -1,9 +1,8 @@
-
 package com.JIRSend.controller;
 
-import com.JIRSend.network.Net;
-import com.JIRSend.users.BaseUser;
-import com.JIRSend.users.User;
+import com.JIRSend.model.network.Net;
+import com.JIRSend.model.user.BaseUser;
+import com.JIRSend.model.user.User;
 import com.JIRSend.view.MainAbstractView;
 import com.JIRSend.view.cli.MainCLI;
 import com.JIRSend.view.gui.MainGUI;

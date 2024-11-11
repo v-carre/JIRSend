@@ -9,6 +9,7 @@ public class CliTools {
     private static final String textLogo = " --------------------------- \n" +
             "-----------------------------\n" +
             "-----------------------------\n" +
+            "-----------------------------\n" +
             "-----------=@@@--+@@@@@@+----\n" +
             "-----------=@@@-=@@@=+%%=----\n" +
             "-----------=@@@--@@@@*-------\n" +
@@ -57,12 +58,12 @@ public class CliTools {
 
     public static void printLogo(boolean color) {
         if (!color) {
-            System.out.println((altLogo ? textLogo : textLogoAlt) + "\n");
+            System.out.println((altLogo ? textLogoAlt : textLogo) + "\n");
             return;
         }
         StringBuilder coloredTextLogo = new StringBuilder();
         boolean isPink = false;
-        for (char c : (altLogo ? textLogo : textLogoAlt).toCharArray()) {
+        for (char c : (altLogo ? textLogoAlt : textLogo).toCharArray()) {
             if (c == '\n' || c == ' ') {
                 coloredTextLogo.append(c);
                 continue;

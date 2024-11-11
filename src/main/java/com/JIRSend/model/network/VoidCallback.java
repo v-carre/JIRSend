@@ -1,4 +1,4 @@
-package com.JIRSend.network;
+package com.JIRSend.model.network;
 
 @FunctionalInterface
 public interface VoidCallback {
