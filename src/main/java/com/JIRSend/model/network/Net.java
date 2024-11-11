@@ -1,11 +1,13 @@
 package com.JIRSend.model.network;
 
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 import com.JIRSend.controller.MainController;
+import com.JIRSend.model.user.UserEntry;
 import com.JIRSend.view.cli.Log;
 
 /*
@@ -146,19 +148,12 @@ public class Net {
         System.out.println("}");
     }
 
-    public class UserEntry {
-        public boolean online;
-        public String username;
-
-        public UserEntry(boolean online, String username) {
-            this.online = online;
-            this.username = username;
+    public ArrayList<UserEntry> getUserEntries() {
+        ArrayList<UserEntry> l = new ArrayList<>();
+        for (UserEntry ue : ipToUserEntry.values()) {
+            l.add(ue);
         }
-
-        @Override
-        public String toString() {
-            return username + (online ? "(online)" : "(offline)");
-        }
+        return l;
     }
 
     private boolean isUsernameValid(String username) {

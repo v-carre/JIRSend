@@ -1,8 +1,11 @@
 package com.JIRSend.controller;
 
+import java.util.ArrayList;
+
 import com.JIRSend.model.network.Net;
 import com.JIRSend.model.user.BaseUser;
 import com.JIRSend.model.user.User;
+import com.JIRSend.model.user.UserEntry;
 import com.JIRSend.view.MainAbstractView;
 import com.JIRSend.view.cli.MainCLI;
 import com.JIRSend.view.gui.MainGUI;
@@ -19,6 +22,7 @@ public class MainController {
 
     // Pipes
     public static Pipe<String> localUsernameChange = new Pipe<>("localUsernameChanged");
+    public static Pipe<String> contactsChange = new Pipe<>("contactsChanged");
 
     public MainController(String name, boolean usingGUI) {
         this.controllerName = name;
@@ -56,5 +60,9 @@ public class MainController {
     /// Getters
     public String getUsername() {
         return this.user.getUsername();
+    }
+
+    public ArrayList<UserEntry> getContacts() {
+        return net.getUserEntries();
     }
 }
