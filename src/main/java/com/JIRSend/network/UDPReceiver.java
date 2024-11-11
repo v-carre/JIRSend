@@ -29,7 +29,7 @@ public class UDPReceiver {
         this.rcvThread = new Thread(() -> {
             Log.l("Listening on port " + port + "...", Log.LOG);
             recverLoop();
-        });
+        }, "UDPReceiver-Thread");
         this.rcvThread.start();
     }
 

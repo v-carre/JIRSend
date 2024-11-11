@@ -1,12 +1,7 @@
 package com.JIRSend.network;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
-import java.net.InetAddress;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.Hashtable;
 
 import com.JIRSend.ui.Log;
@@ -16,17 +11,18 @@ public class TCPServer {
     public final int port;
     private final ServerThread server;
     private final NetCallback callback;
+    private final VoidCallback onRunning;
 
-    public TCPServer(int port, NetCallback callback) {
+    public TCPServer(int port, NetCallback callback, VoidCallback onRunning) {
         table = new Hashtable<>();
         this.port = port;
         this.callback = callback;
+        this.onRunning = onRunning;
         server = new ServerThread();
         server.start();
     }
 
     public boolean send(String address, String string) {
-        //FIXME not working when connecting to new user
         if (table.contains(address))
             return table.get(address).send(string);
         table.put(address, new TCPClient(address, port, callback));
@@ -48,6 +44,7 @@ public class TCPServer {
         public void run() {
             try {
                 socket = new ServerSocket(port);
+                onRunning.execute();
             } catch (IOException e) {
                 Log.e("Error in server socket creation: " + e);
             }
@@ -61,30 +58,6 @@ public class TCPServer {
                     break;
                 }
             }
-        }
-    }
-
-    private static class TestServerReceiver {
-        public TestServerReceiver(Socket socket) throws IOException {
-            var sender = new PrintStream(socket.getOutputStream(),true);
-            var receiver = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            System.out.println(receiver.readLine());
-            sender.println("REPONSE");
-            socket.close();
-        }
-    }
-    public static void main(String[] args) throws IOException {
-        ServerSocket server = new ServerSocket(11573);
-        while(true) {
-            new TCPClient(server.accept(),new NetCallback() {
-
-                @Override
-                public void execute(InetAddress senderAddress, int senderPort, String value, boolean isBroadcast,
-                        boolean isUDP) {
-                    System.err.println(senderAddress.toString()+" "+senderPort+" "+value);
-                    
-                }
-            });
         }
     }
 }
