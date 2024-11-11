@@ -3,6 +3,7 @@ package com.JIRSend.network;
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 import com.JIRSend.controller.MainController;
 import com.JIRSend.ui.Log;
@@ -23,11 +24,24 @@ public class Net {
     private NetworkIO netIO;
     private HashMap<String, UserEntry> ipToUserEntry;
     private final MainController controller;
+    private final CountDownLatch setupLatch;
 
     public Net(MainController controller) {
+        this.setupLatch = new CountDownLatch(1);
+        this.ipToUserEntry = new HashMap<>();
         this.controller = controller;
-        this.netIO = new NetworkIO(new NetworkCallback());
-        ipToUserEntry = new HashMap<>();
+        this.netIO = new NetworkIO(new NetworkCallback(), () -> {
+                // signal that setup is complete
+                setupLatch.countDown();
+        });
+        // wait for TCP Server to be started
+        try {
+            setupLatch.await();
+        } catch (InterruptedException e) {
+            // re-set the interrupt flag
+            Thread.currentThread().interrupt();
+            Log.e("Net setup was interrupted");
+        }
         broadcast("GetUser");
     }
 
@@ -62,11 +76,11 @@ public class Net {
                 command = splited[0];
                 args = splited[1];
             }
-            Log.l("received: \""+command+"\" \""+args+"\"",Log.LOG);
+            Log.l("received: \"" + command + "\" \"" + args + "\"", Log.LOG);
             switch (command) {
                 case "GetUser":
                     String username = controller.getUsername();
-                    if(username != null)
+                    if (username != null)
                         send(senderIP, "GetUserResponse " + username);
                     break;
                 case "GetUserResponse":

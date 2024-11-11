@@ -27,14 +27,16 @@ public class NetworkIO {
     private final UDPReceiver rcv;
     private final UDPSender snd;
     private final NetCallback callback;
+    private final VoidCallback onRunning;
     private final TCPServer tcpServer;
 
-    public NetworkIO(NetCallback callback) {
+    public NetworkIO(NetCallback callback, VoidCallback onRunning) {
         this.rcv = new UDPReceiver(RECV_PORT, onReceive);
         this.rcv.start();
-        this.snd = new UDPSender(BRDC_PORT, RECV_PORT);
+        this.onRunning = onRunning;
         this.callback = callback;
-        tcpServer = new TCPServer(TCP_PORT, callback);
+        tcpServer = new TCPServer(TCP_PORT, this.callback, this.onRunning);
+        this.snd = new UDPSender(BRDC_PORT, RECV_PORT);
     }
 
     public boolean send(String destAddress, String value) {

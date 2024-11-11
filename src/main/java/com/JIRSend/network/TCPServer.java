@@ -11,11 +11,13 @@ public class TCPServer {
     public final int port;
     private final ServerThread server;
     private final NetCallback callback;
+    private final VoidCallback onRunning;
 
-    public TCPServer(int port, NetCallback callback) {
+    public TCPServer(int port, NetCallback callback, VoidCallback onRunning) {
         table = new Hashtable<>();
         this.port = port;
         this.callback = callback;
+        this.onRunning = onRunning;
         server = new ServerThread();
         server.start();
     }
@@ -42,6 +44,7 @@ public class TCPServer {
         public void run() {
             try {
                 socket = new ServerSocket(port);
+                onRunning.execute();
             } catch (IOException e) {
                 Log.e("Error in server socket creation: " + e);
             }
