@@ -14,7 +14,7 @@ public class TCPClient {
     public final String hostname;
     public final int port;
     private Socket socket;
-    private OutputStream sender;
+    private PrintWriter sender;
     private BufferedReader receiver;
     private NetCallback callback;
     private MessageHandlerThread thread;
@@ -27,7 +27,8 @@ public class TCPClient {
         //System.out.println("Creating socket for "+hostname+":"+port);
         try {
             socket = new Socket(hostname, port);
-            sender = socket.getOutputStream();
+            // sender = socket.getOutputStream();
+            sender = new PrintWriter(socket.getOutputStream(), true);
             receiver = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             thread = new MessageHandlerThread();
             thread.start();
@@ -46,7 +47,8 @@ public class TCPClient {
         this.callback = callback;
         this.socket = socket;
         try {
-            sender = socket.getOutputStream();
+            // sender = socket.getOutputStream();
+            sender = new PrintWriter(socket.getOutputStream(), true);
             receiver = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             thread = new MessageHandlerThread();
             thread.start();
@@ -58,15 +60,11 @@ public class TCPClient {
     }
 
     public boolean send(String string) {
-        byte[] data = string.getBytes();
-        try {
-            sender.write(data);
-            sender.flush();
-            return true;
-        } catch (IOException e) {
-            Log.e("Could not send data " + string + " to " + hostname + ":" + port);
-        }
-        return false;
+        // sender.write(data);
+        // sender.flush();
+        sender.println(string);
+        return true;
+        // return false;
     }
 
     public void close() {
