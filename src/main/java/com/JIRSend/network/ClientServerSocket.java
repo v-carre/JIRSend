@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 
-import com.JIRSend.ui.Log;
+import com.JIRSend.cli.Log;
 
 public class ClientServerSocket extends Thread {
     private ServerSocket serverSocket;

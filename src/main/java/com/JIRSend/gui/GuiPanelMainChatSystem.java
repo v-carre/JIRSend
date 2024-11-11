@@ -1,9 +1,10 @@
-package com.JIRSend.ui;
+package com.JIRSend.gui;
 
 import com.JIRSend.controller.MainController;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
 
@@ -50,7 +51,7 @@ public class GuiPanelMainChatSystem {
         public static final Color almostWhiteColor = new Color(-854792);
         public static final Color messageBGColor = new Color(-13816014);
         public static final Color chatBGColor = new Color(-14671323);
-        public static final Color headerContactColor = new Color(-12371388);
+        public static final Color headerContactColor = chatBGColor; //new Color(-12371388);
         public static final Color carretColor = new Color(-3684409);
 
         public GuiPanelMainChatSystem(MainController controller) {
@@ -250,6 +251,8 @@ public class GuiPanelMainChatSystem {
                                 .setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 1,
                                                 new Insets(0, 0, 0, 0), -1, -1));
                 chatContactName.setBackground(headerContactColor);
+                // chatContactName.setBorder(new LineBorder(headerContactColor.brighter(), 10, true));
+                chatContactName.setBorder(new MatteBorder(0, 0, 2, 0, headerContactColor.brighter()));
                 chatContactName.setEnabled(true);
                 chatContent.add(chatContactName,
                                 new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1,

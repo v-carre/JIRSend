@@ -1,4 +1,4 @@
-package com.JIRSend.ui;
+package com.JIRSend.gui;
 
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;

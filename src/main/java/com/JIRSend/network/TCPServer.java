@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.Hashtable;
 
-import com.JIRSend.ui.Log;
+import com.JIRSend.cli.Log;
 
 public class TCPServer {
     private Hashtable<String, TCPClient> table;

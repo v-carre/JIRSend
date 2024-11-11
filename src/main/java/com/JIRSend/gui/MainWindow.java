@@ -1,9 +1,10 @@
-package com.JIRSend.ui;
+package com.JIRSend.gui;
 
 import java.awt.Dimension;
 
 import javax.swing.*;
 
+import com.JIRSend.cli.Log;
 import com.JIRSend.controller.MainController;
 
 public class MainWindow {

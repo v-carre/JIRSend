@@ -5,7 +5,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import com.JIRSend.ui.Log;
+import com.JIRSend.cli.Log;
 
 public class ConnectionHandler extends Thread {
     private final Socket socket;

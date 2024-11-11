@@ -1,8 +1,10 @@
-package com.JIRSend.ui;
+package com.JIRSend.gui;
 
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+
+import com.JIRSend.cli.Log;
 
 import java.awt.*;
 

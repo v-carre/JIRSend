@@ -1,7 +1,7 @@
 package com.JIRSend;
 
+import com.JIRSend.cli.Log;
 import com.JIRSend.controller.MainController;
-import com.JIRSend.ui.Log;
 
 public class App {
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package com.JIRSend.ui;
+package com.JIRSend.gui;
 
 import java.awt.event.*;
 import javax.swing.*;

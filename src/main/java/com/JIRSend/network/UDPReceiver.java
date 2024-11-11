@@ -7,7 +7,7 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Enumeration;
 
-import com.JIRSend.ui.Log;
+import com.JIRSend.cli.Log;
 
 public class UDPReceiver {
     private final NetCallback callback;

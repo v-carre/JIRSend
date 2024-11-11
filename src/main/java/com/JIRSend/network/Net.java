@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
+import com.JIRSend.cli.Log;
 import com.JIRSend.controller.MainController;
-import com.JIRSend.ui.Log;
 
 /*
 *  Protocols:
