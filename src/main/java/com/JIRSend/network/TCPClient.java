@@ -80,6 +80,8 @@ public class TCPClient {
     private class MessageHandlerThread extends Thread {
         @Override
         public void run() {
+            this.setName(hostname + "-ClientHandler");
+            Log.e("NTM ?" + hostname + ":" + port);
             while (true) {
                 // TODO meilleure condition d'arret ^^' (or not)
                 try {
