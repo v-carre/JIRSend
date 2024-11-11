@@ -1,16 +1,18 @@
 
 package com.JIRSend.controller;
 
-import com.JIRSend.gui.MainWindow;
 import com.JIRSend.network.Net;
 import com.JIRSend.users.BaseUser;
 import com.JIRSend.users.User;
+import com.JIRSend.view.MainAbstractView;
+import com.JIRSend.view.cli.MainCLI;
+import com.JIRSend.view.gui.MainGUI;
 
 public class MainController {
     private String controllerName;
 
     // View objects
-    private MainWindow view;
+    private MainAbstractView view;
     
     // Model objects
     protected BaseUser user;
@@ -19,18 +21,21 @@ public class MainController {
     // Pipes
     public static Pipe<String> localUsernameChange = new Pipe<>("localUsernameChanged");
 
-    public MainController(String name) {
+    public MainController(String name, boolean usingGUI) {
         this.controllerName = name;
-        this.view = new MainWindow(this);
+        if (usingGUI)
+            this.view = new MainGUI(this);
+        else
+            this.view = new MainCLI(this);
         this.net = new Net(this);
         this.user = new User(this);
     }
 
-    public MainController() {
-        this("JIRSend Main");
+    public MainController(boolean usingGUI) {
+        this("JIRSend Main", usingGUI);
     }
 
-    public void startWindow() {
+    public void startUI() {
         this.view.open();
     }
 

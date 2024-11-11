@@ -1,4 +1,4 @@
-package com.JIRSend.gui;
+package com.JIRSend.view.gui;
 
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;

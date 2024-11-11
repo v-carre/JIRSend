@@ -1,10 +1,10 @@
-package com.JIRSend.gui;
+package com.JIRSend.view.gui;
 
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import com.JIRSend.cli.Log;
+import com.JIRSend.view.cli.Log;
 
 import java.awt.*;
 
@@ -17,7 +17,7 @@ public class GUISectionConnection extends GUISection {
     // our icons for the actions
     // ImageIcon cutIcon, copyIcon, pasteIcon;
 
-    public GUISectionConnection(MainWindow window, Frame frame) {
+    public GUISectionConnection(MainGUI window, Frame frame) {
         super(window, frame, "Connection");
     }
 

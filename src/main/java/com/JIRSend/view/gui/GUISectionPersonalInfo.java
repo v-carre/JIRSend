@@ -1,4 +1,4 @@
-package com.JIRSend.gui;
+package com.JIRSend.view.gui;
 
 import java.awt.event.*;
 import javax.swing.*;
@@ -13,7 +13,7 @@ public class GUISectionPersonalInfo extends GUISection {
     // our icons for the actions
     // ImageIcon cutIcon, copyIcon, pasteIcon;
 
-    public GUISectionPersonalInfo(MainWindow window, Frame frame) {
+    public GUISectionPersonalInfo(MainGUI window, Frame frame) {
         super(window, frame, "Personnal Information");
     }
 

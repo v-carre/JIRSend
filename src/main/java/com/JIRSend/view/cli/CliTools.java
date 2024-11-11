@@ -1,4 +1,4 @@
-package com.JIRSend.cli;
+package com.JIRSend.view.cli;
 
 import java.io.IOException;
 
@@ -7,7 +7,6 @@ public class CliTools {
 
     private static final boolean altLogo = false;
     private static final String textLogo = " --------------------------- \n" +
-            "-----------------------------\n" +
             "-----------------------------\n" +
             "-----------------------------\n" +
             "-----------=@@@--+@@@@@@+----\n" +

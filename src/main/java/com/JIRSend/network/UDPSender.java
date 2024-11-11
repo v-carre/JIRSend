@@ -7,7 +7,7 @@ import java.net.InetAddress;
 import java.net.SocketTimeoutException;
 import java.time.Instant;
 
-import com.JIRSend.cli.Log;
+import com.JIRSend.view.cli.Log;
 
 public class UDPSender {
 

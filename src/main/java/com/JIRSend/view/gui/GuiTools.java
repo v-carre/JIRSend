@@ -1,4 +1,4 @@
-package com.JIRSend.gui;
+package com.JIRSend.view.gui;
 
 import java.awt.Font;
 import java.util.Locale;

@@ -11,8 +11,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.JIRSend.cli.Log;
-import com.JIRSend.gui.ErrorPopup;
+import com.JIRSend.view.cli.Log;
+import com.JIRSend.view.gui.ErrorPopup;
 
 public class GenericDatabase {
     private boolean connected;

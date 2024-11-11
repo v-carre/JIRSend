@@ -1,4 +1,4 @@
-package com.JIRSend.gui;
+package com.JIRSend.view.gui;
 
 import com.JIRSend.controller.MainController;
 

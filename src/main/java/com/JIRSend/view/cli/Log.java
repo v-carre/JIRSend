@@ -1,4 +1,4 @@
-package com.JIRSend.cli;
+package com.JIRSend.view.cli;
 
 public class Log {
     public final static int ERROR_ONLY = 0;

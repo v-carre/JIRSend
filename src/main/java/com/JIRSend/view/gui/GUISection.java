@@ -1,14 +1,14 @@
-package com.JIRSend.gui;
+package com.JIRSend.view.gui;
 
 import java.awt.*;
 import javax.swing.*;
 
 public abstract class GUISection {
     private String sectionName;
-    protected MainWindow window;
+    protected MainGUI window;
     protected Frame frame;
 
-    protected GUISection(MainWindow window, Frame frame, String name) {
+    protected GUISection(MainGUI window, Frame frame, String name) {
         this.window = window;
         this.frame = frame;
         this.sectionName = name;

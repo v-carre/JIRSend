@@ -1,13 +1,14 @@
-package com.JIRSend.gui;
+package com.JIRSend.view.gui;
 
 import java.awt.Dimension;
 
 import javax.swing.*;
 
-import com.JIRSend.cli.Log;
 import com.JIRSend.controller.MainController;
+import com.JIRSend.view.MainAbstractView;
+import com.JIRSend.view.cli.Log;
 
-public class MainWindow {
+public class MainGUI extends MainAbstractView {
     private enum State {
         notInit, waitConnection, chat, personal
     }
@@ -23,7 +24,7 @@ public class MainWindow {
     private GUISection currentSection;
     private JPanel currentPanel;
 
-    public MainWindow(MainController controller) {
+    public MainGUI(MainController controller) {
         this.controller = controller;
         this.state = State.notInit;
         this.noPanel = true;
@@ -31,10 +32,11 @@ public class MainWindow {
         this.lastError = "";
     }
 
+    @Override
     public void open() {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                Log.l("Starting window !", Log.LOG);
+                Log.l("Starting window", Log.LOG);
                 createWindow();
             }
         });
@@ -52,10 +54,6 @@ public class MainWindow {
         frame.setVisible(true);
         frame.setIconImage(img.getImage());
         frame.setSize(400, 500);
-        // frame.setResizable(false);
-        // frame.isResizable()
-        // frame.revalidate();
-        // frame.repaint();
     }
 
     protected void switchToNextSection() {
@@ -65,7 +63,7 @@ public class MainWindow {
             state = State.chat;
         }
         else {
-            // we should not arrive in that case
+            // we should not arrive in that case, for test purpose only
             state = State.personal;
         }
         refreshSection();
