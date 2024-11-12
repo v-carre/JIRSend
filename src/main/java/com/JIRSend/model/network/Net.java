@@ -28,7 +28,7 @@ public class Net {
     private final MainController controller;
     private final CountDownLatch setupLatch;
 
-    public Net(MainController controller) {
+    public Net(MainController controller, VoidCallback onSetup) {
         this.setupLatch = new CountDownLatch(1);
         this.ipToUserEntry = new HashMap<>();
         this.controller = controller;
@@ -45,6 +45,7 @@ public class Net {
             Log.e("Net setup was interrupted");
         }
         broadcast("GetUser");
+        onSetup.execute();
     }
 
     public boolean usernameAvailable(String username) {
@@ -54,7 +55,7 @@ public class Net {
             if (entry.username.equals(username))
                 return false;
         broadcast("NewUser " + username);
-        printHashMap();
+        // printHashMap();
         return true;
     }
 

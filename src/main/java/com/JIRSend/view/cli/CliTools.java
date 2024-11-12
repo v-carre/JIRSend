@@ -87,11 +87,40 @@ public class CliTools {
 
     /**
      * Automatically colorize text whether it is windows or not
+     * 
      * @param color
-     * @return
+     * @return color or not
      */
     public static String colorize(String color) {
         return isWindowsSystem ? "" : color;
+    }
+
+    /**
+     * Automatically colorize text whether it is windows or not
+     * 
+     * @param color
+     * @return colored text
+     */
+    public static String colorize(String color, String textToColor) {
+        return isWindowsSystem ? textToColor : color + textToColor + NORMAL;
+    }
+
+    /**
+     * Automatically prints colorized text whether it is windows or not
+     * 
+     * @param color
+     */
+    public static void coloredPrintln(String color, String textToColor) {
+        System.out.println(colorize(color, textToColor));
+    }
+
+    /**
+     * Automatically prints colorized text whether it is windows or not
+     * 
+     * @param color
+     */
+    public static void coloredPrint(String color, String textToColor) {
+        System.out.print(colorize(color, textToColor));
     }
 
     public static void clearConsole() {
@@ -152,5 +181,11 @@ public class CliTools {
 
     public static void printTitle(boolean authors) {
         printTitle(!isWindowsSystem, authors);
+    }
+
+    public static void printBigError(String message) {
+        System.out
+                .println(CliTools.colorize(CliTools.RED_NORMAL_BACKGROUND + CliTools.WHITE_NORMAL_COLOR + CliTools.BOLD)
+                        + message + CliTools.colorize(CliTools.NORMAL));
     }
 }

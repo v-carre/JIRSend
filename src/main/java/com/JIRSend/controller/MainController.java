@@ -15,7 +15,7 @@ public class MainController {
 
     // View objects
     private MainAbstractView view;
-    
+
     // Model objects
     protected BaseUser user;
     protected Net net;
@@ -30,8 +30,11 @@ public class MainController {
             this.view = new MainGUI(this);
         else
             this.view = new MainCLI(this);
-        this.net = new Net(this);
         this.user = new User(this);
+        // start UI when Net is setup
+        this.net = new Net(this, () -> {
+            startUI();
+        });
     }
 
     public MainController(boolean usingGUI) {
@@ -49,12 +52,11 @@ public class MainController {
     //////// VIEW
     /// Setters
     public boolean changeUsername(String username) {
-        if (this.net.usernameAvailable(username))
-        {
+        if (this.net.usernameAvailable(username)) {
             this.user.setUsername(username);
             return true;
         }
-        return false; 
+        return false;
     }
 
     /// Getters

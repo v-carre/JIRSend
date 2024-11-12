@@ -16,10 +16,9 @@ public class App {
         CliTools.clearConsole();
         CliTools.printLogo();
         CliTools.printTitle(true);
-        Log.setVerbose(true, Log.ALL);
+        Log.setVerbose(false, Log.ALL);
         Log.l("Starting Client...", Log.LOG);
 
-        MainController controller = new MainController(!cliFlag);
-        controller.startUI();
+        new MainController(!cliFlag);
     };
 }
