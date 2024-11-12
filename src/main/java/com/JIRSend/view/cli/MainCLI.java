@@ -64,16 +64,12 @@ public class MainCLI extends MainAbstractView {
             while (true) {
                 System.out.print("Enter your username: ");
                 String usernameChosen = readIn();
-                if (usernameChosen.length() < 2) {
-                    CliTools.printBigError("Username should have at least 2 characters.");
-                    continue;
+                String res = controller.changeUsername(usernameChosen);
+                if (res.equals("")) {
+                    break;
                 }
 
-                if (controller.changeUsername(usernameChosen)) {
-                    break;
-                } else {
-                    CliTools.printBigError("'" + usernameChosen + "' is not available");
-                }
+                CliTools.printBigError(res);
             }
         }
     }

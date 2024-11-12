@@ -33,8 +33,8 @@ public class Net {
         this.ipToUserEntry = new HashMap<>();
         this.controller = controller;
         this.netIO = new NetworkIO(new NetworkCallback(), () -> {
-                // signal that setup is complete
-                setupLatch.countDown();
+            // signal that setup is complete
+            setupLatch.countDown();
         });
         // wait for TCP Server to be started
         try {
@@ -48,15 +48,21 @@ public class Net {
         onSetup.execute();
     }
 
-    public boolean usernameAvailable(String username) {
-        if (!isUsernameValid(username))
-            return false;
+    /**
+     * Takes the username if available
+     * @param username
+     * @return error | "" if available and taken
+     */
+    public String usernameAvailable(String username) {
+        String isSyntaxValid = isUsernameValid(username);
+        if (!isSyntaxValid.equals(""))
+            return isSyntaxValid;
         for (UserEntry entry : ipToUserEntry.values())
             if (entry.username.equals(username))
-                return false;
+                return "'" + username + "' is not available!";
         broadcast("NewUser " + username);
         // printHashMap();
-        return true;
+        return "";
     }
 
     private class NetworkCallback extends NetCallback {
@@ -87,13 +93,13 @@ public class Net {
                         send(senderIP, "GetUserResponse " + username);
                     break;
                 case "GetUserResponse":
-                    if (!isUsernameValid(args))
+                    if (!isUsernameValid(args).equals(""))
                         Log.l("Forbidden username: " + args, Log.WARNING);
                     else
                         ipToUserEntry.put(senderIP, new UserEntry(true, args));
                     break;
                 case "NewUser":
-                    if (!isUsernameValid(args))
+                    if (!isUsernameValid(args).equals(""))
                         Log.l("Forbidden username: " + args, Log.WARNING);
                     else
                         ipToUserEntry.put(senderIP, new UserEntry(true, args));
@@ -102,14 +108,14 @@ public class Net {
                     if (ipToUserEntry.containsKey(senderIP)) {
                         ipToUserEntry.get(senderIP).online = false;
                     } else {
-                        if (isUsernameValid(args))
+                        if (isUsernameValid(args).equals(""))
                             ipToUserEntry.put(senderIP, new UserEntry(false, args));
                         else
                             Log.l("Forbidden username: " + args);
                     }
                     break;
                 case "UpdateUsername":
-                    if (!isUsernameValid(args))
+                    if (!isUsernameValid(args).equals(""))
                         Log.l("Forbidden username: " + args, Log.WARNING);
                     else if (ipToUserEntry.containsKey(senderIP))
                         ipToUserEntry.get(senderIP).username = args;
@@ -157,8 +163,19 @@ public class Net {
         return l;
     }
 
-    private boolean isUsernameValid(String username) {
-        return !username.contains(":");
+    /**
+     * Returns whether a username syntax is valid
+     * @param username
+     * @return error | "" if valid
+     */
+    private String isUsernameValid(String username) {
+        if (username.contains(":"))
+            return "Username should not contain ':'!";
+        else if (username.contains(" "))
+            return "Username should not contain spaces ' '!";
+        else if (username.length() < 2)
+            return "Username should have at least 2 characters!";
+        return "";
     }
 
     private boolean send(String address, String string) {

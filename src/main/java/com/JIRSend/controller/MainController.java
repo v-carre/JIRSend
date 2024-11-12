@@ -51,12 +51,13 @@ public class MainController {
 
     //////// VIEW
     /// Setters
-    public boolean changeUsername(String username) {
-        if (this.net.usernameAvailable(username)) {
+    public String changeUsername(String username) {
+        String res = this.net.usernameAvailable(username);
+        if (res.equals("")) {
             this.user.setUsername(username);
-            return true;
+            return "";
         }
-        return false;
+        return res;
     }
 
     /// Getters

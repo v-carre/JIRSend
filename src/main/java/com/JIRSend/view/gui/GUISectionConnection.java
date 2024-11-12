@@ -128,25 +128,17 @@ public class GUISectionConnection extends GUISection {
 
         public void actionPerformed(ActionEvent action) {
             String usernameAsked = username.getText();
-            if (usernameAsked.length() < 2) {
-                String usernameError = "Username should have at least 2 characters.";
-                ErrorPopup.show("Connection impossible", usernameError);
-                window.lastError = usernameError;
+            String res = window.controller.changeUsername(usernameAsked);
+            if (res.equals("")) {
+                window.switchToNextSection();
+            } else {
+                ErrorPopup.show("Connection impossible", res);
+                window.lastError = res;
                 window.refreshSection();
                 return;
             }
 
             Log.l("Connecting as '" + usernameAsked + "'", Log.LOG);
-
-            if (window.controller.changeUsername(usernameAsked)) {
-                // window.username = usernameAsked;
-                window.switchToNextSection();
-            } else {
-                String usernameError = "'" + usernameAsked + "' is not available";
-                ErrorPopup.show("Connection impossible", usernameError);
-                window.lastError = usernameError;
-                window.refreshSection();
-            }
         }
     }
 }
