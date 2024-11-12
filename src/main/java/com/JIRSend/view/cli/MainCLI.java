@@ -16,6 +16,9 @@ public class MainCLI extends MainAbstractView {
     public MainCLI(MainController controller) {
         this.controller = controller;
         this.thread = new MainCliThread();
+        MainController.contactsChange.subscribe((messageReceived) -> {
+            printIncomingMessage(CliTools.colorize(CliTools.BLACK_DESAT_COLOR, messageReceived));
+        });
     }
 
     @Override
@@ -37,6 +40,16 @@ public class MainCLI extends MainAbstractView {
                         cmd)
                 + " " + CliTools.colorize(CliTools.BLACK_NORMAL_BACKGROUND + CliTools.WHITE_NORMAL_COLOR, params)
                 + CliTools.colorize(CliTools.NORMAL, " - " + description) + "\n");
+    }
+
+    private final String commandInput = CliTools.colorize(CliTools.PURPLE_NORMAL_COLOR, "> ");
+
+    private void printCommandInput() {
+        System.out.println(commandInput);
+    }
+
+    private void printIncomingMessage(String message) {
+        System.out.print("\r" + message + "\n" + commandInput);
     }
 
     private class MainCliThread extends Thread {
@@ -68,7 +81,7 @@ public class MainCLI extends MainAbstractView {
                     +
                     CliTools.colorize(CliTools.PURPLE_DESAT_COLOR, " to get the list of the available commands."));
             while (true) {
-                CliTools.coloredPrint(CliTools.PURPLE_NORMAL_COLOR, "> ");
+                printCommandInput();
                 String cmd = readIn();
                 String[] args = cmd.split(" ");
                 commandHandler(args);
@@ -136,7 +149,8 @@ public class MainCLI extends MainAbstractView {
                         chooseUsername(true, args[1]);
                     else
                         chooseUsername(true);
-                    System.out.println("You will now appear as " + CliTools.colorize(CliTools.BOLD, controller.getUsername()) + ".");
+                    System.out.println("You will now appear as "
+                            + CliTools.colorize(CliTools.BOLD, controller.getUsername()) + ".");
                     break;
 
                 case "quit":

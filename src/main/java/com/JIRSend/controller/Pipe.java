@@ -9,6 +9,7 @@ public class Pipe<T> {
 
     public Pipe(String name) {
         this.pipeName = name;
+        this.subs = new ArrayList<>();
     }
 
     public void put(T message) throws InfinitePipeRecursion {
@@ -20,6 +21,21 @@ public class Pipe<T> {
             subscription.get(message);
         }
         isSending=false;
+    }
+
+    public void safePut(T message) {
+        if(isSending)
+            return;
+           
+        isSending = true;
+        for (Subscription<T> subscription : subs) {
+            subscription.get(message);
+        }
+        isSending=false;
+    }
+
+    public void subscribe(Subscription<T> sub) {
+        this.subs.add(sub);
     }
 
     public String getName() {

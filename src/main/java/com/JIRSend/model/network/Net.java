@@ -50,6 +50,7 @@ public class Net {
 
     /**
      * Takes the username if available
+     * 
      * @param username
      * @return error | "" if available and taken
      */
@@ -95,21 +96,27 @@ public class Net {
                 case "GetUserResponse":
                     if (!isUsernameValid(args).equals(""))
                         Log.l("Forbidden username: " + args, Log.WARNING);
-                    else
+                    else {
                         ipToUserEntry.put(senderIP, new UserEntry(true, args));
+                        MainController.contactsChange.safePut(args + " is now connected");
+                    }
                     break;
                 case "NewUser":
                     if (!isUsernameValid(args).equals(""))
                         Log.l("Forbidden username: " + args, Log.WARNING);
-                    else
+                    else {
                         ipToUserEntry.put(senderIP, new UserEntry(true, args));
+                        MainController.contactsChange.safePut(args + " is now connected");
+                    }
                     break;
                 case "SetOfflineUser":
                     if (ipToUserEntry.containsKey(senderIP)) {
                         ipToUserEntry.get(senderIP).online = false;
                     } else {
-                        if (isUsernameValid(args).equals(""))
+                        if (isUsernameValid(args).equals("")) {
                             ipToUserEntry.put(senderIP, new UserEntry(false, args));
+                            MainController.contactsChange.safePut(args + " has disconnected");
+                        }
                         else
                             Log.l("Forbidden username: " + args);
                     }
@@ -119,14 +126,16 @@ public class Net {
                         Log.l("Forbidden username: " + args, Log.WARNING);
                     else if (ipToUserEntry.containsKey(senderIP))
                         ipToUserEntry.get(senderIP).username = args;
-                    else
+                    else {
+                        // TODO: check safety
                         ipToUserEntry.put(senderIP, new UserEntry(true, args));
+                        MainController.contactsChange.safePut(args + " has updated his username");
+                    }
                     break;
                 case "SendMessage":
                     if (ipToUserEntry.containsKey(senderIP)) // Maybe set user to online = true
                         System.out.println("[" + ipToUserEntry.get(senderIP).username + "] " + args);
                     else {
-                        // FIXME Message was lost
                         send(senderIP, "GetUser");
                         System.out.println("[Unkown user] " + args);
                     }
@@ -165,6 +174,7 @@ public class Net {
 
     /**
      * Returns whether a username syntax is valid
+     * 
      * @param username
      * @return error | "" if valid
      */
