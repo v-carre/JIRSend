@@ -87,19 +87,6 @@ public class UDPSender {
         }
     }
 
-    public void broadcast(String value) {
-        String timestamp = String.valueOf(Instant.now().toEpochMilli());
-        String message = NetworkIO.APP_HEADER + "B<" + timestamp + "|" + value;
-        byte[] buffer = message.getBytes();
-
-        DatagramPacket packet = new DatagramPacket(buffer, buffer.length, localAddress, this.receiversPort);
-        try {
-            this.socket.send(packet);
-        } catch (IOException e) {
-            Log.l("Failed to send broadcast msg: " + e);
-        }
-    }
-
     public void broadcastNoHeader(String value) {
         String message = value;
         byte[] buffer = message.getBytes();
@@ -110,5 +97,12 @@ public class UDPSender {
         } catch (IOException e) {
             Log.l("Failed to send broadcast msg: " + e);
         }
+    }
+
+    public void broadcast(String value) {
+        String timestamp = String.valueOf(Instant.now().toEpochMilli());
+        String message = NetworkIO.APP_HEADER + "B<" + timestamp + "|" + value;
+        
+        broadcastNoHeader(message);
     }
 }

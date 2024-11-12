@@ -52,7 +52,7 @@ public class MainCLI extends MainAbstractView {
     }
 
     private void printIncomingMessage(String message) {
-        System.out.print(message + "\n" + commandInput);
+        System.out.print("\r" + message + "\n" + commandInput);
     }
 
     private class MainCliThread extends Thread {
