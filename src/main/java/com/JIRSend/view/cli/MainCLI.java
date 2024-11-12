@@ -54,7 +54,7 @@ public class MainCLI extends MainAbstractView {
         public void run() {
             this.setName("CLI Thread");
 
-            chooseUsername();
+            chooseUsername(false);
 
             System.out.println("Welcome " + CliTools.colorize(CliTools.BOLD, controller.getUsername()) + "!");
             CliTools.coloredPrintln(CliTools.BLACK_DESAT_COLOR, controller.getContacts().size()
@@ -93,6 +93,7 @@ public class MainCLI extends MainAbstractView {
                     commandHelperPrint("q, quit", "quit JIRSend");
                     commandHelperPrint("lc, list-contacts", "list contacts");
                     commandHelperPrint("dm, direct-message", "<username> <message>", "send direct message");
+                    commandHelperPrint("su, switch-username", "[newUsername]", "change your username");
 
                     CliTools.coloredPrintln(CliTools.PURPLE_NORMAL_COLOR + CliTools.BOLD, "================\n");
                     break;
@@ -129,6 +130,15 @@ public class MainCLI extends MainAbstractView {
                             CliTools.colorize(CliTools.RED_NORMAL_COLOR, "' is not available yet."));
                     break;
 
+                case "switch-username":
+                case "su":
+                    if (args.length >= 2)
+                        chooseUsername(true, args[1]);
+                    else
+                        chooseUsername(true);
+                    System.out.println("You will now appear as " + CliTools.colorize(CliTools.BOLD, controller.getUsername()) + ".");
+                    break;
+
                 case "quit":
                 case "q":
                     CliTools.coloredPrintln(CliTools.PURPLE_NORMAL_COLOR, "Exiting JIRSend...");
@@ -150,10 +160,12 @@ public class MainCLI extends MainAbstractView {
             }
         }
 
-        private void chooseUsername() {
+        private void chooseUsername(boolean change) {
             while (true) {
-                System.out.print("Enter your username: ");
+                System.out.print("Enter your " + (change ? "new " : "") + "username: ");
                 String usernameChosen = readIn();
+                if (usernameChosen.equals(controller.getUsername()) && usernameChosen != null)
+                    break;
                 String res = controller.changeUsername(usernameChosen);
                 if (res.equals("")) {
                     break;
@@ -161,6 +173,19 @@ public class MainCLI extends MainAbstractView {
 
                 CliTools.printBigError(res);
             }
+        }
+
+        private void chooseUsername(boolean change, String newUsername) {
+            if (newUsername.equals(controller.getUsername()) && newUsername != null)
+                return;
+            String res = controller.changeUsername(newUsername);
+            if (res.equals("")) {
+                return;
+            }
+
+            CliTools.printBigError(res);
+            // if not available go into loop
+            chooseUsername(change);
         }
     }
 }

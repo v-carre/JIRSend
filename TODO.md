@@ -15,7 +15,8 @@
 ### /!\
 - [x] Add header in requests
 - [ ] Better headers
-- [ ] Use TCP
+- [x] Use TCP
+- [ ] Offline
 ### Later
 - [ ] Log.e can take error in param
 - [ ] Check received acks
