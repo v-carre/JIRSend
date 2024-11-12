@@ -32,6 +32,7 @@ public class Net {
         this.setupLatch = new CountDownLatch(1);
         this.ipToUserEntry = new HashMap<>();
         this.controller = controller;
+        MainController.lostContact.subscribe((ip) -> {lostContact(ip);});
         this.netIO = new NetworkIO(new NetworkCallback(), () -> {
             // signal that setup is complete
             setupLatch.countDown();
@@ -196,5 +197,13 @@ public class Net {
     private void broadcast(String string) {
         Log.l("Broadcasting: " + string, Log.LOG);
         netIO.broadcast(string);
+    }
+
+    private void lostContact(String ip) {
+        if (ipToUserEntry.containsKey(ip)) {
+            ipToUserEntry.replace(ip, new UserEntry(false, ipToUserEntry.get(ip).username));
+
+            MainController.contactsChange.safePut(ipToUserEntry.get(ip).username + " has disconnected");
+        }
     }
 }

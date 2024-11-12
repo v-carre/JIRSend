@@ -12,11 +12,14 @@ public class MainCLI extends MainAbstractView {
 
     protected MainController controller;
     private MainCliThread thread;
+    private boolean connected = false;
 
     public MainCLI(MainController controller) {
         this.controller = controller;
+        this.connected = false;
         this.thread = new MainCliThread();
         MainController.contactsChange.subscribe((messageReceived) -> {
+            if (connected)
             printIncomingMessage(CliTools.colorize(CliTools.BLACK_DESAT_COLOR, messageReceived));
         });
     }
@@ -45,11 +48,11 @@ public class MainCLI extends MainAbstractView {
     private final String commandInput = CliTools.colorize(CliTools.PURPLE_NORMAL_COLOR, "> ");
 
     private void printCommandInput() {
-        System.out.println(commandInput);
+        System.out.print(commandInput);
     }
 
     private void printIncomingMessage(String message) {
-        System.out.print("\r" + message + "\n" + commandInput);
+        System.out.print(message + "\n" + commandInput);
     }
 
     private class MainCliThread extends Thread {
@@ -70,7 +73,7 @@ public class MainCLI extends MainAbstractView {
             chooseUsername(false);
 
             System.out.println("Welcome " + CliTools.colorize(CliTools.BOLD, controller.getUsername()) + "!");
-            CliTools.coloredPrintln(CliTools.BLACK_DESAT_COLOR, controller.getContacts().size()
+            CliTools.coloredPrintln(CliTools.BLACK_DESAT_COLOR, controller.getNumberConnected()
                     + " people connected.\n");
 
             System.out.println(CliTools.colorize(CliTools.PURPLE_NORMAL_COLOR, "Type ") +
@@ -122,7 +125,7 @@ public class MainCLI extends MainAbstractView {
                             CliTools.colorize(CliTools.PURPLE_NORMAL_COLOR + CliTools.BOLD, " =====") + "\n");
 
                     CliTools.coloredPrintln(CliTools.BLACK_DESAT_COLOR,
-                            controller.getContacts().size() + " people connected.\n");
+                            controller.getNumberConnected() + " people connected.\n");
                     for (UserEntry ue : controller.getContacts()) {
                         System.out.println(" - " + ue.username + " (" +
                                 (ue.online ? CliTools.colorize(CliTools.GREEN_NORMAL_COLOR, "ONLINE")
@@ -178,10 +181,13 @@ public class MainCLI extends MainAbstractView {
             while (true) {
                 System.out.print("Enter your " + (change ? "new " : "") + "username: ");
                 String usernameChosen = readIn();
-                if (usernameChosen.equals(controller.getUsername()) && usernameChosen != null)
+                if (usernameChosen.equals(controller.getUsername()) && usernameChosen != null) {
+                    connected = true;
                     break;
+                }
                 String res = controller.changeUsername(usernameChosen);
                 if (res.equals("")) {
+                    connected = true;
                     break;
                 }
 
@@ -190,10 +196,13 @@ public class MainCLI extends MainAbstractView {
         }
 
         private void chooseUsername(boolean change, String newUsername) {
-            if (newUsername.equals(controller.getUsername()) && newUsername != null)
+            if (newUsername.equals(controller.getUsername()) && newUsername != null) {
+                connected = true;
                 return;
+            }
             String res = controller.changeUsername(newUsername);
             if (res.equals("")) {
+                connected = true;
                 return;
             }
 

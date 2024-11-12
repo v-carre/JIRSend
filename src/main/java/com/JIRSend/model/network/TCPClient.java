@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import com.JIRSend.controller.MainController;
 import com.JIRSend.view.cli.Log;
 
 public class TCPClient {
@@ -77,11 +78,13 @@ public class TCPClient {
                     String string = receiver.readLine();
                     if (string == null) {
                         Log.l("Connection ended by "+hostname+":"+port);
+                        MainController.lostContact.safePut(hostname);
                         break;
                     }
                     callback.execute(socket.getInetAddress(), port, string, false, false);
                 } catch (IOException e) {
                     Log.l("Msg receiver closed for " + hostname + ":" + port);
+                    MainController.lostContact.safePut(hostname);
                     break;
                 }
             }

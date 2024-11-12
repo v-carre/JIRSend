@@ -21,6 +21,7 @@ public class MainController {
     protected Net net;
 
     // Pipes
+    public static Pipe<String> lostContact = new Pipe<>("lostContact");
     public static Pipe<String> localUsernameChange = new Pipe<>("localUsernameChanged");
     public static Pipe<String> contactsChange = new Pipe<>("contactsChanged");
 
@@ -67,5 +68,14 @@ public class MainController {
 
     public ArrayList<UserEntry> getContacts() {
         return net.getUserEntries();
+    }
+
+    public int getNumberConnected() {
+        int connected = 0;
+        for (UserEntry ue : net.getUserEntries()) {
+            if (ue.online)
+                connected++;
+        }
+        return connected;
     }
 }
