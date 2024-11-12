@@ -171,8 +171,7 @@ public class CliTools {
         System.out.println(" - Local ChatSystem");
 
         if (authors) {
-            System.out.println(colorize(BLACK_DESAT_COLOR) + "    - by:");
-            System.out.println("          Victor LASSERRE");
+            System.out.println(colorize(BLACK_DESAT_COLOR) + "    - by: Victor LASSERRE");
             System.out.println("          Valentin SERVIERES" + colorize(NORMAL));
         }
 

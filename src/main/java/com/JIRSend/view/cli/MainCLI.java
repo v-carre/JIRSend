@@ -44,11 +44,20 @@ public class MainCLI extends MainAbstractView {
             CliTools.coloredPrintln(CliTools.BLACK_DESAT_COLOR, controller.getContacts().size()
                     + " people connected.\n");
 
+            System.out.println(CliTools.colorize(CliTools.PURPLE_DESAT_COLOR, "Type ") +
+                    CliTools.colorize(CliTools.PURPLE_NORMAL_COLOR + CliTools.UNDERLINED, "help") +
+                    CliTools.colorize(CliTools.PURPLE_DESAT_COLOR, " to get the list of the available commands."));
             while (true) {
                 CliTools.coloredPrint(CliTools.PURPLE_NORMAL_COLOR, "> ");
                 String cmd = readIn();
                 String[] args = cmd.split(" ");
+                commandHandler(args);
             }
+        }
+
+        private void commandHandler(String[] args) {
+            if (args.length == 0)
+                return;
         }
 
         private void chooseUsername() {
