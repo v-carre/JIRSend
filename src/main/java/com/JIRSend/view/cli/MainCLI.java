@@ -15,7 +15,7 @@ import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.reader.ParsedLine;
 import org.jline.reader.UserInterruptException;
-import org.jline.reader.impl.completer.StringsCompleter;
+import org.jline.reader.impl.DefaultParser;
 import org.jline.reader.impl.history.DefaultHistory;
 
 import com.JIRSend.controller.MainController;
@@ -29,16 +29,50 @@ public class MainCLI extends MainAbstractView {
     private boolean connected = false;
     private List<String> dmTargets = new ArrayList<>();
 
+    protected List<String> commands = Arrays.asList("h", "help", "q", "quit", "lc", "list-contacts", "dm",
+            "direct-message",
+            "su", "switch-username");
+    protected History history = new DefaultHistory();
+
+    protected Completer superCompleter = (reader, line, candidates) -> {
+        ParsedLine parsedLine = line;
+        List<String> words = parsedLine.words();
+        if (words.size() == 1) {
+            // complete the main commands only
+            commands.forEach(command -> candidates.add(new Candidate(command)));
+        } else if (words.size() == 2 && (words.get(0).equals("dm") || words.get(0).equals("direct-message"))) {
+            // dm suggestions based on userlist
+            dmTargets.forEach(target -> candidates.add(new Candidate(target)));
+        }
+        // no completion for 3 params or more
+    };
+
+    protected LineReader reader;
+
+    // parser that ignores '!'' for history expansion (causes crash)
+    protected DefaultParser parser = new DefaultParser();
+
     public MainCLI(MainController controller) {
         this.controller = controller;
         this.connected = false;
+
+        parser.setEofOnUnclosedBracket(DefaultParser.Bracket.CURLY, DefaultParser.Bracket.ROUND,
+                DefaultParser.Bracket.SQUARE);
+        parser.setEscapeChars(null); // Avoids special handling of `!`
+        this.reader = LineReaderBuilder.builder().history(history).parser(parser).completer(superCompleter).build();
+
+        // disable history expansion on the LineReader (causes crash)
+        reader.setOpt(LineReader.Option.DISABLE_EVENT_EXPANSION);
+
         this.thread = new MainCliThread();
         MainController.contactsChange.subscribe((messageReceived) -> {
             dmTargets = controller.getConnectedUsernames();
             if (connected)
                 printIncomingMessage(CliTools.colorize(CliTools.BLACK_DESAT_COLOR, messageReceived));
         });
-        MainController.messageReceived.subscribe((msg) -> {messageReceived(msg);});
+        MainController.messageReceived.subscribe((msg) -> {
+            messageReceived(msg);
+        });
     }
 
     @Override
@@ -73,34 +107,13 @@ public class MainCLI extends MainAbstractView {
     }
 
     private void messageReceived(Message msg) {
-        printIncomingMessage("[" + CliTools.colorize(CliTools.PURPLE_NORMAL_COLOR + CliTools.BOLD, msg.sender) + "] " + msg.message);
+        printIncomingMessage(
+                "[" + CliTools.colorize(CliTools.PURPLE_NORMAL_COLOR + CliTools.BOLD, msg.sender) + "] " + msg.message);
     }
 
     private class MainCliThread extends Thread {
         // pfff this is so old school !
         BufferedReader oldReader = new BufferedReader(new InputStreamReader(System.in));
-        // Let us introduce
-        List<String> commands = Arrays.asList("h", "help", "q", "quit", "lc", "list-contacts", "dm", "direct-message",
-                "su", "switch-username");
-        History history = new DefaultHistory();
-        Completer commandCompleter = new StringsCompleter(commands);
-
-        Completer superCompleter = (reader, line, candidates) -> {
-            ParsedLine parsedLine = line;
-
-            if (parsedLine.words().size() > 1
-                    && (parsedLine.words().get(0).equals("dm") || parsedLine.words().get(0).equals("direct-message"))) {
-                // complete commands that takes username as param
-                for (String target : dmTargets) {
-                    candidates.add(new Candidate(target));
-                }
-            } else {
-                // complete regular commands
-                commandCompleter.complete(reader, line, candidates);
-            }
-        };
-
-        LineReader reader = LineReaderBuilder.builder().history(history).completer(superCompleter).build();
 
         private String readIn() {
             try {
@@ -268,8 +281,8 @@ public class MainCLI extends MainAbstractView {
         private void sendMessages(String[] argv) {
             final String dest;
             final String msg;
-            
-            if (argv.length < 2) { //no arg
+
+            if (argv.length < 2) { // no arg
                 System.out.println("Please enter recipient's username: ");
                 dest = oldReadIn();
             } else {
@@ -278,19 +291,19 @@ public class MainCLI extends MainAbstractView {
 
             boolean found = false;
             boolean isOnline = false;
-            for(UserEntry entry: controller.getContacts()) {
-                if(entry.username.equals(dest)) {
+            for (UserEntry entry : controller.getContacts()) {
+                if (entry.username.equals(dest)) {
                     found = true;
                     isOnline = entry.online;
                     break;
                 }
             }
 
-            if(!found) {
-                System.out.println(CliTools.colorize(CliTools.RED_NORMAL_COLOR, "No user \""+dest+"\" was found."));
+            if (!found) {
+                System.out.println(CliTools.colorize(CliTools.RED_NORMAL_COLOR, "No user \"" + dest + "\" was found."));
                 return;
             } else if (!isOnline) {
-                System.out.println(CliTools.colorize(CliTools.RED_NORMAL_COLOR, "User "+dest+" is not online."));
+                System.out.println(CliTools.colorize(CliTools.RED_NORMAL_COLOR, "User " + dest + " is not online."));
                 return;
             }
 
@@ -299,7 +312,7 @@ public class MainCLI extends MainAbstractView {
                 msg = oldReadIn();
             } else {
                 String acu = "";
-                for(int i = 2;i<argv.length;++i)
+                for (int i = 2; i < argv.length; ++i)
                     acu = acu + argv[i] + ' ';
                 msg = acu;
             }

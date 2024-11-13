@@ -11,13 +11,14 @@ import com.JIRSend.view.cli.Log;
  * 
  * Communication template
  * 
- * -JIRSENDPACK>$TYPE$<$TIMESTAMP$|$PAYLOAD$
+ * -JIRSend>$TYPE$<$TIMESTAMP$|$PAYLOAD$
  * $TYPE$ = (A:Ack|B:Broadcast|M:Message)
  */
 public class NetworkIO {
+    // set to false to use UDP with ACK messages instead of TCP
     public static final boolean NO_ACK = true;
     public static final boolean NO_HEADER = false;
-    public static final String APP_HEADER = "-ConnaissezVousJIRSend?>";
+    public static final String APP_HEADER = "-JIRSend>";
     public static final int RECV_PORT = NO_ACK ? 1610 : 11572;
     public static final int TCP_PORT = 11573;
     public static final int BRDC_PORT = 11574;
