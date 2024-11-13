@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 import com.JIRSend.controller.MainController;
+import com.JIRSend.model.Message;
 import com.JIRSend.model.user.UserEntry;
 import com.JIRSend.view.cli.Log;
 
@@ -33,7 +34,12 @@ public class Net {
         this.setupLatch = new CountDownLatch(1);
         this.ipToUserEntry = new HashMap<>();
         this.controller = controller;
-        MainController.lostContact.subscribe((ip) -> {lostContact(ip);});
+        MainController.lostContact.subscribe((ip) -> {
+            lostContact(ip);
+        });
+        MainController.sendMessages.subscribe((message) -> {
+            send(getIpFromUsername(message.receiver), message.message);
+        });
         this.netIO = new NetworkIO(new NetworkCallback(), () -> {
             // signal that setup is complete
             setupLatch.countDown();
@@ -117,8 +123,7 @@ public class Net {
                         if (isUsernameValid(args).equals(okString)) {
                             ipToUserEntry.put(senderIP, new UserEntry(false, args));
                             MainController.contactsChange.safePut(args + " has disconnected");
-                        }
-                        else
+                        } else
                             Log.l("Forbidden username: " + args);
                     }
                     break;
@@ -133,9 +138,16 @@ public class Net {
                     }
                     break;
                 case "SendMessage":
-                    if (ipToUserEntry.containsKey(senderIP)) // May want to set user to online = true
-                        System.out.println("[" + ipToUserEntry.get(senderIP).username + "] " + args);
-                    else {
+                    if (ipToUserEntry.containsKey(senderIP)) {
+                        final String senderUsername = ipToUserEntry.get(senderIP).username;
+                        if(ipToUserEntry.get(senderIP).online == false) {
+                            ipToUserEntry.get(senderIP).online = true;
+                            MainController.contactsChange.safePut(senderUsername + " is now connected");
+                        }
+                        MainController.messageReceived.safePut(
+                                new Message(senderUsername, controller.getUsername(), args));
+                    } else {
+                        //TODO recover "lost" message
                         send(senderIP, "GetUser");
                         System.out.println("[Unkown user] " + args);
                     }
@@ -200,10 +212,20 @@ public class Net {
 
     private void lostContact(String ip) {
         if (ipToUserEntry.containsKey(ip)) {
-            //ipToUserEntry.replace(ip, new UserEntry(false, ipToUserEntry.get(ip).username));
+            // ipToUserEntry.replace(ip, new UserEntry(false,
+            // ipToUserEntry.get(ip).username));
             ipToUserEntry.get(ip).online = false;
 
             MainController.contactsChange.safePut(ipToUserEntry.get(ip).username + " has disconnected");
         }
+    }
+
+    public String getIpFromUsername(String username) {
+        for (Map.Entry<String, UserEntry> pair : ipToUserEntry.entrySet()) {
+            if (pair.getValue().username.equals(username)) {
+                return pair.getKey();
+            }
+        }
+        return null;
     }
 }

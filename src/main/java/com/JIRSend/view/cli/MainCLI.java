@@ -19,6 +19,7 @@ import org.jline.reader.impl.completer.StringsCompleter;
 import org.jline.reader.impl.history.DefaultHistory;
 
 import com.JIRSend.controller.MainController;
+import com.JIRSend.model.Message;
 import com.JIRSend.model.user.UserEntry;
 import com.JIRSend.view.MainAbstractView;
 
@@ -37,6 +38,7 @@ public class MainCLI extends MainAbstractView {
             if (connected)
                 printIncomingMessage(CliTools.colorize(CliTools.BLACK_DESAT_COLOR, messageReceived));
         });
+        MainController.messageReceived.subscribe((msg) -> {messageReceived(msg);});
     }
 
     @Override
@@ -68,6 +70,10 @@ public class MainCLI extends MainAbstractView {
 
     private void printIncomingMessage(String message) {
         System.out.print("\r" + message + "\n" + commandInput);
+    }
+
+    private void messageReceived(Message msg) {
+        printIncomingMessage("[" + CliTools.colorize(CliTools.PURPLE_NORMAL_COLOR + CliTools.BOLD, msg.sender) + "] " + msg.message);
     }
 
     private class MainCliThread extends Thread {
@@ -191,12 +197,7 @@ public class MainCLI extends MainAbstractView {
 
                 case "direct-message":
                 case "dm":
-                    System.out.println(CliTools.colorize(CliTools.RED_NORMAL_COLOR, "The command '") +
-                            CliTools.colorize(
-                                    CliTools.RED_DESAT_COLOR + CliTools.UNDERLINED + CliTools.BLACK_NORMAL_BACKGROUND,
-                                    args[0])
-                            +
-                            CliTools.colorize(CliTools.RED_NORMAL_COLOR, "' is not available yet."));
+                    sendMessages(args);
                     break;
 
                 case "switch-username":
@@ -262,6 +263,48 @@ public class MainCLI extends MainAbstractView {
             CliTools.printBigError(res);
             // if not available go into loop
             chooseUsername(change);
+        }
+
+        private void sendMessages(String[] argv) {
+            final String dest;
+            final String msg;
+            
+            if (argv.length < 2) { //no arg
+                System.out.println("Please enter recipient's username: ");
+                dest = oldReadIn();
+            } else {
+                dest = argv[1];
+            }
+
+            boolean found = false;
+            boolean isOnline = false;
+            for(UserEntry entry: controller.getContacts()) {
+                if(entry.username.equals(dest)) {
+                    found = true;
+                    isOnline = entry.online;
+                    break;
+                }
+            }
+
+            if(!found) {
+                System.out.println(CliTools.colorize(CliTools.RED_NORMAL_COLOR, "No user \""+dest+"\" was found."));
+                return;
+            } else if (!isOnline) {
+                System.out.println(CliTools.colorize(CliTools.RED_NORMAL_COLOR, "User "+dest+" is not online."));
+                return;
+            }
+
+            if (argv.length < 3) {
+                System.out.println("Please enter your message: ");
+                msg = oldReadIn();
+            } else {
+                String acu = "";
+                for(int i = 2;i<argv.length;++i)
+                    acu = acu + argv[i] + ' ';
+                msg = acu;
+            }
+
+            MainController.sendMessages.safePut(new Message(controller.getUsername(), dest, msg));
         }
     }
 }

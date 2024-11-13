@@ -2,6 +2,7 @@ package com.JIRSend.controller;
 
 import java.util.ArrayList;
 
+import com.JIRSend.model.Message;
 import com.JIRSend.model.network.Net;
 import com.JIRSend.model.user.BaseUser;
 import com.JIRSend.model.user.User;
@@ -21,9 +22,11 @@ public class MainController {
     protected Net net;
 
     // Pipes
-    public static Pipe<String> lostContact = new Pipe<>("lostContact");
-    public static Pipe<String> localUsernameChange = new Pipe<>("localUsernameChanged");
-    public static Pipe<String> contactsChange = new Pipe<>("contactsChanged");
+    public static Pipe<String> lostContact = new Pipe<>("Lost Contact");
+    public static Pipe<String> localUsernameChange = new Pipe<>("Local Username Changed");
+    public static Pipe<String> contactsChange = new Pipe<>("Contacts Changed");
+    public static Pipe<Message> sendMessages = new Pipe<>("Sending Message");
+    public static Pipe<Message> messageReceived = new Pipe<>("Message received");
 
     public MainController(String name, boolean usingGUI) {
         this.controllerName = name;
