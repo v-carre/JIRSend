@@ -82,8 +82,10 @@ public class MainCLI extends MainAbstractView {
 
         Completer superCompleter = (reader, line, candidates) -> {
             ParsedLine parsedLine = line;
+
             if (parsedLine.words().size() > 1
                     && (parsedLine.words().get(0).equals("dm") || parsedLine.words().get(0).equals("direct-message"))) {
+                // complete commands that takes username as param
                 for (String target : dmTargets) {
                     candidates.add(new Candidate(target));
                 }

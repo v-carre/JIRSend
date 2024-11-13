@@ -9,7 +9,7 @@ public class GUISectionMain extends GUISection {
 
     public GUISectionMain(MainGUI window, Frame frame) {
         super(window, frame, "JIRSend main");
-        this.mainPanel = new GuiPanelMainChatSystem(window.controller);
+        this.mainPanel = new GuiPanelMainChatSystem(window.controller, window);
     }
 
     public JPanel createPanel() {

@@ -93,4 +93,9 @@ public class MainGUI extends MainAbstractView {
         frame.revalidate();
         frame.repaint();
     }
+
+    protected void refreshFrame() {
+        frame.revalidate();
+        frame.repaint();
+    }
 }
