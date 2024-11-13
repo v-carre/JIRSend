@@ -210,7 +210,7 @@ public class MainCLI extends MainAbstractView {
 
                 case "direct-message":
                 case "dm":
-                    sendMessages(args);
+                    sendMessage(args);
                     break;
 
                 case "switch-username":
@@ -278,7 +278,7 @@ public class MainCLI extends MainAbstractView {
             chooseUsername(change);
         }
 
-        private void sendMessages(String[] argv) {
+        private void sendMessage(String[] argv) {
             final String dest;
             final String msg;
 
@@ -317,7 +317,7 @@ public class MainCLI extends MainAbstractView {
                 msg = acu;
             }
 
-            MainController.sendMessages.safePut(new Message(controller.getUsername(), dest, msg));
+            MainController.sendMessage.safePut(new Message(controller.getUsername(), dest, msg));
         }
     }
 }

@@ -37,8 +37,8 @@ public class Net {
         MainController.lostContact.subscribe((ip) -> {
             lostContact(ip);
         });
-        MainController.sendMessages.subscribe((message) -> {
-            send(getIpFromUsername(message.receiver), message.message);
+        MainController.sendMessage.subscribe((message) -> {
+            send(getIpFromUsername(message.receiver), "SendMessage " + message.message);
         });
         this.netIO = new NetworkIO(new NetworkCallback(), () -> {
             // signal that setup is complete

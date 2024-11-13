@@ -25,7 +25,7 @@ public class MainController {
     public static Pipe<String> lostContact = new Pipe<>("Lost Contact");
     public static Pipe<String> localUsernameChange = new Pipe<>("Local Username Changed");
     public static Pipe<String> contactsChange = new Pipe<>("Contacts Changed");
-    public static Pipe<Message> sendMessages = new Pipe<>("Sending Message");
+    public static Pipe<Message> sendMessage = new Pipe<>("Sending Message");
     public static Pipe<Message> messageReceived = new Pipe<>("Message received");
 
     public MainController(String name, boolean usingGUI) {
