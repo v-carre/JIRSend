@@ -51,7 +51,7 @@ public class MainGUI extends MainAbstractView {
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                Log.l("Closing GUI", Log.WARNING);
+                // Log.l("Closing GUI", Log.WARNING);
                 controller.stoppingApp();
             }
         });
