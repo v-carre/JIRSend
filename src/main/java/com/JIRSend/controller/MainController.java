@@ -78,4 +78,13 @@ public class MainController {
         }
         return connected;
     }
+
+    public ArrayList<String> getConnectedUsernames() {
+        ArrayList<String> connected = new ArrayList<>();
+        for (UserEntry ue : net.getUserEntries()) {
+            if (ue.online)
+                connected.add(ue.username);
+        }
+        return connected;
+    }
 }
