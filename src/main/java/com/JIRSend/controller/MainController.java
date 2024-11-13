@@ -54,9 +54,9 @@ public class MainController {
     /// Setters
     public String changeUsername(String username) {
         String res = this.net.usernameAvailable(username);
-        if (res.equals("")) {
+        if (res.equals(Net.okString)) {
             this.user.setUsername(username);
-            return "";
+            return Net.okString;
         }
         return res;
     }

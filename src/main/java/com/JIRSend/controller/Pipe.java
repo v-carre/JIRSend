@@ -13,7 +13,7 @@ public class Pipe<T> {
     }
 
     public void put(T message) throws InfinitePipeRecursion {
-        if(isSending)
+        if(isSending) //Note: we may want to reset isSending at this point
             throw new InfinitePipeRecursion(null);
            
         isSending = true;

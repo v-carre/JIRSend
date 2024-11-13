@@ -23,7 +23,6 @@ import com.JIRSend.model.user.UserEntry;
 import com.JIRSend.view.MainAbstractView;
 
 public class MainCLI extends MainAbstractView {
-
     protected MainController controller;
     private MainCliThread thread;
     private boolean connected = false;
@@ -76,7 +75,7 @@ public class MainCLI extends MainAbstractView {
         BufferedReader oldReader = new BufferedReader(new InputStreamReader(System.in));
         // Let us introduce
         List<String> commands = Arrays.asList("h", "help", "q", "quit", "lc", "list-contacts", "dm", "direct-message",
-                "su", "switch-user");
+                "su", "switch-username");
         History history = new DefaultHistory();
         Completer commandCompleter = new StringsCompleter(commands);
 

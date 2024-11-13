@@ -27,6 +27,7 @@ public class Net {
     private HashMap<String, UserEntry> ipToUserEntry;
     private final MainController controller;
     private final CountDownLatch setupLatch;
+    public static final String okString = "";
 
     public Net(MainController controller, VoidCallback onSetup) {
         this.setupLatch = new CountDownLatch(1);
@@ -42,8 +43,8 @@ public class Net {
             setupLatch.await();
         } catch (InterruptedException e) {
             // re-set the interrupt flag
-            Thread.currentThread().interrupt();
             Log.e("Net setup was interrupted");
+            Thread.currentThread().interrupt();
         }
         broadcast("GetUser");
         onSetup.execute();
@@ -53,18 +54,17 @@ public class Net {
      * Takes the username if available
      * 
      * @param username
-     * @return error | "" if available and taken
+     * @return error | Net.okString if available
      */
     public String usernameAvailable(String username) {
         String isSyntaxValid = isUsernameValid(username);
-        if (!isSyntaxValid.equals(""))
+        if (!isSyntaxValid.equals(okString))
             return isSyntaxValid;
         for (UserEntry entry : ipToUserEntry.values())
             if (entry.username.equals(username))
                 return "'" + username + "' is not available!";
         broadcast("NewUser " + username);
-        // printHashMap();
-        return "";
+        return okString;
     }
 
     private class NetworkCallback extends NetCallback {
@@ -95,7 +95,7 @@ public class Net {
                         send(senderIP, "GetUserResponse " + username);
                     break;
                 case "GetUserResponse":
-                    if (!isUsernameValid(args).equals(""))
+                    if (!isUsernameValid(args).equals(okString))
                         Log.l("Forbidden username: " + args, Log.WARNING);
                     else {
                         ipToUserEntry.put(senderIP, new UserEntry(true, args));
@@ -103,7 +103,7 @@ public class Net {
                     }
                     break;
                 case "NewUser":
-                    if (!isUsernameValid(args).equals(""))
+                    if (!isUsernameValid(args).equals(okString))
                         Log.l("Forbidden username: " + args, Log.WARNING);
                     else {
                         ipToUserEntry.put(senderIP, new UserEntry(true, args));
@@ -114,7 +114,7 @@ public class Net {
                     if (ipToUserEntry.containsKey(senderIP)) {
                         ipToUserEntry.get(senderIP).online = false;
                     } else {
-                        if (isUsernameValid(args).equals("")) {
+                        if (isUsernameValid(args).equals(okString)) {
                             ipToUserEntry.put(senderIP, new UserEntry(false, args));
                             MainController.contactsChange.safePut(args + " has disconnected");
                         }
@@ -123,18 +123,17 @@ public class Net {
                     }
                     break;
                 case "UpdateUsername":
-                    if (!isUsernameValid(args).equals(""))
+                    if (!isUsernameValid(args).equals(okString))
                         Log.l("Forbidden username: " + args, Log.WARNING);
                     else if (ipToUserEntry.containsKey(senderIP))
                         ipToUserEntry.get(senderIP).username = args;
                     else {
-                        // TODO: check safety
                         ipToUserEntry.put(senderIP, new UserEntry(true, args));
                         MainController.contactsChange.safePut(args + " has updated his username");
                     }
                     break;
                 case "SendMessage":
-                    if (ipToUserEntry.containsKey(senderIP)) // Maybe set user to online = true
+                    if (ipToUserEntry.containsKey(senderIP)) // May want to set user to online = true
                         System.out.println("[" + ipToUserEntry.get(senderIP).username + "] " + args);
                     else {
                         send(senderIP, "GetUser");
@@ -177,7 +176,7 @@ public class Net {
      * Returns whether a username syntax is valid
      * 
      * @param username
-     * @return error | "" if valid
+     * @return error | Net.okString if valid
      */
     private String isUsernameValid(String username) {
         if (username.contains(":"))
@@ -186,7 +185,7 @@ public class Net {
             return "Username should not contain spaces ' '!";
         else if (username.length() < 2)
             return "Username should have at least 2 characters!";
-        return "";
+        return okString;
     }
 
     private boolean send(String address, String string) {
@@ -201,7 +200,8 @@ public class Net {
 
     private void lostContact(String ip) {
         if (ipToUserEntry.containsKey(ip)) {
-            ipToUserEntry.replace(ip, new UserEntry(false, ipToUserEntry.get(ip).username));
+            //ipToUserEntry.replace(ip, new UserEntry(false, ipToUserEntry.get(ip).username));
+            ipToUserEntry.get(ip).online = false;
 
             MainController.contactsChange.safePut(ipToUserEntry.get(ip).username + " has disconnected");
         }
