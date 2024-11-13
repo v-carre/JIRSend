@@ -122,7 +122,7 @@ public class MainCLI extends MainAbstractView {
                 // e.printStackTrace();
                 if (e instanceof UserInterruptException || e instanceof EndOfFileException) {
                     CliTools.coloredPrintln(CliTools.PURPLE_NORMAL_COLOR, "Exiting JIRSend...");
-                    System.exit(0);
+                    controller.stoppingApp();
                 }
                 return null;
             }
@@ -226,7 +226,7 @@ public class MainCLI extends MainAbstractView {
                 case "quit":
                 case "q":
                     CliTools.coloredPrintln(CliTools.PURPLE_NORMAL_COLOR, "Exiting JIRSend...");
-                    System.exit(0);
+                    controller.stoppingApp();
                     break;
 
                 default:

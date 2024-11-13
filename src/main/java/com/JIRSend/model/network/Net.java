@@ -228,4 +228,9 @@ public class Net {
         }
         return null;
     }
+
+    public void sendGoingOfflineMessage() {
+        Log.l("Broadcasting: Going offline", Log.LOG);
+        netIO.broadcast("SetOfflineUser " + controller.getUsername());
+    }
 }

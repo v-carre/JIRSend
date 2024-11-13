@@ -1,6 +1,8 @@
 package com.JIRSend.view.gui;
 
 import java.awt.Dimension;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.*;
 
@@ -46,6 +48,14 @@ public class MainGUI extends MainAbstractView {
         frame = new JFrame("JIRSend");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                Log.l("Closing GUI", Log.WARNING);
+                controller.stoppingApp();
+            }
+        });
+
         ImageIcon img = new ImageIcon("assets/jirsend_logo.png");
 
         switchToNextSection();
@@ -61,8 +71,7 @@ public class MainGUI extends MainAbstractView {
             state = State.waitConnection;
         } else if (state == State.waitConnection) {
             state = State.chat;
-        }
-        else {
+        } else {
             // we should not arrive in that case, for test purpose only
             state = State.personal;
         }

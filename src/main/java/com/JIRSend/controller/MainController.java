@@ -53,6 +53,14 @@ public class MainController {
         return controllerName;
     }
 
+    /**
+     * Will stop the app
+     */
+    public void stoppingApp() {
+        net.sendGoingOfflineMessage();
+        System.exit(0);
+    }
+
     //////// VIEW
     /// Setters
     public String changeUsername(String username) {
