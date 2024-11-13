@@ -46,4 +46,9 @@ public class Pipe<T> {
     public String toString() {
         return "[" + pipeName + "]";
     }
+
+    public void put(Pipe<Integer> newValue) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'put'");
+    }
 }

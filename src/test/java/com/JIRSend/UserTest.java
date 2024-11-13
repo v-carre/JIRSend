@@ -1,4 +1,4 @@
-package com.JIRSend.user;
+package com.JIRSend;
 
 import org.junit.jupiter.api.Test;
 

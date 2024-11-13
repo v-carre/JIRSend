@@ -549,7 +549,6 @@ public class GuiPanelMainChatSystem {
         }
 
         public void actionPerformed(ActionEvent action) {
-            // Log.l("SWITCHING USERNAME", Log.WARNING);
             String usernameAsked = usernameTextField.getText();
             if (usernameAsked.equals(controller.getUsername()))
                 return;
