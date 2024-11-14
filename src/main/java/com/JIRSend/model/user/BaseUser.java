@@ -37,7 +37,7 @@ public abstract class BaseUser {
                 addToConversation(recipientIp, new Message("you", "recipient", msg.message));
         });
         MainController.contactsChange.subscribe((ch) -> {
-            if (controller.getIPFromUsername(currentConversationName) == null)
+            if (controller.getIPFromUsername(currentConversationName) == null && currentConversationIP != null)
                 currentConversationName = controller.getUsernameFromIP(currentConversationIP);
         });
     }

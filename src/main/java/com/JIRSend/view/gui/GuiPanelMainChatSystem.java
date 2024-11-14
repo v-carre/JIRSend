@@ -208,6 +208,7 @@ public class GuiPanelMainChatSystem {
             messageAuthor.setFont(messageAuthorFont);
         messageAuthor.setForeground(whitestColor);
         messageAuthor.setText(author + ": ");
+        messageAuthor.setBorder(new EmptyBorder(3, 3, 3, 3));
         messageElement.add(messageAuthor,
                 new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1,
                         com.intellij.uiDesigner.core.GridConstraints.ANCHOR_NORTHWEST,

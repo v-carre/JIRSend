@@ -38,7 +38,7 @@ public class Net {
             lostContact(ip);
         });
         MainController.sendMessage.subscribe((message) -> {
-            send(getIpFromUsername(message.receiver), "SendMessage " + message.message);
+            send(getIpFromUsername(message.receiver), "SendMessage " + message.message.replaceAll("\\n", "\\\\n"));
         });
         this.netIO = new NetworkIO(new NetworkCallback(), () -> {
             // signal that setup is complete
@@ -145,7 +145,7 @@ public class Net {
                             MainController.contactsChange.safePut(senderUsername + " is now connected");
                         }
                         MainController.messageReceived.safePut(
-                                new Message(senderUsername, controller.getUsername(), args));
+                                new Message(senderUsername, controller.getUsername(), args.replaceAll("\\\\n", "\n")));
                     } else {
                         //TODO recover "lost" message
                         send(senderIP, "GetUser");

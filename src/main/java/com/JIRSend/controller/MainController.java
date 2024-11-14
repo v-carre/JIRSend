@@ -112,6 +112,8 @@ public class MainController {
     }
 
     public String getIPFromUsername(String username) {
+        if (net == null)
+            return null;
         return net.getIpFromUsername(username);
     }
 
