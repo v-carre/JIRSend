@@ -17,12 +17,18 @@ public abstract class BaseUser {
     protected HashMap<String, Conversation> ipToConversations;
     protected String currentConversationName;
 
-    protected BaseUser(MainController controler, String username, userType type) {
-        this.controller = controler;
+    protected BaseUser(MainController controller, String username, userType type) {
+        this.controller = controller;
         this.username = username;
         this.type = type;
         this.ipToConversations = new HashMap<>();
         this.currentConversationName = null;
+
+        MainController.messageReceived.subscribe((msg) -> {
+            String senderIp = controller.getIPfromUsername(msg.sender);
+            if (senderIp != null)
+                addToConversation(senderIp, msg);
+        });
     }
 
     public String getUsername() {

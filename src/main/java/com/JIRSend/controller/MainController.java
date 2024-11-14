@@ -100,6 +100,10 @@ public class MainController {
         return connected;
     }
 
+    public String getIPfromUsername(String username) {
+        return net.getIpFromUsername(username);
+    }
+
     public String getConversationName() {
         return user.getCurrentConversationName();
     }

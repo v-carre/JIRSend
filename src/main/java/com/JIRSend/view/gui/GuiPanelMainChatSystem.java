@@ -307,7 +307,7 @@ public class GuiPanelMainChatSystem {
             chatContactLabel.setFont(chatContactLabelFont);
         chatContactLabel.setForeground(whitestColor);
         chatContactLabel.setIconTextGap(10);
-        chatContactLabel.setText("[DISTANT-USER]");
+        chatContactLabel.setText("<- Choose a conversation");
         chatContactName.add(chatContactLabel,
                 new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1,
                         com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST,
@@ -384,6 +384,11 @@ public class GuiPanelMainChatSystem {
         inputMessage.setText("");
         inputMessage.setToolTipText("Enter your message here");
         messageToSendScroll.setViewportView(inputMessage);
+
+        // TODO: edit this part like contacts scrollpane & list
+        
+        // TODO: ###############################################################
+        
         messagesScroll = new JScrollPane();
         messagesScroll.setAutoscrolls(true);
         messagesScroll.setBackground(chatBGColor);
@@ -458,6 +463,9 @@ public class GuiPanelMainChatSystem {
                         com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, 1,
                         com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null,
                         null, null, 0, false));
+                        
+        // TODO: ###############################################################
+        
         Footer = new JPanel();
         Footer.setLayout(
                 new com.intellij.uiDesigner.core.GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), 0, 0));
@@ -480,7 +488,7 @@ public class GuiPanelMainChatSystem {
         usernameTextField.setForeground(almostWhiteColor);
         usernameTextField.setHorizontalAlignment(4);
         usernameTextField.setSelectedTextColor(whitestColor);
-        usernameTextField.setText("Jack");
+        usernameTextField.setText("---");
         usernameTextField.setToolTipText("Change your username");
         Footer.add(usernameTextField,
                 new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1,
