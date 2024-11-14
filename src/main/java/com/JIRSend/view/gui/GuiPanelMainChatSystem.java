@@ -77,9 +77,7 @@ public class GuiPanelMainChatSystem {
             updateGUI();
         });
         MainController.messageReceived.subscribe((msg) -> {
-            if (msg.sender.equals(controller.getConversationName())) {
-                updateGUI();
-            }
+            updateGUI();
         });
         updateGUI();
     }
@@ -87,6 +85,7 @@ public class GuiPanelMainChatSystem {
     private void updateGUI() {
         updateConversation();
         updateContactList();
+        maingui.updateIcon();
         maingui.refreshFrame();
     }
 
@@ -120,10 +119,17 @@ public class GuiPanelMainChatSystem {
             SendMessageSection.setVisible(true);
         else
             SendMessageSection.setVisible(false);
+        int msgNb = 0;
+        int unReadThreshold = conv.getMessages().size() - conv.numberUnRead();
+        //Log.l("Unread current conv: " + conv.numberUnRead(), Log.WARNING);
         for (Message msg : conv.getMessages()) {
+            if (msgNb == unReadThreshold && conv.numberUnRead() > 0)
+                createUnreadBar();
             // Log.l("MSG> " + msg.sender + ": " + msg.message);
             createMessageElement(msg.sender.equals("you") ? you : recipient, msg.message);
+            msgNb++;
         }
+        controller.markConversationRead(recipient);
     }
 
     private void createContactElement(String username, boolean online, boolean currentConv, boolean hasNewMessage) {
@@ -132,19 +138,11 @@ public class GuiPanelMainChatSystem {
         contactElement.setMaximumSize(new Dimension(1920, 100));
         contactElement.setCursor(new Cursor(Cursor.HAND_CURSOR));
         contactElement.setBackground(
-                currentConv ? contactElementBGColor.brighter().brighter() : (online ? contactElementBGColor.brighter() : contactElementBGColor));
+                currentConv ? contactElementBGColor.brighter().brighter()
+                        : (online ? contactElementBGColor.brighter() : contactElementBGColor));
         // contactElement.setBorder(new LineBorder(whitestColor, 2));
         contactElement.setBorder(new GuiRoundedBorder(10));
         contactElement.addMouseListener(new MouseAdapter() {
-            private void mouseOver() {
-                if (online)
-                    contactElement
-                            .setBackground(contactElementBGColor.brighter().brighter());
-                else
-                    contactElement
-                            .setBackground(currentConv ? contactElementBGColor.brighter().brighter() : contactElementBGColor.brighter());
-            }
-
             @Override
             public void mouseClicked(MouseEvent e) {
                 controller.getConversation(username);
@@ -153,19 +151,20 @@ public class GuiPanelMainChatSystem {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                mouseOver();
-
+                if (online)
+                    contactElement
+                            .setBackground(contactElementBGColor.brighter().brighter());
+                else
+                    contactElement
+                            .setBackground(currentConv ? contactElementBGColor.brighter().brighter()
+                                    : contactElementBGColor.brighter());
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
                 contactElement.setBackground(
-                    currentConv ? contactElementBGColor.brighter().brighter() : (online ? contactElementBGColor.brighter() : contactElementBGColor));
-            }
-
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                // mouseOver();
+                        currentConv ? contactElementBGColor.brighter().brighter()
+                                : (online ? contactElementBGColor.brighter() : contactElementBGColor));
             }
         });
         contactsList.add(contactElement);
@@ -174,9 +173,13 @@ public class GuiPanelMainChatSystem {
         if (contactNameFont != null)
             contactName.setFont(contactNameFont);
         contactName.setForeground(online ? almostWhiteColor : disconnectedColor);
-        contactName.setText(online ? username
-                : ("<html><body style=\"text-align:center;\">" + username
-                        + "<br><span color=\"red\">(offline)</span></body></html>"));
+        int nbUnread = controller.getConversationUnreadNumber(username);
+        // Log.l("CONTACT: " + nbUnread, Log.WARNING);
+        contactName.setText("<html><body style=\"text-align:center;\">" + username
+                + (online ? "" : "<br><span color=\"red\">(offline)</span>")
+                + (nbUnread > 0 ? ("<br><span style=\"color:white;background:red;\">(" + nbUnread + ")</span>")
+                        : "")
+                + "</body></html>");
         contactElement.add(contactName,
                 new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1,
                         com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST,
@@ -186,21 +189,32 @@ public class GuiPanelMainChatSystem {
                         null, null, 0, false));
     }
 
+    private void createUnreadBar() {
+        JPanel unreadBar = new JPanel();
+
+        unreadBar.setMinimumSize(new Dimension(50, 5));
+        unreadBar.setMaximumSize(new Dimension(1920, 5));
+        unreadBar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        unreadBar.setBackground(new Color(255, 0, 0));
+        messagesList.add(unreadBar);
+    }
+
     private void createMessageElement(String author, String content) {
         JPanel messageElement = new JPanel();
         messageElement
                 .setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 2,
                         new Insets(0, 0, 0, 0), -1, -1));
         messageElement.setBackground(messageBGColor);
-        messagesList.add(messageElement,
-                new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1,
-                        com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
-                        com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH,
-                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
-                                | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
-                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
-                                | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
-                        null, null, null, 0, false));
+        messagesList.add(messageElement);
+        // ,
+        // new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1,
+        // com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
+        // com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH,
+        // com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
+        // | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
+        // com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
+        // | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
+        // null, null, null, 0, false));
         messageAuthor = new JLabel();
         messageAuthor.setBackground(messageBGColor);
         Font messageAuthorFont = this.$$$getFont$$$("Monospaced", Font.BOLD, -1, messageAuthor.getFont());

@@ -132,7 +132,7 @@ public class MainController {
         String convIp = getConversationIP();
         if (convIp == null)
             return null;
-        user.markConversationRead(convIp);
+        // user.markConversationRead(convIp);
         return user.getConversation(convIp);
     }
 
@@ -163,7 +163,17 @@ public class MainController {
         if (conv != null)
             user.setCurrentConversationName(name);
 
-        user.markConversationRead(ip);
         return conv;
+    }
+
+    public int getTotalUnread() {
+        return user.getTotalUnread();
+    }
+
+    public void markConversationRead(String name) {
+        String ip = net.getIpFromUsername(name);
+        if (ip == null)
+            return;
+        user.markConversationRead(ip);
     }
 }

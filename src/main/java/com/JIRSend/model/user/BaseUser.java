@@ -54,6 +54,14 @@ public abstract class BaseUser {
         return this.type;
     }
 
+    public int getTotalUnread() {
+        int totalUnread = 0;
+        for (Conversation conv : this.ipToConversations.values()) {
+            totalUnread += conv.numberUnRead();
+        }
+        return totalUnread;
+    }
+
     public Conversation getConversation(String ip) {
         if (!ipToConversations.containsKey(ip))
             this.ipToConversations.put(ip, new Conversation());
@@ -66,7 +74,7 @@ public abstract class BaseUser {
     }
 
     public int getConversationUnreadNb(String ip) {
-        if (ip == null) return 0;
+        if (ip == null || this.ipToConversations.get(ip) == null) return 0;
         return this.ipToConversations.get(ip).numberUnRead();
     }
 
@@ -76,8 +84,8 @@ public abstract class BaseUser {
         else {
             ipToConversations.put(ip, new Conversation(msg));
         }
-        if (!currentConversationName.equals(msg.sender))
-            ipToConversations.get(ip).incrUnread();
+        // if (currentConversationName != null && !currentConversationName.equals(msg.sender))
+        ipToConversations.get(ip).incrUnread();
     }
 
     public String getCurrentConversationName() {

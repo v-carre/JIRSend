@@ -46,6 +46,7 @@ public class MainGUI extends MainAbstractView {
 
     private void createWindow() {
         frame = new JFrame("JIRSend");
+        frame.setTitle("JIRSend");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         frame.addWindowListener(new WindowAdapter() {
@@ -64,6 +65,22 @@ public class MainGUI extends MainAbstractView {
         frame.setVisible(true);
         frame.setIconImage(img.getImage());
         frame.setSize(400, 500);
+    }
+
+    public void updateIcon() {
+        ImageIcon img;
+        int totalUnread = controller.getTotalUnread();
+        // Log.l("REFRESH ICON: " + totalUnread, Log.WARNING);
+        if (totalUnread > 0) {
+            img = new ImageIcon("assets/jirsend_logo_notif.png");
+            frame.setName("JIRSend (" + totalUnread + ")");
+            frame.setTitle("JIRSend (" + totalUnread + ")");
+        } else {
+            img = new ImageIcon("assets/jirsend_logo.png");
+            frame.setName("JIRSend");
+            frame.setTitle("JIRSend");
+        }
+        frame.setIconImage(img.getImage());
     }
 
     protected void switchToNextSection() {
