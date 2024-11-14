@@ -27,7 +27,12 @@ public abstract class BaseUser {
         MainController.messageReceived.subscribe((msg) -> {
             String senderIp = controller.getIPfromUsername(msg.sender);
             if (senderIp != null)
-                addToConversation(senderIp, msg);
+                addToConversation(senderIp, new Message("sender", "you", msg.message));
+        });
+        MainController.sendMessage.subscribe((msg) -> {
+            String recipientIp = controller.getIPfromUsername(msg.receiver);
+            if (recipientIp != null)
+                addToConversation(recipientIp, new Message("you", "recipient", msg.message));
         });
     }
 
@@ -45,15 +50,17 @@ public abstract class BaseUser {
 
     public Conversation getConversation(String ip) {
         if (!ipToConversations.containsKey(ip))
-            return null;
+            this.ipToConversations.put(ip, new Conversation());
         return this.ipToConversations.get(ip);
     }
 
     public void markConversationRead(String ip) {
+        if (ip == null || this.ipToConversations.get(ip) == null) return;
         this.ipToConversations.get(ip).setUnread(0);
     }
 
     public int getConversationUnreadNb(String ip) {
+        if (ip == null) return 0;
         return this.ipToConversations.get(ip).numberUnRead();
     }
 

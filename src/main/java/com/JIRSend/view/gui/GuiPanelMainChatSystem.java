@@ -72,11 +72,6 @@ public class GuiPanelMainChatSystem {
         this.controller = controller;
         usernameTextField.setText(this.controller.getUsername());
         this.maingui = maingui;
-        // createActions();
-
-        // this.JIRSendLogo = new JLabel(new ImageIcon(new
-        // javax.swing.ImageIcon(getClass().getResource("/assets/jirsend_logo.png")).getImage().getScaledInstance(20,
-        // 20, Image.SCALE_SMOOTH)));
         updateContactList();
 
         MainController.contactsChange.subscribe((event) -> {
@@ -87,11 +82,7 @@ public class GuiPanelMainChatSystem {
                 updateConversation();
             }
         });
-    }
-
-    protected void createActions() {
-        submitSUAction = new SubmitSwitchUsernameAction();
-        reconnectButton.setAction(submitSUAction);
+        updateConversation();
     }
 
     private void updateContactList() {
@@ -105,16 +96,32 @@ public class GuiPanelMainChatSystem {
     }
 
     private void updateConversation() {
+        Log.l("UPDATING GUI CONVERSATION", Log.WARNING);
+        messagesList.removeAll();
+        createMessageElement("ADMIN", "WELCOME IN JIRSEND");
         Conversation conv = controller.getConversation();
         if (conv == null) {
             chatContactLabel.setText("<- Choose a conversation");
+            SendMessageSection.setVisible(false);
+            return;
         }
-        chatContactLabel.setText(null);
+        String recipient = controller.getConversationName();
+        String you = controller.getUsername();
+        chatContactLabel.setText(recipient);
+        if (controller.isConnected(recipient))
+            SendMessageSection.setVisible(true);
+        else
+            SendMessageSection.setVisible(false);
+        for (Message msg : conv.getMessages()) {
+            System.out.println("MSG> " + msg.sender + ": " + msg.message);
+            createMessageElement(msg.sender.equals("you") ? you : recipient, msg.message);
+        }
     }
 
     private void createContactElement(String username, boolean online, boolean currentConv, boolean hasNewMessage) {
         contactElement = new JPanel();
         contactElement.setMaximumSize(new Dimension(1920, 100));
+        contactElement.setCursor(new Cursor(Cursor.HAND_CURSOR));
         contactElement.setBackground(currentConv ? contactElementBGColor.brighter() : contactElementBGColor);
         // contactElement.setBorder(new LineBorder(whitestColor, 2));
         contactElement.setBorder(new GuiRoundedBorder(10));
@@ -122,6 +129,7 @@ public class GuiPanelMainChatSystem {
             @Override
             public void mouseClicked(MouseEvent e) {
                 controller.getConversation(username);
+                updateConversation();
             }
 
             @Override
@@ -140,12 +148,6 @@ public class GuiPanelMainChatSystem {
             public void mouseMoved(MouseEvent e) {
             }
         });
-        // addActionListener(new ActionListener() {
-        // public void actionPerformed(ActionEvent evt) {
-        // System.out.println((char) ('a' + col) + "" + (8 - lin));
-        //
-        // }
-        // });
         contactsList.add(contactElement);
         contactName = new JLabel();
         Font contactNameFont = this.$$$getFont$$$("Monospaced", Font.BOLD, -1, contactName.getFont());
@@ -162,6 +164,56 @@ public class GuiPanelMainChatSystem {
                         com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED,
                         com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null,
                         null, null, 0, false));
+    }
+
+    private void createMessageElement(String author, String content) {
+        messageElement = new JPanel();
+        messageElement
+                .setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 2,
+                        new Insets(0, 0, 0, 0), -1, -1));
+        messageElement.setBackground(messageBGColor);
+        messagesList.add(messageElement,
+                new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1,
+                        com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
+                        com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH,
+                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
+                                | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
+                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
+                                | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
+                        null, null, null, 0, false));
+        messageAuthor = new JLabel();
+        messageAuthor.setBackground(messageBGColor);
+        Font messageAuthorFont = this.$$$getFont$$$("Monospaced", Font.BOLD, -1, messageAuthor.getFont());
+        if (messageAuthorFont != null)
+            messageAuthor.setFont(messageAuthorFont);
+        messageAuthor.setForeground(whitestColor);
+        messageAuthor.setText(author + ": ");
+        messageElement.add(messageAuthor,
+                new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1,
+                        com.intellij.uiDesigner.core.GridConstraints.ANCHOR_NORTHWEST,
+                        com.intellij.uiDesigner.core.GridConstraints.FILL_NONE,
+                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED,
+                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null,
+                        null, null, 0, false));
+        messageContent = new JTextPane();
+        messageContent.setBackground(messageBGColor);
+        messageContent.setDisabledTextColor(almostWhiteColor);
+        messageContent.setEditable(false);
+        messageContent.setEnabled(false);
+        Font messageContentFont = this.$$$getFont$$$("Monospaced", -1, -1, messageContent.getFont());
+        if (messageContentFont != null)
+            messageContent.setFont(messageContentFont);
+        messageContent.setForeground(almostWhiteColor);
+        messageContent.setSelectedTextColor(whitestColor);
+        messageContent.setText(content);
+        messageElement.add(messageContent,
+                new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1,
+                        com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
+                        com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH,
+                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW,
+                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null,
+                        new Dimension(150, 50),
+                        null, 0, false));
     }
 
     public JPanel getPanel() {
@@ -449,65 +501,25 @@ public class GuiPanelMainChatSystem {
                                 | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW,
                         null, null, null, 0, false));
         messagesList = new JPanel();
-        messagesList.setLayout(
-                new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(1, 1, 1, 1), 2, 2));
+        // messagesList.setLayout(
+        // new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(1, 1, 1,
+        // 1), 2, 2));
+
+        messagesList.setLayout(new BoxLayout(messagesList, BoxLayout.Y_AXIS));
+        messagesList.setAlignmentY(Component.TOP_ALIGNMENT);
+        messagesList.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         messagesList.setBackground(chatBGColor);
         messagesList.setForeground(almostWhiteColor);
         messagesScroll.setViewportView(messagesList);
-        messageElement = new JPanel();
-        messageElement
-                .setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 2,
-                        new Insets(0, 0, 0, 0), -1, -1));
-        messageElement.setBackground(messageBGColor);
-        messagesList.add(messageElement,
-                new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1,
-                        com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
-                        com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH,
-                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
-                                | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
-                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
-                                | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
-                        null, null, null, 0, false));
-        messageAuthor = new JLabel();
-        messageAuthor.setBackground(messageBGColor);
-        Font messageAuthorFont = this.$$$getFont$$$("Monospaced", Font.BOLD, -1, messageAuthor.getFont());
-        if (messageAuthorFont != null)
-            messageAuthor.setFont(messageAuthorFont);
-        messageAuthor.setForeground(whitestColor);
-        messageAuthor.setText("Author: ");
-        messageElement.add(messageAuthor,
-                new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1,
-                        com.intellij.uiDesigner.core.GridConstraints.ANCHOR_NORTHWEST,
-                        com.intellij.uiDesigner.core.GridConstraints.FILL_NONE,
-                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED,
-                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null,
-                        null, null, 0, false));
-        messageContent = new JTextPane();
-        messageContent.setBackground(messageBGColor);
-        messageContent.setDisabledTextColor(almostWhiteColor);
-        messageContent.setEditable(false);
-        messageContent.setEnabled(false);
-        Font messageContentFont = this.$$$getFont$$$("Monospaced", -1, -1, messageContent.getFont());
-        if (messageContentFont != null)
-            messageContent.setFont(messageContentFont);
-        messageContent.setForeground(almostWhiteColor);
-        messageContent.setSelectedTextColor(whitestColor);
-        messageContent.setText("Message sent\nin several lines.");
-        messageElement.add(messageContent,
-                new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1,
-                        com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
-                        com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH,
-                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW,
-                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null,
-                        new Dimension(150, 50),
-                        null, 0, false));
-        final com.intellij.uiDesigner.core.Spacer spacer3 = new com.intellij.uiDesigner.core.Spacer();
-        messagesList.add(spacer3,
-                new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1,
-                        com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
-                        com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, 1,
-                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null,
-                        null, null, 0, false));
+
+        // final com.intellij.uiDesigner.core.Spacer spacer3 = new
+        // com.intellij.uiDesigner.core.Spacer();
+        // messagesList.add(spacer3,
+        // new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1,
+        // com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
+        // com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, 1,
+        // com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null,
+        // null, null, 0, false));
 
         // TODO: ###############################################################
 
@@ -624,6 +636,7 @@ public class GuiPanelMainChatSystem {
                 return;
             }
 
+            updateConversation();
             Log.l("Switching username to '" + usernameAsked + "'", Log.LOG);
         }
     }
@@ -640,6 +653,9 @@ public class GuiPanelMainChatSystem {
                 return;
             MainController.sendMessage.safePut(new Message(controller.getUsername(),
                     controller.getConversationName(), messageToSend));
+
+            inputMessage.setText("");
+            updateConversation();
         }
     }
 }

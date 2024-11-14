@@ -91,6 +91,17 @@ public class MainController {
         return connected;
     }
 
+    public boolean isConnected(String name) {
+        boolean connected = false;
+        for (UserEntry ue : net.getUserEntries()) {
+            if (ue.username == name) {
+                connected = ue.online;
+                break;
+            }
+        }
+        return connected;
+    }
+
     public ArrayList<String> getConnectedUsernames() {
         ArrayList<String> connected = new ArrayList<>();
         for (UserEntry ue : net.getUserEntries()) {
@@ -129,7 +140,7 @@ public class MainController {
     public int getConversationUnreadNumber(String name) {
         String ip = getConversationIP(name);
         if (ip == null)
-            return -1;
+            return 0;
         return this.user.getConversationUnreadNb(ip);
     }
 
