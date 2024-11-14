@@ -40,9 +40,9 @@ public class GuiPanelMainChatSystem {
     private JPanel contactsList;
     private JButton reconnectButton;
     private JPanel messagesList;
-    private JPanel contactElement;
+    // private JPanel contactElement;
     private JLabel contactName;
-    private JPanel messageElement;
+    // private JPanel messageElement;
     private JLabel messageAuthor;
     private JTextPane messageContent;
     private JLabel chatSystemName;
@@ -72,17 +72,22 @@ public class GuiPanelMainChatSystem {
         this.controller = controller;
         usernameTextField.setText(this.controller.getUsername());
         this.maingui = maingui;
-        updateContactList();
 
         MainController.contactsChange.subscribe((event) -> {
-            updateContactList();
+            updateGUI();
         });
         MainController.messageReceived.subscribe((msg) -> {
             if (msg.sender.equals(controller.getConversationName())) {
-                updateConversation();
+                updateGUI();
             }
         });
+        updateGUI();
+    }
+
+    private void updateGUI() {
         updateConversation();
+        updateContactList();
+        maingui.refreshFrame();
     }
 
     private void updateContactList() {
@@ -92,16 +97,19 @@ public class GuiPanelMainChatSystem {
         for (UserEntry ue : controller.getContacts()) {
             createContactElement(ue.username, ue.online, currentConvName == ue.username, false);
         }
-        maingui.refreshFrame();
     }
 
     private void updateConversation() {
-        Log.l("UPDATING GUI CONVERSATION", Log.WARNING);
+        // Log.l("UPDATING GUI CONVERSATION", Log.WARNING);
         messagesList.removeAll();
-        createMessageElement("ADMIN", "WELCOME IN JIRSEND");
+        // createMessageElement("ADMIN", "WELCOME IN JIRSEND");
         Conversation conv = controller.getConversation();
         if (conv == null) {
             chatContactLabel.setText("<- Choose a conversation");
+            createMessageElement("JIRSend", "Welcome in JIRSend!\n\n"
+                    + "- In the left panel are shown the connected users, you can simply click on them to start a conversation with them.\n"
+                    + "You will see a text input below to send a message.\n\n"
+                    + "To change your username, just modify your useername in the footer and click on the refresh button.");
             SendMessageSection.setVisible(false);
             return;
         }
@@ -113,39 +121,51 @@ public class GuiPanelMainChatSystem {
         else
             SendMessageSection.setVisible(false);
         for (Message msg : conv.getMessages()) {
-            System.out.println("MSG> " + msg.sender + ": " + msg.message);
+            // Log.l("MSG> " + msg.sender + ": " + msg.message);
             createMessageElement(msg.sender.equals("you") ? you : recipient, msg.message);
         }
     }
 
     private void createContactElement(String username, boolean online, boolean currentConv, boolean hasNewMessage) {
-        contactElement = new JPanel();
+        JPanel contactElement = new JPanel();
+        contactElement.setMinimumSize(new Dimension(50, 20));
         contactElement.setMaximumSize(new Dimension(1920, 100));
         contactElement.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        contactElement.setBackground(currentConv ? contactElementBGColor.brighter() : contactElementBGColor);
+        contactElement.setBackground(
+                currentConv ? contactElementBGColor.brighter().brighter() : (online ? contactElementBGColor.brighter() : contactElementBGColor));
         // contactElement.setBorder(new LineBorder(whitestColor, 2));
         contactElement.setBorder(new GuiRoundedBorder(10));
         contactElement.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                controller.getConversation(username);
-                updateConversation();
+            private void mouseOver() {
+                if (online)
+                    contactElement
+                            .setBackground(contactElementBGColor.brighter().brighter());
+                else
+                    contactElement
+                            .setBackground(currentConv ? contactElementBGColor.brighter().brighter() : contactElementBGColor.brighter());
             }
 
             @Override
-            public void mouseReleased(MouseEvent e) {
+            public void mouseClicked(MouseEvent e) {
+                controller.getConversation(username);
+                updateGUI();
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
+                mouseOver();
+
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
+                contactElement.setBackground(
+                    currentConv ? contactElementBGColor.brighter().brighter() : (online ? contactElementBGColor.brighter() : contactElementBGColor));
             }
 
             @Override
             public void mouseMoved(MouseEvent e) {
+                // mouseOver();
             }
         });
         contactsList.add(contactElement);
@@ -167,7 +187,7 @@ public class GuiPanelMainChatSystem {
     }
 
     private void createMessageElement(String author, String content) {
-        messageElement = new JPanel();
+        JPanel messageElement = new JPanel();
         messageElement
                 .setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 2,
                         new Insets(0, 0, 0, 0), -1, -1));
@@ -392,7 +412,7 @@ public class GuiPanelMainChatSystem {
         chatContent.add(chatContactName,
                 new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1,
                         com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
-                        com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH,
+                        com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL,
                         com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
                                 | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
                         com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
@@ -579,7 +599,7 @@ public class GuiPanelMainChatSystem {
         Footer.add(reconnectButton,
                 new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1,
                         com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
-                        com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL,
+                        com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH,
                         com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED,
                         com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null,
                         null,
@@ -636,7 +656,7 @@ public class GuiPanelMainChatSystem {
                 return;
             }
 
-            updateConversation();
+            updateGUI();
             Log.l("Switching username to '" + usernameAsked + "'", Log.LOG);
         }
     }
@@ -655,7 +675,7 @@ public class GuiPanelMainChatSystem {
                     controller.getConversationName(), messageToSend));
 
             inputMessage.setText("");
-            updateConversation();
+            updateGUI();
         }
     }
 }

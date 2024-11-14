@@ -16,6 +16,7 @@ public abstract class BaseUser {
     protected int id;
     protected HashMap<String, Conversation> ipToConversations;
     protected String currentConversationName;
+    protected String currentConversationIP;
 
     protected BaseUser(MainController controller, String username, userType type) {
         this.controller = controller;
@@ -23,16 +24,21 @@ public abstract class BaseUser {
         this.type = type;
         this.ipToConversations = new HashMap<>();
         this.currentConversationName = null;
+        this.currentConversationIP = null;
 
         MainController.messageReceived.subscribe((msg) -> {
-            String senderIp = controller.getIPfromUsername(msg.sender);
+            String senderIp = controller.getIPFromUsername(msg.sender);
             if (senderIp != null)
                 addToConversation(senderIp, new Message("sender", "you", msg.message));
         });
         MainController.sendMessage.subscribe((msg) -> {
-            String recipientIp = controller.getIPfromUsername(msg.receiver);
+            String recipientIp = controller.getIPFromUsername(msg.receiver);
             if (recipientIp != null)
                 addToConversation(recipientIp, new Message("you", "recipient", msg.message));
+        });
+        MainController.contactsChange.subscribe((ch) -> {
+            if (controller.getIPFromUsername(currentConversationName) == null)
+                currentConversationName = controller.getUsernameFromIP(currentConversationIP);
         });
     }
 
@@ -80,5 +86,6 @@ public abstract class BaseUser {
 
     public void setCurrentConversationName(String convName) {
         this.currentConversationName = convName;
+        this.currentConversationIP = controller.getIPFromUsername(convName);
     }
 }

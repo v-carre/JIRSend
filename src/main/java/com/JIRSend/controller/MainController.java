@@ -111,8 +111,15 @@ public class MainController {
         return connected;
     }
 
-    public String getIPfromUsername(String username) {
+    public String getIPFromUsername(String username) {
         return net.getIpFromUsername(username);
+    }
+
+    public String getUsernameFromIP(String ip) {
+        UserEntry ue = net.getHashMap().get(ip);
+        if (ue == null)
+            return null;
+        return ue.username;
     }
 
     public String getConversationName() {
