@@ -49,12 +49,22 @@ public abstract class BaseUser {
         return this.ipToConversations.get(ip);
     }
 
+    public void markConversationRead(String ip) {
+        this.ipToConversations.get(ip).setUnread(0);
+    }
+
+    public int getConversationUnreadNb(String ip) {
+        return this.ipToConversations.get(ip).numberUnRead();
+    }
+
     public void addToConversation(String ip, Message msg) {
         if (ipToConversations.containsKey(ip))
-            ipToConversations.get(ip).messages.add(msg);
+            ipToConversations.get(ip).putMessage(msg);
         else {
             ipToConversations.put(ip, new Conversation(msg));
         }
+        if (!currentConversationName.equals(msg.sender))
+            ipToConversations.get(ip).incrUnread();
     }
 
     public String getCurrentConversationName() {

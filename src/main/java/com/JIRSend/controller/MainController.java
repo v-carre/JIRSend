@@ -108,11 +108,29 @@ public class MainController {
         return user.getCurrentConversationName();
     }
 
-    public String getConversationIP() {
-        String convName = user.getCurrentConversationName();
+    public Conversation getConversation() {
+        String convIp = getConversationIP();
+        if (convIp == null)
+            return null;
+        user.markConversationRead(convIp);
+        return user.getConversation(convIp);
+    }
+
+    public String getConversationIP(String convName) {
         if (convName == null)
             return null;
         return net.getIpFromUsername(convName);
+    }
+
+    public String getConversationIP() {
+        return getConversationIP(user.getCurrentConversationName());
+    }
+
+    public int getConversationUnreadNumber(String name) {
+        String ip = getConversationIP(name);
+        if (ip == null)
+            return -1;
+        return this.user.getConversationUnreadNb(ip);
     }
 
     public Conversation getConversation(String name) {
@@ -124,6 +142,8 @@ public class MainController {
         Conversation conv = user.getConversation(ip);
         if (conv != null)
             user.setCurrentConversationName(name);
+
+        user.markConversationRead(ip);
         return conv;
     }
 }

@@ -2,6 +2,7 @@ package com.JIRSend.view.gui;
 
 import com.JIRSend.controller.MainController;
 import com.JIRSend.model.Message;
+import com.JIRSend.model.user.Conversation;
 import com.JIRSend.model.user.UserEntry;
 import com.JIRSend.view.cli.Log;
 
@@ -13,6 +14,8 @@ import javax.swing.text.StyleContext;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseAdapter;
 import java.util.Locale;
 
 public class GuiPanelMainChatSystem {
@@ -79,6 +82,11 @@ public class GuiPanelMainChatSystem {
         MainController.contactsChange.subscribe((event) -> {
             updateContactList();
         });
+        MainController.messageReceived.subscribe((msg) -> {
+            if (msg.sender.equals(controller.getConversationName())) {
+                updateConversation();
+            }
+        });
     }
 
     protected void createActions() {
@@ -87,20 +95,57 @@ public class GuiPanelMainChatSystem {
     }
 
     private void updateContactList() {
+        String currentConvName = controller.getConversationName();
         contactsList.removeAll();
         // Log.l("UPDATING GUI CONTACTS LIST", Log.WARNING);
         for (UserEntry ue : controller.getContacts()) {
-            createContactElement(ue.username, ue.online);
+            createContactElement(ue.username, ue.online, currentConvName == ue.username, false);
         }
         maingui.refreshFrame();
     }
 
-    private void createContactElement(String username, boolean online) {
+    private void updateConversation() {
+        Conversation conv = controller.getConversation();
+        if (conv == null) {
+            chatContactLabel.setText("<- Choose a conversation");
+        }
+        chatContactLabel.setText(null);
+    }
+
+    private void createContactElement(String username, boolean online, boolean currentConv, boolean hasNewMessage) {
         contactElement = new JPanel();
         contactElement.setMaximumSize(new Dimension(1920, 100));
-        contactElement.setBackground(contactElementBGColor);
+        contactElement.setBackground(currentConv ? contactElementBGColor.brighter() : contactElementBGColor);
         // contactElement.setBorder(new LineBorder(whitestColor, 2));
         contactElement.setBorder(new GuiRoundedBorder(10));
+        contactElement.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                controller.getConversation(username);
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+            }
+        });
+        // addActionListener(new ActionListener() {
+        // public void actionPerformed(ActionEvent evt) {
+        // System.out.println((char) ('a' + col) + "" + (8 - lin));
+        //
+        // }
+        // });
         contactsList.add(contactElement);
         contactName = new JLabel();
         Font contactNameFont = this.$$$getFont$$$("Monospaced", Font.BOLD, -1, contactName.getFont());
@@ -386,9 +431,9 @@ public class GuiPanelMainChatSystem {
         messageToSendScroll.setViewportView(inputMessage);
 
         // TODO: edit this part like contacts scrollpane & list
-        
+
         // TODO: ###############################################################
-        
+
         messagesScroll = new JScrollPane();
         messagesScroll.setAutoscrolls(true);
         messagesScroll.setBackground(chatBGColor);
@@ -463,9 +508,9 @@ public class GuiPanelMainChatSystem {
                         com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, 1,
                         com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null,
                         null, null, 0, false));
-                        
+
         // TODO: ###############################################################
-        
+
         Footer = new JPanel();
         Footer.setLayout(
                 new com.intellij.uiDesigner.core.GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), 0, 0));
