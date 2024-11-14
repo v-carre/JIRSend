@@ -220,6 +220,11 @@ public class Net {
         }
     }
 
+    /**
+     * Get IP associated to a username
+     * @param username
+     * @return ip string | null if not found
+     */
     public String getIpFromUsername(String username) {
         for (Map.Entry<String, UserEntry> pair : ipToUserEntry.entrySet()) {
             if (pair.getValue().username.equals(username)) {

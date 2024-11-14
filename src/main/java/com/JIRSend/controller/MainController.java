@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.JIRSend.model.Message;
 import com.JIRSend.model.network.Net;
 import com.JIRSend.model.user.BaseUser;
+import com.JIRSend.model.user.Conversation;
 import com.JIRSend.model.user.User;
 import com.JIRSend.model.user.UserEntry;
 import com.JIRSend.view.MainAbstractView;
@@ -97,5 +98,28 @@ public class MainController {
                 connected.add(ue.username);
         }
         return connected;
+    }
+
+    public String getConversationName() {
+        return user.getCurrentConversationName();
+    }
+
+    public String getConversationIP() {
+        String convName = user.getCurrentConversationName();
+        if (convName == null)
+            return null;
+        return net.getIpFromUsername(convName);
+    }
+
+    public Conversation getConversation(String name) {
+        if (name == null)
+            return null;
+        String ip = net.getIpFromUsername(name);
+        if (ip == null)
+            return null;
+        Conversation conv = user.getConversation(ip);
+        if (conv != null)
+            user.setCurrentConversationName(name);
+        return conv;
     }
 }

@@ -15,12 +15,14 @@ public abstract class BaseUser {
     protected String username;
     protected int id;
     protected HashMap<String, Conversation> ipToConversations;
+    protected String currentConversationName;
 
     protected BaseUser(MainController controler, String username, userType type) {
         this.controller = controler;
         this.username = username;
         this.type = type;
         this.ipToConversations = new HashMap<>();
+        this.currentConversationName = null;
     }
 
     public String getUsername() {
@@ -36,6 +38,8 @@ public abstract class BaseUser {
     }
 
     public Conversation getConversation(String ip) {
+        if (!ipToConversations.containsKey(ip))
+            return null;
         return this.ipToConversations.get(ip);
     }
 
@@ -45,5 +49,13 @@ public abstract class BaseUser {
         else {
             ipToConversations.put(ip, new Conversation(msg));
         }
+    }
+
+    public String getCurrentConversationName() {
+        return currentConversationName;
+    }
+
+    public void setCurrentConversationName(String convName) {
+        this.currentConversationName = convName;
     }
 }

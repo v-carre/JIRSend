@@ -1,6 +1,7 @@
 package com.JIRSend.view.gui;
 
 import com.JIRSend.controller.MainController;
+import com.JIRSend.model.Message;
 import com.JIRSend.model.user.UserEntry;
 import com.JIRSend.view.cli.Log;
 
@@ -60,8 +61,9 @@ public class GuiPanelMainChatSystem {
 
     private MainGUI maingui;
 
-    // private Action submitAction;
-    private Action submitAction = new SubmitConnectionAction();
+    // private Action submitSUAction;
+    private Action submitSUAction = new SubmitSwitchUsernameAction();
+    private Action submitMsgAction = new SubmitMessageAction();
 
     public GuiPanelMainChatSystem(MainController controller, MainGUI maingui) {
         this.controller = controller;
@@ -80,8 +82,8 @@ public class GuiPanelMainChatSystem {
     }
 
     protected void createActions() {
-        submitAction = new SubmitConnectionAction();
-        reconnectButton.setAction(submitAction);
+        submitSUAction = new SubmitSwitchUsernameAction();
+        reconnectButton.setAction(submitSUAction);
     }
 
     private void updateContactList() {
@@ -327,10 +329,18 @@ public class GuiPanelMainChatSystem {
                         com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
                                 | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
                         null, new Dimension(-1, 80), new Dimension(-1, 300), 0, false));
-        sendMessageButton = new JButton(
+        // sendMessageButton = new JButton(
+        // new ImageIcon(new
+        // javax.swing.ImageIcon(getClass().getResource("/assets/send.png"))
+        // .getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
+
+        sendMessageButton = new JButton(submitMsgAction);
+        sendMessageButton.setText("");
+        sendMessageButton.setIcon(
                 new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/send.png"))
-                        .getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
+                        .getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
         sendMessageButton.setBackground(headerFooterBGColor);
+        sendMessageButton.setPreferredSize(new Dimension(60, 60));
         sendMessageButton.setBorderPainted(true);
         sendMessageButton.setBorder(new EmptyBorder(0, 0, 0, 0));
         final JSButtonUI uiSend = new JSButtonUI();
@@ -484,11 +494,12 @@ public class GuiPanelMainChatSystem {
         // new ImageIcon(new
         // javax.swing.ImageIcon(getClass().getResource("/assets/reconnect.png"))
         // .getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
-        // reconnectButton.setAction(submitAction);
-        reconnectButton = new JButton(submitAction);
+        // reconnectButton.setAction(submitSUAction);
+        reconnectButton = new JButton(submitSUAction);
         reconnectButton.setText("");
-        reconnectButton.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/reconnect.png"))
-                .getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
+        reconnectButton.setIcon(
+                new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/reconnect.png"))
+                        .getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
 
         // reconnectButton.setText("change");
         reconnectButton.setPreferredSize(new Dimension(20, 20));
@@ -543,9 +554,9 @@ public class GuiPanelMainChatSystem {
         return contentPane;
     }
 
-    private class SubmitConnectionAction extends AbstractAction {
-        public SubmitConnectionAction() {
-            super("Connection");
+    private class SubmitSwitchUsernameAction extends AbstractAction {
+        public SubmitSwitchUsernameAction() {
+            super("SwitchUsername");
         }
 
         public void actionPerformed(ActionEvent action) {
@@ -561,6 +572,21 @@ public class GuiPanelMainChatSystem {
             }
 
             Log.l("Switching username to '" + usernameAsked + "'", Log.LOG);
+        }
+    }
+
+    private class SubmitMessageAction extends AbstractAction {
+        public SubmitMessageAction() {
+            super("SubmitMessage");
+        }
+
+        public void actionPerformed(ActionEvent action) {
+            String messageToSend = inputMessage.getText();
+            if (messageToSend == null || messageToSend.isEmpty()
+                    || controller.getConversationName() == null)
+                return;
+            MainController.sendMessage.safePut(new Message(controller.getUsername(),
+                    controller.getConversationName(), messageToSend));
         }
     }
 }
