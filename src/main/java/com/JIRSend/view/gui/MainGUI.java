@@ -1,6 +1,7 @@
 package com.JIRSend.view.gui;
 
 import java.awt.Dimension;
+import java.awt.HeadlessException;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -35,7 +36,7 @@ public class MainGUI extends MainAbstractView {
     }
 
     @Override
-    public void open() {
+    public void open() throws HeadlessException{
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 Log.l("Starting window", Log.LOG);
