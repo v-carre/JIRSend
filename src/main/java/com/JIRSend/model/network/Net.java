@@ -214,10 +214,7 @@ public class Net {
 
     private void lostContact(String ip) {
         if (ipToUserEntry.containsKey(ip)) {
-            // ipToUserEntry.replace(ip, new UserEntry(false,
-            // ipToUserEntry.get(ip).username));
             ipToUserEntry.get(ip).online = false;
-
             MainController.contactsChange.safePut(ipToUserEntry.get(ip).username + " has disconnected");
         }
     }

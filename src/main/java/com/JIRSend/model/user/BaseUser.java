@@ -90,8 +90,6 @@ public abstract class BaseUser {
         else {
             ipToConversations.put(ip, new Conversation(msg));
         }
-        // if (currentConversationName != null &&
-        // !currentConversationName.equals(msg.sender))
         ipToConversations.get(ip).incrUnread();
     }
 

@@ -98,10 +98,6 @@ public class MainCLI extends MainAbstractView {
 
     private final String commandInput = CliTools.colorize(CliTools.PURPLE_NORMAL_COLOR, "> ");
 
-    // private void printCommandInput() {
-    // System.out.print(commandInput);
-    // }
-
     private void printIncomingMessage(String message) {
         System.out.print("\r" + message + "\n" + commandInput);
     }

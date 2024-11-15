@@ -43,8 +43,6 @@ public class NetworkIO {
 
     public boolean send(String destAddress, String value) {
         return tcpServer.send(destAddress, value);
-        // return snd.sendAndWaitForAck(destAddress, RECV_PORT, value, TIMEOUT,
-        // MAX_TRIES);
     }
 
     public boolean sendUDP(String destAddress, String value) {
@@ -71,7 +69,7 @@ public class NetworkIO {
         public void execute(InetAddress senderAddress, int senderPort, String value, boolean isBroadcast,
                 boolean isUDP) {
 
-            // Do not try to parse an inexistant header
+            // Do not try to parse a non-existant header
             if (NO_HEADER) {
                 callback.execute(senderAddress, senderPort, value, false, true);
                 return;

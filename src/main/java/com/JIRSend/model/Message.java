@@ -1,6 +1,6 @@
 package com.JIRSend.model;
 
-public class Message { // struct-like class
+public class Message {
     public final String sender;
     // public final String senderIP;
     public final String receiver;
