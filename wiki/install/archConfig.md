@@ -1,11 +1,11 @@
-````bash
-mvn compile
-mvn -X compile #????
-
+# Arch memo
+If you are getting in trouble to configure java and VSCode on your Arch Linux machine, follow these steps.
+```bash
 archlinux-java status
 sudo archlinux-java set java-17-openjdk
 ```
 
+.vscode/settings.json
 ```json
 "java.configuration.runtimes": [
     {
