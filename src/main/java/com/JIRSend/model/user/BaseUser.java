@@ -18,6 +18,10 @@ public abstract class BaseUser {
     protected String currentConversationName;
     protected String currentConversationIP;
 
+    public static final String youString = "you";
+    public static final String senderString = "sender";
+    public static final String recipientString = "sender";
+
     protected BaseUser(MainController controller, String username, userType type) {
         this.controller = controller;
         this.username = username;
@@ -29,12 +33,12 @@ public abstract class BaseUser {
         MainController.messageReceived.subscribe((msg) -> {
             String senderIp = controller.getIPFromUsername(msg.sender);
             if (senderIp != null)
-                addToConversation(senderIp, new Message("sender", "you", msg.message));
+                addToConversation(senderIp, new Message(senderString, youString, msg.message));
         });
         MainController.sendMessage.subscribe((msg) -> {
             String recipientIp = controller.getIPFromUsername(msg.receiver);
             if (recipientIp != null)
-                addToConversation(recipientIp, new Message("you", "recipient", msg.message));
+                addToConversation(recipientIp, new Message(youString, recipientString, msg.message));
         });
         MainController.contactsChange.subscribe((ch) -> {
             if (controller.getIPFromUsername(currentConversationName) == null && currentConversationIP != null)
@@ -69,12 +73,14 @@ public abstract class BaseUser {
     }
 
     public void markConversationRead(String ip) {
-        if (ip == null || this.ipToConversations.get(ip) == null) return;
+        if (ip == null || this.ipToConversations.get(ip) == null)
+            return;
         this.ipToConversations.get(ip).setUnread(0);
     }
 
     public int getConversationUnreadNb(String ip) {
-        if (ip == null || this.ipToConversations.get(ip) == null) return 0;
+        if (ip == null || this.ipToConversations.get(ip) == null)
+            return 0;
         return this.ipToConversations.get(ip).numberUnRead();
     }
 
@@ -84,7 +90,8 @@ public abstract class BaseUser {
         else {
             ipToConversations.put(ip, new Conversation(msg));
         }
-        // if (currentConversationName != null && !currentConversationName.equals(msg.sender))
+        // if (currentConversationName != null &&
+        // !currentConversationName.equals(msg.sender))
         ipToConversations.get(ip).incrUnread();
     }
 

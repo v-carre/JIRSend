@@ -197,6 +197,8 @@ public class Net {
             return "Username should not contain spaces ' '!";
         else if (username.length() < 2)
             return "Username should have at least 2 characters!";
+        else if (username.length() > 17)
+            return "Username should have at most 17 characters!";
         return okString;
     }
 
