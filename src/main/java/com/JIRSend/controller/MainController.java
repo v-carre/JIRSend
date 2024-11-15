@@ -58,7 +58,7 @@ public class MainController {
         try {
             this.view.open();
         } catch (HeadlessException e) {
-            System.err.println("Could not find X11 display. Opening a Command Line Interface instead...");
+            System.err.println("Could not find X11 display. Opening a Command Line Interface instead. Consider using --cli option.");
             this.view = new MainCLI(this);
             this.view.open();
         }
