@@ -1,5 +1,7 @@
 package com.JIRSend.controller;
 
+import java.awt.GraphicsEnvironment;
+import java.awt.HeadlessException;
 import java.util.ArrayList;
 
 import com.JIRSend.model.Message;
@@ -9,6 +11,7 @@ import com.JIRSend.model.user.Conversation;
 import com.JIRSend.model.user.User;
 import com.JIRSend.model.user.UserEntry;
 import com.JIRSend.view.MainAbstractView;
+import com.JIRSend.view.cli.CliTools;
 import com.JIRSend.view.cli.MainCLI;
 import com.JIRSend.view.gui.MainGUI;
 
@@ -32,7 +35,12 @@ public class MainController {
     public MainController(String name, boolean usingGUI) {
         this.controllerName = name;
         if (usingGUI)
-            this.view = new MainGUI(this);
+            if (!GraphicsEnvironment.isHeadless())
+                this.view = new MainGUI(this);
+            else {
+                CliTools.printBigError("Not X11 display found. Starting Command Line Interface instead...");
+                this.view = new MainCLI(this);
+            }
         else
             this.view = new MainCLI(this);
         this.user = new User(this);
@@ -47,7 +55,13 @@ public class MainController {
     }
 
     public void startUI() {
-        this.view.open();
+        try {
+            this.view.open();
+        } catch (HeadlessException e) {
+            System.err.println("Could not find X11 display. Opening a Command Line Interface instead...");
+            this.view = new MainCLI(this);
+            this.view.open();
+        }
     }
 
     public String getName() {
