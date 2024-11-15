@@ -197,6 +197,8 @@ public class Net {
             return "Username should not contain spaces ' '!";
         else if (username.length() < 2)
             return "Username should have at least 2 characters!";
+        else if (username.length() > 17)
+            return "Username should have at most 17 characters!";
         return okString;
     }
 
@@ -212,10 +214,7 @@ public class Net {
 
     private void lostContact(String ip) {
         if (ipToUserEntry.containsKey(ip)) {
-            // ipToUserEntry.replace(ip, new UserEntry(false,
-            // ipToUserEntry.get(ip).username));
             ipToUserEntry.get(ip).online = false;
-
             MainController.contactsChange.safePut(ipToUserEntry.get(ip).username + " has disconnected");
         }
     }

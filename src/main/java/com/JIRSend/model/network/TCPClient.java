@@ -73,9 +73,9 @@ public class TCPClient {
         public void run() {
             this.setName(hostname + "-ClientHandler");
             while (true) {
-                // TODO meilleure condition d'arret ^^' (or not)
                 try {
                     String string = receiver.readLine();
+                    //Stop condition (because TCP Client receive null after connection closed)
                     if (string == null) {
                         Log.l("Connection ended by "+hostname+":"+port);
                         MainController.lostContact.safePut(hostname);

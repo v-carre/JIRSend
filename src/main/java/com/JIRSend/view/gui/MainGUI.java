@@ -53,7 +53,6 @@ public class MainGUI extends MainAbstractView {
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                // Log.l("Closing GUI", Log.WARNING);
                 controller.stoppingApp();
             }
         });
@@ -71,7 +70,6 @@ public class MainGUI extends MainAbstractView {
     public void updateIcon() {
         ImageIcon img;
         int totalUnread = controller.getTotalUnread();
-        // Log.l("REFRESH ICON: " + totalUnread, Log.WARNING);
         if (totalUnread > 0) {
             img = new ImageIcon("assets/jirsend_logo_notif.png");
             frame.setName("JIRSend (" + totalUnread + ")");

@@ -14,8 +14,6 @@ public class GUISectionConnection extends GUISection {
     private JButton connect;
 
     private Action submitAction;
-    // our icons for the actions
-    // ImageIcon cutIcon, copyIcon, pasteIcon;
 
     public GUISectionConnection(MainGUI window, Frame frame) {
         super(window, frame, "Connection");

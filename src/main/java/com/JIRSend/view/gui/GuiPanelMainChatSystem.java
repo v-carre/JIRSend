@@ -40,9 +40,7 @@ public class GuiPanelMainChatSystem {
     private JPanel contactsList;
     private JButton reconnectButton;
     private JPanel messagesList;
-    // private JPanel contactElement;
     private JLabel contactName;
-    // private JPanel messageElement;
     private JLabel messageAuthor;
     private JTextPane messageContent;
     private JLabel chatSystemName;
@@ -59,12 +57,11 @@ public class GuiPanelMainChatSystem {
     public static final Color almostWhiteColor = new Color(-854792);
     public static final Color messageBGColor = new Color(-13816014);
     public static final Color chatBGColor = new Color(-14671323);
-    public static final Color headerContactColor = chatBGColor; // new Color(-12371388);
+    public static final Color headerContactColor = chatBGColor;
     public static final Color carretColor = new Color(-3684409);
 
     private MainGUI maingui;
 
-    // private Action submitSUAction;
     private Action submitSUAction = new SubmitSwitchUsernameAction();
     private Action submitMsgAction = new SubmitMessageAction();
 
@@ -92,23 +89,20 @@ public class GuiPanelMainChatSystem {
     private void updateContactList() {
         String currentConvName = controller.getConversationName();
         contactsList.removeAll();
-        // Log.l("UPDATING GUI CONTACTS LIST", Log.WARNING);
         for (UserEntry ue : controller.getContacts()) {
             createContactElement(ue.username, ue.online, currentConvName == ue.username, false);
         }
     }
 
     private void updateConversation() {
-        // Log.l("UPDATING GUI CONVERSATION", Log.WARNING);
         messagesList.removeAll();
-        // createMessageElement("ADMIN", "WELCOME IN JIRSEND");
         Conversation conv = controller.getConversation();
         if (conv == null) {
             chatContactLabel.setText("<- Choose a conversation");
             createMessageElement("JIRSend", "Welcome in JIRSend!\n\n"
-                    + "- In the left panel are shown the connected users, you can simply click on them to start a conversation with them.\n"
-                    + "You will see a text input below to send a message.\n\n"
-                    + "To change your username, just modify your useername in the footer and click on the refresh button.");
+                    + "- In the left panel are shown the connected users. You can simply click on them to start a conversation with them.\n"
+                    + "You will see a text input at the bottom to send a message.\n\n"
+                    + "- To change your username, just modify your username in the footer and click on the refresh button.");
             SendMessageSection.setVisible(false);
             return;
         }
@@ -121,11 +115,9 @@ public class GuiPanelMainChatSystem {
             SendMessageSection.setVisible(false);
         int msgNb = 0;
         int unReadThreshold = conv.getMessages().size() - conv.numberUnRead();
-        //Log.l("Unread current conv: " + conv.numberUnRead(), Log.WARNING);
         for (Message msg : conv.getMessages()) {
             if (msgNb == unReadThreshold && conv.numberUnRead() > 0)
                 createUnreadBar();
-            // Log.l("MSG> " + msg.sender + ": " + msg.message);
             createMessageElement(msg.sender.equals("you") ? you : recipient, msg.message);
             msgNb++;
         }
@@ -140,7 +132,6 @@ public class GuiPanelMainChatSystem {
         contactElement.setBackground(
                 currentConv ? contactElementBGColor.brighter().brighter()
                         : (online ? contactElementBGColor.brighter() : contactElementBGColor));
-        // contactElement.setBorder(new LineBorder(whitestColor, 2));
         contactElement.setBorder(new GuiRoundedBorder(10));
         contactElement.addMouseListener(new MouseAdapter() {
             @Override
@@ -174,7 +165,6 @@ public class GuiPanelMainChatSystem {
             contactName.setFont(contactNameFont);
         contactName.setForeground(online ? almostWhiteColor : disconnectedColor);
         int nbUnread = controller.getConversationUnreadNumber(username);
-        // Log.l("CONTACT: " + nbUnread, Log.WARNING);
         contactName.setText("<html><body style=\"text-align:center;\">" + username
                 + (online ? "" : "<br><span color=\"red\">(offline)</span>")
                 + (nbUnread > 0 ? ("<br><span style=\"color:white;background:red;\">(" + nbUnread + ")</span>")
@@ -206,15 +196,6 @@ public class GuiPanelMainChatSystem {
                         new Insets(0, 0, 0, 0), -1, -1));
         messageElement.setBackground(messageBGColor);
         messagesList.add(messageElement);
-        // ,
-        // new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1,
-        // com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
-        // com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH,
-        // com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
-        // | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
-        // com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
-        // | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
-        // null, null, null, 0, false));
         messageAuthor = new JLabel();
         messageAuthor.setBackground(messageBGColor);
         Font messageAuthorFont = this.$$$getFont$$$("Monospaced", Font.BOLD, -1, messageAuthor.getFont());
@@ -256,20 +237,10 @@ public class GuiPanelMainChatSystem {
     }
 
     {
-        // GUI initializer generated by IntelliJ IDEA GUI Designer
-        // >>> IMPORTANT!! <<<
-        // DO NOT EDIT OR ADD ANY CODE HERE! (lol)
-        $$$setupUI$$$();
+        setupUI();
     }
-
-    /**
-     * Method generated by IntelliJ IDEA GUI Designer
-     * >>> IMPORTANT!! <<<
-     * DO NOT edit this method OR call it in your code!
-     *
-     * @noinspection ALL
-     */
-    private void $$$setupUI$$$() {
+    
+    private void setupUI() {
         contentPane = new JPanel();
         contentPane.setLayout(
                 new com.intellij.uiDesigner.core.GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), 0, 0));
@@ -312,7 +283,6 @@ public class GuiPanelMainChatSystem {
         JIRSendLogo.setHorizontalAlignment(0);
         JIRSendLogo.setHorizontalTextPosition(0);
         JIRSendLogo.setBorder(new EmptyBorder(0, 1, 0, 0));
-        // JIRSendLogo.setText("JS");
         headPane.add(JIRSendLogo,
                 new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1,
                         com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
@@ -383,21 +353,10 @@ public class GuiPanelMainChatSystem {
         // Add some padding around each contact panel
         contactsList.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         // contactsList
-        // .setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1,
-        // new Insets(0, 0, 0, 0), -1, -1));
         contactsList.setBackground(contactSectionBGColor);
         contactsListScroll.setViewportView(contactsList);
         contactsListScroll.setBorder(new EmptyBorder(0, 0, 0, 0));
         contactsListScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-
-        // final com.intellij.uiDesigner.core.Spacer spacer2 = new
-        // com.intellij.uiDesigner.core.Spacer();
-        // contactsList.add(spacer2,
-        // new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1,
-        // com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
-        // com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, 1,
-        // com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null,
-        // null, null, 0, false));
         chatSection = new JPanel();
         chatSection.setLayout(new CardLayout(0, 0));
         chatSection.setBackground(chatBGColor);
@@ -420,8 +379,6 @@ public class GuiPanelMainChatSystem {
                 .setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 1,
                         new Insets(0, 0, 0, 0), -1, -1));
         chatContactName.setBackground(headerContactColor);
-        // chatContactName.setBorder(new LineBorder(headerContactColor.brighter(), 10,
-        // true));
         chatContactName.setBorder(new MatteBorder(0, 0, 2, 0, headerContactColor.brighter()));
         chatContactName.setEnabled(true);
         chatContent.add(chatContactName,
@@ -461,10 +418,6 @@ public class GuiPanelMainChatSystem {
                         com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
                                 | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
                         null, new Dimension(-1, 80), new Dimension(-1, 300), 0, false));
-        // sendMessageButton = new JButton(
-        // new ImageIcon(new
-        // javax.swing.ImageIcon(getClass().getResource("/assets/send.png"))
-        // .getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
 
         sendMessageButton = new JButton(submitMsgAction);
         sendMessageButton.setText("");
@@ -517,10 +470,6 @@ public class GuiPanelMainChatSystem {
         inputMessage.setToolTipText("Enter your message here");
         messageToSendScroll.setViewportView(inputMessage);
 
-        // TODO: edit this part like contacts scrollpane & list
-
-        // TODO: ###############################################################
-
         messagesScroll = new JScrollPane();
         messagesScroll.setAutoscrolls(true);
         messagesScroll.setBackground(chatBGColor);
@@ -536,9 +485,6 @@ public class GuiPanelMainChatSystem {
                                 | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW,
                         null, null, null, 0, false));
         messagesList = new JPanel();
-        // messagesList.setLayout(
-        // new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(1, 1, 1,
-        // 1), 2, 2));
 
         messagesList.setLayout(new BoxLayout(messagesList, BoxLayout.Y_AXIS));
         messagesList.setAlignmentY(Component.TOP_ALIGNMENT);
@@ -546,17 +492,6 @@ public class GuiPanelMainChatSystem {
         messagesList.setBackground(chatBGColor);
         messagesList.setForeground(almostWhiteColor);
         messagesScroll.setViewportView(messagesList);
-
-        // final com.intellij.uiDesigner.core.Spacer spacer3 = new
-        // com.intellij.uiDesigner.core.Spacer();
-        // messagesList.add(spacer3,
-        // new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1,
-        // com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
-        // com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, 1,
-        // com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null,
-        // null, null, 0, false));
-
-        // TODO: ###############################################################
 
         Footer = new JPanel();
         Footer.setLayout(
@@ -590,18 +525,12 @@ public class GuiPanelMainChatSystem {
                         com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null,
                         new Dimension(150, -1),
                         new Dimension(250, -1), 0, false));
-        // reconnectButton = new JButton(
-        // new ImageIcon(new
-        // javax.swing.ImageIcon(getClass().getResource("/assets/reconnect.png"))
-        // .getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
-        // reconnectButton.setAction(submitSUAction);
         reconnectButton = new JButton(submitSUAction);
         reconnectButton.setText("");
         reconnectButton.setIcon(
                 new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/reconnect.png"))
                         .getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
 
-        // reconnectButton.setText("change");
         reconnectButton.setPreferredSize(new Dimension(20, 20));
         reconnectButton.setBackground(headerFooterBGColor);
         reconnectButton.setForeground(whitestColor);
@@ -610,7 +539,6 @@ public class GuiPanelMainChatSystem {
         uiReconnect.setPressedColor(reconnectButton.getBackground().darker());
         reconnectButton.setUI(uiReconnect);
         reconnectButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        // reconnectButton.setText("S");
         Footer.add(reconnectButton,
                 new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1,
                         com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,

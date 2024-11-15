@@ -146,7 +146,6 @@ public class MainController {
         String convIp = getConversationIP();
         if (convIp == null)
             return null;
-        // user.markConversationRead(convIp);
         return user.getConversation(convIp);
     }
 
