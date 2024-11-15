@@ -160,7 +160,7 @@ public class GuiPanelMainChatSystem {
         });
         contactsList.add(contactElement);
         contactName = new JLabel();
-        Font contactNameFont = this.$$$getFont$$$("Monospaced", Font.BOLD, -1, contactName.getFont());
+        Font contactNameFont = this.getFont("Monospaced", Font.BOLD, -1, contactName.getFont());
         if (contactNameFont != null)
             contactName.setFont(contactNameFont);
         contactName.setForeground(online ? almostWhiteColor : disconnectedColor);
@@ -198,7 +198,7 @@ public class GuiPanelMainChatSystem {
         messagesList.add(messageElement);
         messageAuthor = new JLabel();
         messageAuthor.setBackground(messageBGColor);
-        Font messageAuthorFont = this.$$$getFont$$$("Monospaced", Font.BOLD, -1, messageAuthor.getFont());
+        Font messageAuthorFont = this.getFont("Monospaced", Font.BOLD, -1, messageAuthor.getFont());
         if (messageAuthorFont != null)
             messageAuthor.setFont(messageAuthorFont);
         messageAuthor.setForeground(whitestColor);
@@ -216,7 +216,7 @@ public class GuiPanelMainChatSystem {
         messageContent.setDisabledTextColor(almostWhiteColor);
         messageContent.setEditable(false);
         messageContent.setEnabled(false);
-        Font messageContentFont = this.$$$getFont$$$("Monospaced", -1, -1, messageContent.getFont());
+        Font messageContentFont = this.getFont("Monospaced", -1, -1, messageContent.getFont());
         if (messageContentFont != null)
             messageContent.setFont(messageContentFont);
         messageContent.setForeground(almostWhiteColor);
@@ -258,7 +258,7 @@ public class GuiPanelMainChatSystem {
                         null, 0, false));
         chatSystemName = new JLabel();
         chatSystemName.setOpaque(false);
-        Font chatSystemNameFont = this.$$$getFont$$$("Monospaced", Font.BOLD, -1, chatSystemName.getFont());
+        Font chatSystemNameFont = this.getFont("Monospaced", Font.BOLD, -1, chatSystemName.getFont());
         if (chatSystemNameFont != null)
             chatSystemName.setFont(chatSystemNameFont);
         chatSystemName.setForeground(whitestColor);
@@ -323,7 +323,7 @@ public class GuiPanelMainChatSystem {
         contactsSection.add(contactsContent, "Card1");
         contactsLabel = new JLabel();
         contactsLabel.setBackground(contactElementBGColor);
-        Font contactsLabelFont = this.$$$getFont$$$("Monospaced", Font.BOLD, 22, contactsLabel.getFont());
+        Font contactsLabelFont = this.getFont("Monospaced", Font.BOLD, 22, contactsLabel.getFont());
         if (contactsLabelFont != null)
             contactsLabel.setFont(contactsLabelFont);
         contactsLabel.setForeground(whitestColor);
@@ -391,7 +391,7 @@ public class GuiPanelMainChatSystem {
                                 | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
                         null, null, null, 0, false));
         chatContactLabel = new JLabel();
-        Font chatContactLabelFont = this.$$$getFont$$$("Monospaced", Font.BOLD, 36, chatContactLabel.getFont());
+        Font chatContactLabelFont = this.getFont("Monospaced", Font.BOLD, 36, chatContactLabel.getFont());
         if (chatContactLabelFont != null)
             chatContactLabel.setFont(chatContactLabelFont);
         chatContactLabel.setForeground(whitestColor);
@@ -432,7 +432,7 @@ public class GuiPanelMainChatSystem {
         uiSend.setPressedColor(sendMessageButton.getBackground().darker());
         sendMessageButton.setUI(uiSend);
         sendMessageButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        Font sendMessageButtonFont = this.$$$getFont$$$("Monospaced", Font.BOLD, 8,
+        Font sendMessageButtonFont = this.getFont("Monospaced", Font.BOLD, 8,
                 sendMessageButton.getFont());
         if (sendMessageButtonFont != null)
             sendMessageButton.setFont(sendMessageButtonFont);
@@ -460,7 +460,7 @@ public class GuiPanelMainChatSystem {
         inputMessage.setBackground(messageBGColor);
         inputMessage.setCaretColor(carretColor);
         inputMessage.setDragEnabled(true);
-        Font inputMessageFont = this.$$$getFont$$$("Monospaced", -1, -1, inputMessage.getFont());
+        Font inputMessageFont = this.getFont("Monospaced", -1, -1, inputMessage.getFont());
         if (inputMessageFont != null)
             inputMessage.setFont(inputMessageFont);
         inputMessage.setForeground(almostWhiteColor);
@@ -508,7 +508,7 @@ public class GuiPanelMainChatSystem {
         usernameTextField = new RoundJTextField(17);
         usernameTextField.setBackground(headerFooterBGColor.darker());
         usernameTextField.setCaretColor(carretColor);
-        Font usernameTextFieldFont = this.$$$getFont$$$("Monospaced", Font.BOLD, -1,
+        Font usernameTextFieldFont = this.getFont("Monospaced", Font.BOLD, -1,
                 usernameTextField.getFont());
         if (usernameTextFieldFont != null)
             usernameTextField.setFont(usernameTextFieldFont);
@@ -552,7 +552,7 @@ public class GuiPanelMainChatSystem {
     /**
      * @noinspection ALL
      */
-    private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
+    private Font getFont(String fontName, int style, int size, Font currentFont) {
         if (currentFont == null)
             return null;
         String resultName;

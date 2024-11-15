@@ -112,8 +112,14 @@ public class Net {
                     if (!isUsernameValid(args).equals(okString))
                         Log.l("Forbidden username: " + args, Log.WARNING);
                     else {
-                        ipToUserEntry.put(senderIP, new UserEntry(true, args));
-                        MainController.contactsChange.safePut(args + " is now connected");
+                        if (ipToUserEntry.containsKey(senderIP)) {
+                            MainController.contactsChange
+                                    .safePut(ipToUserEntry.get(senderIP) + " changed his username to " + args);
+                            ipToUserEntry.put(senderIP, new UserEntry(true, args));
+                        } else {
+                            ipToUserEntry.put(senderIP, new UserEntry(true, args));
+                            MainController.contactsChange.safePut(args + " is now connected");
+                        }
                     }
                     break;
                 case "SetOfflineUser":
@@ -130,24 +136,26 @@ public class Net {
                 case "UpdateUsername":
                     if (!isUsernameValid(args).equals(okString))
                         Log.l("Forbidden username: " + args, Log.WARNING);
-                    else if (ipToUserEntry.containsKey(senderIP))
+                    else if (ipToUserEntry.containsKey(senderIP)) {
+                        MainController.contactsChange
+                                .safePut(ipToUserEntry.get(senderIP) + " changed his username  to" + args);
                         ipToUserEntry.get(senderIP).username = args;
-                    else {
+                    } else {
                         ipToUserEntry.put(senderIP, new UserEntry(true, args));
-                        MainController.contactsChange.safePut(args + " has updated his username");
+                        MainController.contactsChange.safePut(args + " is now connected");
                     }
                     break;
                 case "SendMessage":
                     if (ipToUserEntry.containsKey(senderIP)) {
                         final String senderUsername = ipToUserEntry.get(senderIP).username;
-                        if(ipToUserEntry.get(senderIP).online == false) {
+                        if (ipToUserEntry.get(senderIP).online == false) {
                             ipToUserEntry.get(senderIP).online = true;
                             MainController.contactsChange.safePut(senderUsername + " is now connected");
                         }
                         MainController.messageReceived.safePut(
                                 new Message(senderUsername, controller.getUsername(), args.replaceAll("\\\\n", "\n")));
                     } else {
-                        //TODO recover "lost" message
+                        // TODO recover "lost" message
                         send(senderIP, "GetUser");
                         System.out.println("[Unkown user] " + args);
                     }
@@ -221,6 +229,7 @@ public class Net {
 
     /**
      * Get IP associated to a username
+     * 
      * @param username
      * @return ip string | null if not found
      */
