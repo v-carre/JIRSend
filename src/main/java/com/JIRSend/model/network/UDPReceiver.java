@@ -5,6 +5,7 @@ import java.net.DatagramSocket;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.Enumeration;
 
 import com.JIRSend.view.cli.Log;
@@ -35,6 +36,8 @@ public class UDPReceiver {
 
     public void stop() {
         this.isRunning = false;
+        this.socket.close();
+        this.rcvThread.interrupt();
         try {
             rcvThread.join();
         } catch (InterruptedException e) {
@@ -56,13 +59,14 @@ public class UDPReceiver {
                 String message = new String(receivePacket.getData(), 0, receivePacket.getLength());
 
                 if (receivePacket.getAddress().getHostAddress().equals(local)) {
-                    Log.l("Received message from self: "+message, Log.DEBUG);
+                    Log.l("Received message from self: " + message, Log.DEBUG);
                     continue;
                 }
-                Log.l("recv: " + message,Log.DEBUG);
+                Log.l("recv: " + message, Log.DEBUG);
                 // broadcast is false because it is handled somewhere else (NetworkIO)
                 callback.execute(receivePacket.getAddress(), receivePacket.getPort(), message, false, true);
             }
+        } catch (SocketException e) {
         } catch (Exception e) {
             e.printStackTrace();
         }

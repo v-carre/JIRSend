@@ -2,6 +2,7 @@ package com.JIRSend.model.network;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import com.JIRSend.view.cli.Log;
@@ -11,57 +12,72 @@ import com.JIRSend.view.cli.Log;
  * 
  * Communication template
  * 
- * -JIRSend>$TYPE$<$TIMESTAMP$|$PAYLOAD$
- * $TYPE$ = (A:Ack|B:Broadcast|M:Message)
+ * -JIRSend>$<$|$
+ * $ = (A:Ack|B:Broadcast|M:Message)
  */
 public class NetworkIO {
     // set to false to use UDP with ACK messages instead of TCP
     public static final boolean NO_ACK = true;
     public static final boolean NO_HEADER = false;
     public static final String APP_HEADER = "-JIRSend>";
-    public static final int RECV_PORT = NO_ACK ? 1610 : 11572;
+    public static final int RECV_PORT = 11572; // FIXME: Clavardons 1610 
     public static final int TCP_PORT = 11573;
     public static final int BRDC_PORT = 11574;
+    public static final int RECV_PORT_TEST = 10572;
+    public static final int TCP_PORT_TEST = 10573;
+    public static final int BRDC_PORT_TEST = 10574;
     public static final int TIMEOUT = 500; // milliseconds
     public static final int MAX_TRIES = 10;
 
     private final UDPCallback onReceive = new UDPCallback();
-    private final UDPReceiver rcv;
-    private final UDPSender snd;
+    private final UDPReceiver RCV;
+    private final UDPSender SND;
     private final NetCallback callback;
     private final VoidCallback onRunning;
-    private final TCPServer tcpServer;
+    private final TCPServer TCP_SERVER;
+    private final boolean IS_TEST;
 
-    public NetworkIO(NetCallback callback, VoidCallback onRunning) {
-        this.rcv = new UDPReceiver(RECV_PORT, onReceive);
-        this.rcv.start();
+    public NetworkIO(NetCallback callback, VoidCallback onRunning, boolean test) throws SocketException {
+        this.IS_TEST = test;
+        this.RCV = new UDPReceiver(test ? RECV_PORT_TEST : RECV_PORT, onReceive);
+        this.RCV.start();
         this.onRunning = onRunning;
         this.callback = callback;
-        tcpServer = new TCPServer(TCP_PORT, this.callback, this.onRunning);
-        this.snd = new UDPSender(BRDC_PORT, RECV_PORT);
+        TCP_SERVER = new TCPServer(test ? TCP_PORT_TEST : TCP_PORT, this.callback, this.onRunning);
+        this.SND = new UDPSender(BRDC_PORT, test ? RECV_PORT_TEST : RECV_PORT);
+    }
+
+    public NetworkIO(NetCallback callback, VoidCallback onRunning) throws SocketException {
+        this(callback, onRunning, false);
+    }
+
+    public void stop() {
+        this.TCP_SERVER.stop();
+        this.RCV.stop();
+        this.SND.stop();
     }
 
     public boolean send(String destAddress, String value) {
-        return tcpServer.send(destAddress, value);
+        return TCP_SERVER.send(destAddress, value);
     }
 
     public boolean sendUDP(String destAddress, String value) {
         if (NO_ACK) {
             try {
-                snd.send(InetAddress.getByName(destAddress), RECV_PORT, value);
+                SND.send(InetAddress.getByName(destAddress), IS_TEST ? RECV_PORT_TEST : RECV_PORT, value);
             } catch (UnknownHostException e) {
                 return false;
             }
             return true;
         } else
-            return snd.sendAndWaitForAck(destAddress, RECV_PORT, value, TIMEOUT, MAX_TRIES);
+            return SND.sendAndWaitForAck(destAddress, IS_TEST ? RECV_PORT_TEST : RECV_PORT, value, TIMEOUT, MAX_TRIES);
     }
 
     public void broadcast(String message) {
         if (NO_HEADER)
-            snd.broadcastNoHeader(message);
+            SND.broadcastNoHeader(message);
         else
-            snd.broadcast(message);
+            SND.broadcast(message);
     }
 
     protected class UDPCallback extends NetCallback {
@@ -104,7 +120,7 @@ public class NetworkIO {
 
         try {
             String ackMsg = APP_HEADER + "A<" + sentTimestamp + "|" + Inet4Address.getLocalHost().getHostAddress();
-            snd.send(sAddress, sPort, ackMsg);
+            SND.send(sAddress, sPort, ackMsg);
         } catch (UnknownHostException e) {
             Log.e("Could not send Ack");
         }

@@ -1,6 +1,7 @@
 package com.JIRSend.model.network;
 
 import java.net.InetAddress;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +16,7 @@ import com.JIRSend.view.cli.Log;
 *  Protocols:
 *      - Connection protocol:
 *          Broadcast "GetUser"
-*          Response: "GetUserResponse $username$" -> store usernames and IPs
+*          Response: "GetUserResponse $" -> store usernames and IPs
 *      - GetUser
 *      - GetUserResponse username
 *      - NewUser username
@@ -30,7 +31,7 @@ public class Net {
     private final CountDownLatch setupLatch;
     public static final String okString = "";
 
-    public Net(MainController controller, VoidCallback onSetup) {
+    public Net(MainController controller, VoidCallback onSetup, boolean test) throws SocketException {
         this.setupLatch = new CountDownLatch(1);
         this.ipToUserEntry = new HashMap<>();
         this.controller = controller;
@@ -40,20 +41,34 @@ public class Net {
         MainController.sendMessage.subscribe((message) -> {
             send(getIpFromUsername(message.receiver), "SendMessage " + message.message.replaceAll("\\n", "\\\\n"));
         });
-        this.netIO = new NetworkIO(new NetworkCallback(), () -> {
-            // signal that setup is complete
-            setupLatch.countDown();
-        });
+        if (test)
+            this.netIO = new NetworkIO(new NetworkCallback(), () -> {
+                // signal that setup is complete
+                setupLatch.countDown();
+            }, true);
+        else
+            this.netIO = new NetworkIO(new NetworkCallback(), () -> {
+                // signal that setup is complete
+                setupLatch.countDown();
+            });
         // wait for TCP Server to be started
         try {
             setupLatch.await();
+            broadcast("GetUser");
+            onSetup.execute();
         } catch (InterruptedException e) {
             // re-set the interrupt flag
             Log.e("Net setup was interrupted");
             Thread.currentThread().interrupt();
         }
-        broadcast("GetUser");
-        onSetup.execute();
+    }
+
+    public Net(MainController controller, VoidCallback onSetup) throws SocketException {
+        this(controller, onSetup, false);
+    }
+
+    public void stop() {
+        this.netIO.stop();
     }
 
     /**
@@ -115,11 +130,11 @@ public class Net {
                         if (ipToUserEntry.containsKey(senderIP)) {
                             MainController.contactsChange
                                     .safePut(ipToUserEntry.get(senderIP).username + " changed his username to " + args);
-                            ipToUserEntry.get(senderIP).username=args;
+                            ipToUserEntry.get(senderIP).username = args;
                             ipToUserEntry.get(senderIP).online = true;
                         } else {
                             ipToUserEntry.put(senderIP, new UserEntry(true, args));
-                            MainController.contactsChange.safePut(args + " is now connected");  
+                            MainController.contactsChange.safePut(args + " is now connected");
                         }
                     }
                     break;

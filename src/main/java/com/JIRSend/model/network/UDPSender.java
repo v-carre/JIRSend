@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.time.Instant;
 
 import com.JIRSend.view.cli.Log;
@@ -15,15 +17,41 @@ public class UDPSender {
     private InetAddress localAddress;
     private int receiversPort;
 
-    public UDPSender(int broadcastPort, int receiversPort) {
+    public UDPSender(int broadcastPort, int receiversPort) throws SocketException {
+        // while (true) {
+        // try {
+        // this.socket = new DatagramSocket(broadcastPort);
+        // this.socket.setBroadcast(true);
+        // this.localAddress = InetAddress.getByName("255.255.255.255");
+        // this.receiversPort = receiversPort;
+        // } catch (Exception e) {
+        // Log.e("Failed to create UDP Sender: " + e);
+        // }
+
+        // if (this.socket != null)
+        // break;
+        // }
+        // try {
+        // this.socket = new DatagramSocket(broadcastPort);
+        // this.socket.setBroadcast(true);
+        // this.localAddress = InetAddress.getByName("255.255.255.255");
+        // this.receiversPort = receiversPort;
+        // } catch (Exception e) {
+        // e.printStackTrace();
+        // Log.e("Failed to create UDP Sender: " + e);
+        // }
+        this.socket = new DatagramSocket(broadcastPort);
+        this.socket.setBroadcast(true);
         try {
-            this.socket = new DatagramSocket(broadcastPort);
-            this.socket.setBroadcast(true);
             this.localAddress = InetAddress.getByName("255.255.255.255");
-            this.receiversPort = receiversPort;
-        } catch (Exception e) {
-            Log.e("Failed to create UDP Sender: " + e);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
         }
+        this.receiversPort = receiversPort;
+    }
+
+    public void stop() {
+        this.socket.close();
     }
 
     /**
@@ -72,10 +100,10 @@ public class UDPSender {
                     socket.receive(ackPacket);
                     return true;
                 } catch (SocketTimeoutException e) {
-                    Log.l("No ACK received within the timeout period.",Log.WARNING);
+                    Log.l("No ACK received within the timeout period.", Log.WARNING);
                 }
             }
-            Log.l("No ack received",Log.ERROR);
+            Log.l("No ack received", Log.ERROR);
             return false;
         } catch (Exception e) {
             e.printStackTrace();
@@ -98,7 +126,7 @@ public class UDPSender {
     public void broadcast(String value) {
         String timestamp = String.valueOf(Instant.now().toEpochMilli());
         String message = NetworkIO.APP_HEADER + "B<" + timestamp + "|" + value;
-        
+
         broadcastNoHeader(message);
     }
 }

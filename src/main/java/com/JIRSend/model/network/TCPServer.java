@@ -2,6 +2,7 @@ package com.JIRSend.model.network;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.SocketException;
 import java.util.Hashtable;
 
 import com.JIRSend.view.cli.Log;
@@ -35,7 +36,11 @@ public class TCPServer {
 
     public void stop() {
         try {
+            // server.interrupt();
             server.socket.close();
+            for (TCPClient tcpc : table.values()) {
+                tcpc.close();
+            }
         } catch (IOException e) {
             Log.e("Failed to close server socket" + e);
         }
@@ -54,12 +59,19 @@ public class TCPServer {
             }
             if (socket == null)
                 return;
-            while (true) {
+            while (!Thread.currentThread().isInterrupted() && !socket.isClosed()) {
                 try {
                     TCPClient newClient = new TCPClient(socket.accept(), callback);
                     if (newClient.hasFailedToStart())
                         continue;
                     table.put(newClient.hostname, newClient);
+                } catch (SocketException e) {
+                    if (socket.isClosed()) {
+                        Log.l("Server socket closed as expected.", Log.LOG);
+                    } else {
+                        Log.e("Unexpected SocketException: " + e.getMessage());
+                    }
+                    break;
                 } catch (IOException e) {
                     Log.l("Server socket closed (probably)", Log.LOG);
                     e.printStackTrace();

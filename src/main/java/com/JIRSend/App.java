@@ -1,8 +1,11 @@
 package com.JIRSend;
 
+import java.net.SocketException;
+
 import com.JIRSend.controller.MainController;
 import com.JIRSend.view.cli.CliTools;
 import com.JIRSend.view.cli.Log;
+import com.JIRSend.view.gui.ErrorPopup;
 
 public class App {
     public static void main(String[] args) {
@@ -23,6 +26,14 @@ public class App {
         Log.setVerbose(verboseFlag, Log.ALL);
         Log.l("Starting Client...", Log.LOG);
 
-        new MainController(!cliFlag);
+        try {
+            new MainController(!cliFlag);
+        } catch (SocketException e) {
+            Log.e("Error while starting app: Could not create socket");
+            if (!cliFlag)
+                ErrorPopup.show("JIRSend could not start", "Could not create socket");
+            e.printStackTrace();
+            System.exit(1);
+        }
     };
 }

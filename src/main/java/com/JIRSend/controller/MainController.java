@@ -2,6 +2,7 @@ package com.JIRSend.controller;
 
 import java.awt.GraphicsEnvironment;
 import java.awt.HeadlessException;
+import java.net.SocketException;
 import java.util.ArrayList;
 
 import com.JIRSend.model.Message;
@@ -32,7 +33,7 @@ public class MainController {
     public static Pipe<Message> sendMessage = new Pipe<>("Sending Message");
     public static Pipe<Message> messageReceived = new Pipe<>("Message received");
 
-    public MainController(String name, boolean usingGUI) {
+    public MainController(String name, boolean usingGUI) throws SocketException {
         this.controllerName = name;
         if (usingGUI)
             if (!GraphicsEnvironment.isHeadless())
@@ -50,7 +51,7 @@ public class MainController {
         });
     }
 
-    public MainController(boolean usingGUI) {
+    public MainController(boolean usingGUI) throws SocketException {
         this("JIRSend Main", usingGUI);
     }
 
@@ -68,11 +69,16 @@ public class MainController {
         return controllerName;
     }
 
+    public void stopNet() {
+        this.net.stop();
+    }
+
     /**
      * Will stop the app
      */
     public void stoppingApp() {
         net.sendGoingOfflineMessage();
+        stopNet();
         System.exit(0);
     }
 
