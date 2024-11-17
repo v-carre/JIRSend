@@ -1,7 +1,6 @@
 package com.JIRSend.view.cli;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -244,7 +243,11 @@ public class MainCLI extends MainAbstractView {
             while (true) {
                 System.out.print("Enter your " + (change ? "new " : "") + "username: ");
                 String usernameChosen = oldReadIn();
-                if (usernameChosen.equals(controller.getUsername()) && usernameChosen != null) {
+                if (usernameChosen == null) {
+                    System.out.println("\r");
+                    continue;
+                }
+                if (usernameChosen != null && usernameChosen.equals(controller.getUsername())) {
                     connected = true;
                     break;
                 }
