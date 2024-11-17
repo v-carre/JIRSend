@@ -30,8 +30,10 @@ public class Net {
     private final MainController controller;
     private final CountDownLatch setupLatch;
     public static final String okString = "";
+    private boolean online = false;
 
     public Net(MainController controller, VoidCallback onSetup, boolean test) throws SocketException {
+        this.online = false;
         this.setupLatch = new CountDownLatch(1);
         this.ipToUserEntry = new HashMap<>();
         this.controller = controller;
@@ -56,6 +58,7 @@ public class Net {
             setupLatch.await();
             broadcast("GetUser");
             onSetup.execute();
+            online = true;
         } catch (InterruptedException e) {
             // re-set the interrupt flag
             Log.e("Net setup was interrupted");
@@ -68,7 +71,13 @@ public class Net {
     }
 
     public void stop() {
+        this.online = false;
         this.netIO.stop();
+    }
+
+    public void contactsChangePut(String value) {
+        if (online)
+            MainController.contactsChange.safePut(value);
     }
 
     /**
@@ -120,31 +129,38 @@ public class Net {
                         Log.l("Forbidden username: " + args, Log.WARNING);
                     else {
                         ipToUserEntry.put(senderIP, new UserEntry(true, args));
-                        MainController.contactsChange.safePut(args + " is now connected");
+                        contactsChangePut(args + " is now connected");
                     }
                     break;
                 case "NewUser":
                     if (!isUsernameValid(args).equals(okString))
                         Log.l("Forbidden username: " + args, Log.WARNING);
                     else {
-                        if (ipToUserEntry.containsKey(senderIP)) {
-                            MainController.contactsChange
-                                    .safePut(ipToUserEntry.get(senderIP).username + " changed his username to " + args);
+                        if (ipToUserEntry.containsKey(senderIP) && !ipToUserEntry.get(senderIP).username.equals(args)) {
+                            final UserEntry oldUE = new UserEntry(ipToUserEntry.get(senderIP).online, ipToUserEntry.get(senderIP).username); 
                             ipToUserEntry.get(senderIP).username = args;
                             ipToUserEntry.get(senderIP).online = true;
+
+                            contactsChangePut(oldUE.username + " changed his username to "
+                                    + args + (oldUE.online ? "" : " and is now connected"));
                         } else {
                             ipToUserEntry.put(senderIP, new UserEntry(true, args));
-                            MainController.contactsChange.safePut(args + " is now connected");
+                            contactsChangePut(args + " is now connected");
                         }
                     }
                     break;
                 case "SetOfflineUser":
                     if (ipToUserEntry.containsKey(senderIP)) {
+                        boolean change = false;
+                        if (ipToUserEntry.get(senderIP).online)
+                            change = true;
                         ipToUserEntry.get(senderIP).online = false;
+                        if (change)
+                            contactsChangePut(args + " has disconnected");
                     } else {
                         if (isUsernameValid(args).equals(okString)) {
                             ipToUserEntry.put(senderIP, new UserEntry(false, args));
-                            MainController.contactsChange.safePut(args + " has disconnected");
+                            contactsChangePut(args + " has disconnected");
                         } else
                             Log.l("Forbidden username: " + args);
                     }
@@ -158,7 +174,7 @@ public class Net {
                         ipToUserEntry.get(senderIP).username = args;
                     } else {
                         ipToUserEntry.put(senderIP, new UserEntry(true, args));
-                        MainController.contactsChange.safePut(args + " is now connected");
+                        contactsChangePut(args + " is now connected");
                     }
                     break;
                 case "SendMessage":
@@ -166,7 +182,7 @@ public class Net {
                         final String senderUsername = ipToUserEntry.get(senderIP).username;
                         if (ipToUserEntry.get(senderIP).online == false) {
                             ipToUserEntry.get(senderIP).online = true;
-                            MainController.contactsChange.safePut(senderUsername + " is now connected");
+                            contactsChangePut(senderUsername + " is now connected");
                         }
                         MainController.messageReceived.safePut(
                                 new Message(senderUsername, controller.getUsername(), args.replaceAll("\\\\n", "\n")));
@@ -238,8 +254,12 @@ public class Net {
 
     private void lostContact(String ip) {
         if (ipToUserEntry.containsKey(ip)) {
+            boolean change = false;
+            if (ipToUserEntry.get(ip).online)
+                change = true;
             ipToUserEntry.get(ip).online = false;
-            MainController.contactsChange.safePut(ipToUserEntry.get(ip).username + " has disconnected");
+            if (change)
+                contactsChangePut(ipToUserEntry.get(ip).username + " has disconnected");
         }
     }
 
