@@ -5,3 +5,4 @@ target/
 *.jar
 .idea
 .vscode
+build.sh
