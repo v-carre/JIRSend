@@ -17,12 +17,13 @@ import com.JIRSend.model.network.Net;
 
 @Tag("Controller")
 @ResourceLock("NETWORK_RESSOURCE")
-public class MainControllerTest {
+public class GuiControllerTest {
     static MainController controller;
     
     @BeforeAll
     static void setup() throws SocketException {
-        controller = new MainController(false);
+        controller = new MainController(true);
+        assertDoesNotThrow(() -> controller.startUI());
     }
 
     @AfterAll
