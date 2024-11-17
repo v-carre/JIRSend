@@ -127,7 +127,7 @@ public class MainCLI extends MainAbstractView {
         private String oldReadIn() {
             try {
                 return oldReader.readLine().trim();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 return null;
             }
         }

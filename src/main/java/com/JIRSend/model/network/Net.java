@@ -114,11 +114,12 @@ public class Net {
                     else {
                         if (ipToUserEntry.containsKey(senderIP)) {
                             MainController.contactsChange
-                                    .safePut(ipToUserEntry.get(senderIP) + " changed his username to " + args);
-                            ipToUserEntry.put(senderIP, new UserEntry(true, args));
+                                    .safePut(ipToUserEntry.get(senderIP).username + " changed his username to " + args);
+                            ipToUserEntry.get(senderIP).username=args;
+                            ipToUserEntry.get(senderIP).online = true;
                         } else {
                             ipToUserEntry.put(senderIP, new UserEntry(true, args));
-                            MainController.contactsChange.safePut(args + " is now connected");
+                            MainController.contactsChange.safePut(args + " is now connected");  
                         }
                     }
                     break;
