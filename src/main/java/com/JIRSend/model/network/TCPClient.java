@@ -17,8 +17,10 @@ public class TCPClient {
     private BufferedReader receiver;
     private NetCallback callback;
     private MessageHandlerThread thread;
+    private boolean failed;
 
     public TCPClient(String hostname, int port, NetCallback callback) {
+        this.failed = false;
         this.hostname = hostname;
         this.port = port;
         this.callback = callback;
@@ -33,12 +35,14 @@ public class TCPClient {
             sender = null;
             receiver = null;
             thread = null;
+            this.failed = true;
             Log.e("Error at socket creation (" + hostname + ":" + port + "): " + e);
         }
         Log.l("Socket created "+hostname+":"+port,Log.DEBUG);
     }
 
     protected TCPClient(Socket socket, NetCallback callback) {
+        this.failed = false;
         this.hostname = socket.getInetAddress().getHostAddress();
         this.port = socket.getPort();
         this.callback = callback;
@@ -51,8 +55,13 @@ public class TCPClient {
         } catch (IOException e) {
             sender = null;
             receiver = null;
+            this.failed = true;
             Log.e("Failed to create socket IO (" + hostname + ":" + port + ") " + e);
         }
+    }
+
+    public boolean hasFailedToStart() {
+        return this.failed;
     }
 
     public boolean send(String string) {

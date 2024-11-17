@@ -25,7 +25,11 @@ public class TCPServer {
     public boolean send(String address, String string) {
         if (table.contains(address))
             return table.get(address).send(string);
-        table.put(address, new TCPClient(address, port, callback));
+
+        TCPClient newClient = new TCPClient(address, port, callback);
+        if (newClient.hasFailedToStart())
+            return false;
+        table.put(address, newClient);
         return table.get(address).send(string);
     }
 
@@ -48,9 +52,13 @@ public class TCPServer {
             } catch (IOException e) {
                 Log.e("Error in server socket creation: " + e);
             }
+            if (socket == null)
+                return;
             while (true) {
                 try {
                     TCPClient newClient = new TCPClient(socket.accept(), callback);
+                    if (newClient.hasFailedToStart())
+                        continue;
                     table.put(newClient.hostname, newClient);
                 } catch (IOException e) {
                     Log.l("Server socket closed (probably)", Log.LOG);
