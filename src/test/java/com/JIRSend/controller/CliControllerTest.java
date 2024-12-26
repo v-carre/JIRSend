@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.SocketException;
+import java.util.ArrayList;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -39,12 +40,12 @@ public class CliControllerTest {
     }
 
     @Test
-    void testGetConnectedUsernames() {
+    void testGetConnectedUsernames() throws SocketException {
         assertTrue(controller.getConnectedUsernames().isEmpty());
     }
 
     @Test
-    void testGetContacts() {
+    void testGetContacts() throws SocketException {
         assertTrue(controller.getContacts().isEmpty());
     }
 

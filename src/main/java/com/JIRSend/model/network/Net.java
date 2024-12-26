@@ -136,7 +136,9 @@ public class Net {
                     if (!isUsernameValid(args).equals(okString))
                         Log.l("Forbidden username: " + args, Log.WARNING);
                     else {
-                        if (ipToUserEntry.containsKey(senderIP) && !ipToUserEntry.get(senderIP).username.equals(args)) {
+                        if (controller.getUsername().equals(args))
+                            break;
+                        else if (ipToUserEntry.containsKey(senderIP) && !ipToUserEntry.get(senderIP).username.equals(args)) {
                             final UserEntry oldUE = new UserEntry(ipToUserEntry.get(senderIP).online, ipToUserEntry.get(senderIP).username); 
                             ipToUserEntry.get(senderIP).username = args;
                             ipToUserEntry.get(senderIP).online = true;
