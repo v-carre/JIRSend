@@ -12,7 +12,7 @@ public class Pipe<T> {
         this.subs = new ArrayList<>();
     }
 
-    public void put(T message) throws InfinitePipeRecursion {
+    public synchronized void put(T message) throws InfinitePipeRecursion {
         if(isSending) //Note: we may want to reset isSending at this point
             throw new InfinitePipeRecursion(null);
            
@@ -23,7 +23,7 @@ public class Pipe<T> {
         isSending=false;
     }
 
-    public void safePut(T message) {
+    public synchronized void safePut(T message) {
         if(isSending)
             return;
            
@@ -34,7 +34,7 @@ public class Pipe<T> {
         isSending=false;
     }
 
-    public void subscribe(Subscription<T> sub) {
+    public synchronized void subscribe(Subscription<T> sub) {
         this.subs.add(sub);
     }
 
