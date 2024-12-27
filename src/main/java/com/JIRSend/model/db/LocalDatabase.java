@@ -275,4 +275,14 @@ public class LocalDatabase {
     public void insertMessageInDB(DatabaseMessage dbmsg) {
 
     }
+
+    public ArrayList<IDandUsername> getDBContacts() {
+        ArrayList<IDandUsername> rtn = new ArrayList<>();
+        ArrayList<Row> rows = selectQuery("SELECT * FROM contacts", new ArrayList<>());
+        for (Row contact : rows) {
+            String ip = ((String) contact.getValue("id")).replace("c", "").replace("_", ".");
+            rtn.add(new IDandUsername(ip, (String) contact.getValue("username"), (int) contact.getValue("updtAuthor") == 1));
+        }
+        return rtn;
+    }
 }

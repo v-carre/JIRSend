@@ -215,4 +215,8 @@ public class MainController {
             return;
         user.markConversationRead(ip);
     }
+
+    public ArrayList<IDandUsername> getDBContacts() {
+        return db.getDBContacts();
+    }
 }

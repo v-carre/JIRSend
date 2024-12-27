@@ -38,6 +38,7 @@ public class Net {
         this.setupLatch = new CountDownLatch(1);
         this.ipToUserEntry = new HashMap<>();
         this.controller = controller;
+        addDBContacts();
         MainController.lostContact.subscribe((ip) -> {
             lostContact(ip);
         });
@@ -69,6 +70,13 @@ public class Net {
 
     public Net(MainController controller, VoidCallback onSetup) throws SocketException {
         this(controller, onSetup, false);
+    }
+
+    private void addDBContacts() {
+        ArrayList<IDandUsername> dbc = controller.getDBContacts();
+        for (IDandUsername c : dbc) {
+            this.ipToUserEntry.put(c.id, new UserEntry(false, c.username));
+        }
     }
 
     public void stop() {
