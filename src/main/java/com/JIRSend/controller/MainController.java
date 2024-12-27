@@ -6,6 +6,7 @@ import java.net.SocketException;
 import java.util.ArrayList;
 
 import com.JIRSend.model.Message;
+import com.JIRSend.model.db.LocalDatabase;
 import com.JIRSend.model.network.Net;
 import com.JIRSend.model.user.BaseUser;
 import com.JIRSend.model.user.Conversation;
@@ -14,6 +15,7 @@ import com.JIRSend.model.user.UserEntry;
 import com.JIRSend.view.MainAbstractView;
 import com.JIRSend.view.cli.CliTools;
 import com.JIRSend.view.cli.MainCLI;
+import com.JIRSend.view.gui.ErrorPopup;
 import com.JIRSend.view.gui.MainGUI;
 
 public class MainController {
@@ -21,10 +23,12 @@ public class MainController {
 
     // View objects
     private MainAbstractView view;
+    private boolean usingGUI;
 
     // Model objects
     protected BaseUser user;
     protected Net net;
+    protected LocalDatabase db;
 
     // Pipes
     public static Pipe<String> lostContact = new Pipe<>("Lost Contact");
@@ -35,16 +39,27 @@ public class MainController {
 
     public MainController(String name, boolean usingGUI) throws SocketException {
         this.controllerName = name;
+        this.usingGUI = usingGUI;
         if (usingGUI)
             if (!GraphicsEnvironment.isHeadless())
                 this.view = new MainGUI(this);
             else {
-                CliTools.printBigError("Not X11 display found. Starting Command Line Interface instead...");
+                CliTools.printBigError("No X11 display found. Starting Command Line Interface instead...");
                 this.view = new MainCLI(this);
+                this.usingGUI = false;
             }
         else
             this.view = new MainCLI(this);
         this.user = new User(this);
+        this.db = new LocalDatabase();
+        // connect db
+        if (!this.db.connect()) {
+            CliTools.printBigError("Could not load/create local save: Unable to create local database. Check your permissions!");
+            if (this.usingGUI)
+                ErrorPopup.show("Could not load/create local save",
+                        "Unable to create local database. Check your permissions!");
+            System.exit(4);
+        }
         // start UI when Net is setup
         this.net = new Net(this, () -> {
             startUI();
@@ -59,7 +74,8 @@ public class MainController {
         try {
             this.view.open();
         } catch (HeadlessException e) {
-            System.err.println("Could not find X11 display. Opening a Command Line Interface instead. Consider using --cli option.");
+            System.err.println(
+                    "Could not find X11 display. Opening a Command Line Interface instead. Consider using --cli option.");
             this.view = new MainCLI(this);
             this.view.open();
         }

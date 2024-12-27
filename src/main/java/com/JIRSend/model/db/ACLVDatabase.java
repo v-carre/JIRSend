@@ -7,7 +7,7 @@ import java.sql.Statement;
 
 import com.JIRSend.view.cli.Log;
 
-public class ACLVDatabase extends GenericDatabase {
+public class ACLVDatabase extends LocalDatabase {
     public static String UserTable = "user";
     public static String HelperTable = "volontaire";
     public static String AdminTable = "admin";
