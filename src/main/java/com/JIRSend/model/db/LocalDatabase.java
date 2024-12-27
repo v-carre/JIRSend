@@ -273,7 +273,7 @@ public class LocalDatabase {
     }
 
     public void insertMessageInDB(DatabaseMessage dbmsg) {
-
+        
     }
 
     public ArrayList<IDandUsername> getDBContacts() {

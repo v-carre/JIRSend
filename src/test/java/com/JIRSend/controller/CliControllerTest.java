@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
 import java.net.SocketException;
 
 import org.junit.jupiter.api.AfterAll;
@@ -19,9 +20,16 @@ import com.JIRSend.model.network.Net;
 @ResourceLock("NETWORK_RESSOURCE")
 public class CliControllerTest {
     static MainController controller;
+    static File hdb = new File("./history.db");
+    static File hdbTemp = new File("./temphistory.db");
+    static boolean hdbExists = false;
     
     @BeforeAll
     static void setup() throws SocketException {
+        if (hdb.exists()) {
+            hdbExists = true;
+            hdb.renameTo(hdbTemp);
+        }
         controller = new MainController(false);
     }
 
@@ -30,6 +38,9 @@ public class CliControllerTest {
         // controller.stoppingApp();
         controller.stopNet();
         Thread.sleep(100);
+        if (hdbExists && hdbTemp.exists()) {
+            hdbTemp.renameTo(hdb);
+        }
     }
 
     @Test

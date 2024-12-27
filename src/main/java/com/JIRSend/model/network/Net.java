@@ -73,6 +73,7 @@ public class Net {
     }
 
     private void addDBContacts() {
+        if (controller == null) return;
         ArrayList<IDandUsername> dbc = controller.getDBContacts();
         for (IDandUsername c : dbc) {
             this.ipToUserEntry.put(c.id, new UserEntry(false, c.username));
