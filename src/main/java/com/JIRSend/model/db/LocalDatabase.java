@@ -258,7 +258,7 @@ public class LocalDatabase {
     }
 
     private void updateMessageAuthorInDB(IDandUsername idusrn, String idContact) {
-        modifyQuery("UPDATE " + idusrn + " SET who = ? WHERE isme = 0",
+        modifyQuery("UPDATE " + idContact + " SET who = ? WHERE isme = 0",
                 new ArrayList<>(Arrays.asList(idusrn.username)));
     }
 
@@ -290,6 +290,24 @@ public class LocalDatabase {
             String ip = ((String) contact.getValue("id")).replace("c", "").replace("_", ".");
             rtn.add(new IDandUsername(ip, (String) contact.getValue("username"),
                     (int) contact.getValue("updtAuthor") == 1));
+        }
+        return rtn;
+    }
+
+    public ArrayList<DatabaseMessage> getMessagesFromContact(String contactID) {
+        if (!contactID.startsWith("c"))
+            contactID =  "c" + contactID.replace(".", "_");
+        ArrayList<DatabaseMessage> rtn = new ArrayList<>();
+        ArrayList<Row> contact = selectQuery("SELECT * FROM contacts WHERE id = ?",
+                new ArrayList<>(Arrays.asList(contactID)));
+        if (contact.isEmpty())
+            return rtn;
+
+        ArrayList<Row> rows = selectQuery("SELECT * FROM " + contactID, new ArrayList<>());
+        for (Row message : rows) {
+            String ip = contactID.replace("c", "").replace("_", ".");
+            rtn.add(new DatabaseMessage(ip, (String) message.getValue("who"), (String) message.getValue("content"),
+                    (int) message.getValue("isme") == 1));
         }
         return rtn;
     }

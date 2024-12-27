@@ -54,16 +54,17 @@ public class MainController {
             }
         else
             this.view = new MainCLI(this);
-        this.user = new User(this);
         this.db = new LocalDatabase();
         // connect db
         if (!this.db.connect()) {
-            CliTools.printBigError("Could not load/create local save: Unable to create local database. Check your permissions!");
+            CliTools.printBigError(
+                    "Could not load/create local save: Unable to create local database. Check your permissions!");
             if (this.usingGUI)
                 ErrorPopup.show("Could not load/create local save",
                         "Unable to create local database. Check your permissions!");
             System.exit(4);
         }
+        this.user = new User(this);
         // start UI when Net is setup
         this.net = new Net(this, () -> {
             startUI();
@@ -218,5 +219,18 @@ public class MainController {
 
     public ArrayList<IDandUsername> getDBContacts() {
         return db.getDBContacts();
+    }
+
+    public ArrayList<DatabaseMessage> getMessagesFromContact(String contactID) {
+        return db.getMessagesFromContact(contactID);
+    }
+
+    public ArrayList<DatabaseMessage> getAllMessagesFromDB() {
+        ArrayList<DatabaseMessage> rtn = new ArrayList<>();
+        ArrayList<IDandUsername> contacts = db.getDBContacts();
+        for (IDandUsername contact : contacts) {
+            rtn.addAll(db.getMessagesFromContact(contact.id));
+        }
+        return rtn;
     }
 }

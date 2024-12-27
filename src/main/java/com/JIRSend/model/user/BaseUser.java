@@ -1,9 +1,11 @@
 package com.JIRSend.model.user;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.JIRSend.controller.MainController;
 import com.JIRSend.model.Message;
+import com.JIRSend.model.db.LocalDatabase.DatabaseMessage;
 
 public abstract class BaseUser {
     protected enum userType {
@@ -29,6 +31,7 @@ public abstract class BaseUser {
         this.ipToConversations = new HashMap<>();
         this.currentConversationName = null;
         this.currentConversationIP = null;
+        retrieveConversationsFromDB();
 
         MainController.messageReceived.subscribe((msg) -> {
             String senderIp = controller.getIPFromUsername(msg.sender);
@@ -44,6 +47,14 @@ public abstract class BaseUser {
             if (controller.getIPFromUsername(currentConversationName) == null && currentConversationIP != null)
                 currentConversationName = controller.getUsernameFromIP(currentConversationIP);
         });
+    }
+
+    private void retrieveConversationsFromDB() {
+        // TODO: Ajouter unread messages information
+        ArrayList<DatabaseMessage> msgs = controller.getAllMessagesFromDB();
+        for (DatabaseMessage msg : msgs) {
+            addToConversation(msg.id, new Message(msg.isMe ? youString : senderString, msg.isMe ? recipientString : youString, msg.message), true);
+        }
     }
 
     public String getUsername() {
@@ -84,13 +95,18 @@ public abstract class BaseUser {
         return this.ipToConversations.get(ip).numberUnRead();
     }
 
-    public void addToConversation(String ip, Message msg) {
+    public void addToConversation(String ip, Message msg, boolean read) {
         if (ipToConversations.containsKey(ip))
             ipToConversations.get(ip).putMessage(msg);
         else {
             ipToConversations.put(ip, new Conversation(msg));
         }
-        ipToConversations.get(ip).incrUnread();
+        if (!read)
+            ipToConversations.get(ip).incrUnread();
+    }
+
+    public void addToConversation(String ip, Message msg) {
+        addToConversation(ip, msg, false);
     }
 
     public String getCurrentConversationName() {
