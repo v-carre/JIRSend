@@ -9,6 +9,7 @@ import java.util.concurrent.CountDownLatch;
 
 import com.JIRSend.controller.MainController;
 import com.JIRSend.model.Message;
+import com.JIRSend.model.db.LocalDatabase.DatabaseMessage;
 import com.JIRSend.model.db.LocalDatabase.IDandUsername;
 import com.JIRSend.model.user.UserEntry;
 import com.JIRSend.view.cli.Log;
@@ -43,7 +44,10 @@ public class Net {
             lostContact(ip);
         });
         MainController.sendMessage.subscribe((message) -> {
-            send(getIpFromUsername(message.receiver), "SendMessage " + message.message.replaceAll("\\n", "\\\\n"));
+            final String addrDest = getIpFromUsername(message.receiver);
+            send(addrDest, "SendMessage " + message.message.replaceAll("\\n", "\\\\n"));
+            MainController.databaseMessage
+                    .safePut(new DatabaseMessage(addrDest, message.receiver, message.message, true));
         });
         if (test)
             this.netIO = new NetworkIO(new NetworkCallback(), () -> {
@@ -73,7 +77,8 @@ public class Net {
     }
 
     private void addDBContacts() {
-        if (controller == null) return;
+        if (controller == null)
+            return;
         ArrayList<IDandUsername> dbc = controller.getDBContacts();
         for (IDandUsername c : dbc) {
             this.ipToUserEntry.put(c.id, new UserEntry(false, c.username));
@@ -207,8 +212,11 @@ public class Net {
                             ipToUserEntry.get(senderIP).online = true;
                             contactsChangePut(senderUsername + " is now connected");
                         }
-                        MainController.messageReceived.safePut(
-                                new Message(senderUsername, controller.getUsername(), args.replaceAll("\\\\n", "\n")));
+                        final String messageContent = args.replaceAll("\\\\n", "\n");
+                        MainController.databaseMessage
+                                .safePut(new DatabaseMessage(senderIP, senderUsername, messageContent, false));
+                        MainController.messageReceived
+                                .safePut(new Message(senderUsername, controller.getUsername(), messageContent));
                     } else {
                         // TODO recover "lost" message
                         send(senderIP, "GetUser");

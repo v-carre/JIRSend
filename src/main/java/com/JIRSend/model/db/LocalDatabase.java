@@ -60,7 +60,8 @@ public class LocalDatabase {
 
             Log.l("Connected.", Log.LOG);
 
-            if (modifyQuery("CREATE TABLE IF NOT EXISTS contacts (id VARCHAR(20), username VARCHAR(20), updtAuthor INT)",
+            if (modifyQuery(
+                    "CREATE TABLE IF NOT EXISTS contacts (id VARCHAR(20), username VARCHAR(20), updtAuthor INT)",
                     new ArrayList<>()) == -1) {
                 Log.e("Error while preparing contacts table");
                 return false;
@@ -235,11 +236,13 @@ public class LocalDatabase {
 
     public static class DatabaseMessage {
         public String id, username, message;
+        public boolean isMe;
 
-        public DatabaseMessage(String id, String username, String message) {
+        public DatabaseMessage(String id, String username, String message, boolean isMe) {
             this.id = id;
             this.username = username;
             this.message = message;
+            this.isMe = isMe;
         }
     }
 
@@ -247,14 +250,16 @@ public class LocalDatabase {
         int r1 = modifyQuery("INSERT INTO contacts (id,username,updtAuthor) values (?,?,?)",
                 new ArrayList<>(Arrays.asList(idContact, idusrn.username, idusrn.updateConversation)));
         if (r1 > 0) {
-            return modifyQuery("CREATE TABLE IF NOT EXISTS " + idContact + " (isme INT, who VARCHAR(20), content VARCHAR(2048))",
-                new ArrayList<>());
-        }
-        else return r1;
+            return modifyQuery(
+                    "CREATE TABLE IF NOT EXISTS " + idContact + " (isme INT, who VARCHAR(20), content VARCHAR(2048))",
+                    new ArrayList<>());
+        } else
+            return r1;
     }
 
     private void updateMessageAuthorInDB(IDandUsername idusrn, String idContact) {
-
+        modifyQuery("UPDATE " + idusrn + " SET who = ? WHERE isme = 0",
+                new ArrayList<>(Arrays.asList(idusrn.username)));
     }
 
     public void updateContactInDB(IDandUsername idusrn) {
@@ -273,7 +278,9 @@ public class LocalDatabase {
     }
 
     public void insertMessageInDB(DatabaseMessage dbmsg) {
-        
+        String idContact = "c" + dbmsg.id.replace(".", "_");
+        modifyQuery("INSERT INTO " + idContact + " (isme,who,content) values (?,?,?)",
+                new ArrayList<>(Arrays.asList(dbmsg.isMe ? 1 : 0, dbmsg.username, dbmsg.message)));
     }
 
     public ArrayList<IDandUsername> getDBContacts() {
@@ -281,7 +288,8 @@ public class LocalDatabase {
         ArrayList<Row> rows = selectQuery("SELECT * FROM contacts", new ArrayList<>());
         for (Row contact : rows) {
             String ip = ((String) contact.getValue("id")).replace("c", "").replace("_", ".");
-            rtn.add(new IDandUsername(ip, (String) contact.getValue("username"), (int) contact.getValue("updtAuthor") == 1));
+            rtn.add(new IDandUsername(ip, (String) contact.getValue("username"),
+                    (int) contact.getValue("updtAuthor") == 1));
         }
         return rtn;
     }
