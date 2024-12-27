@@ -27,6 +27,11 @@
             <version>8.0.30</version>
         </dependency>
         <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.47.0.0</version>
+        </dependency>
+        <dependency>
             <groupId>com.jtransc</groupId>
             <artifactId>jtransc-rt</artifactId>
             <version>0.5.0-ALPHA4</version>
