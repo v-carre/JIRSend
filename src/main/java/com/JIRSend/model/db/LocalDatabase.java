@@ -89,14 +89,15 @@ public class LocalDatabase {
      */
     public ArrayList<Row> selectQuery(String query, ArrayList<Object> placeholders) {
         ArrayList<Row> rtn = new ArrayList<>();
-        if (getOccurenceInString("\\?", query) != placeholders.size()) {
-            Log.e("QUERY [" + getOccurenceInString("\\?", query)
+        int interrogationOccurences = getOccurenceInString("\\?", query);
+        if (interrogationOccurences != placeholders.size()) {
+            Log.e("QUERY [" + interrogationOccurences
                     + "] doesn't have the same amount of '?' than PLACEHOLDERS size [" + placeholders.size() + "]");
             return rtn;
         }
         // Log.l(query, Log.DEBUG);
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            int position = 0;
+            int position = 1;
             for (Object object : placeholders) {
                 preparedStatement.setObject(position, object);
                 position++;
@@ -177,7 +178,7 @@ public class LocalDatabase {
             return -1;
         }
         try (PreparedStatement preparedStatement = connection.prepareStatement(query);) {
-            int position = 0;
+            int position = 1;
             for (Object object : placeholders) {
                 preparedStatement.setObject(position, object);
                 position++;
@@ -218,24 +219,24 @@ public class LocalDatabase {
     private int getOccurenceInString(String regex, String string) {
         if (string == null || string.isEmpty())
             return 0;
-        return string.split(regex).length - 1;
+        return string.split(regex, -1).length - 1;
     }
 
-    public class IDandUsername {
+    public static class IDandUsername {
         public String id, username;
         public boolean updateConversation;
 
-        IDandUsername(String id, String username, boolean update) {
+        public IDandUsername(String id, String username, boolean update) {
             this.id = id;
             this.username = username;
             this.updateConversation = update;
         }
     }
 
-    public class DatabaseMessage {
+    public static class DatabaseMessage {
         public String id, username, message;
 
-        DatabaseMessage(String id, String username, String message) {
+        public DatabaseMessage(String id, String username, String message) {
             this.id = id;
             this.username = username;
             this.message = message;
@@ -246,8 +247,8 @@ public class LocalDatabase {
         int r1 = modifyQuery("INSERT INTO contacts (id,username,updtAuthor) values (?,?,?)",
                 new ArrayList<>(Arrays.asList(idContact, idusrn.username, idusrn.updateConversation)));
         if (r1 > 0) {
-            return modifyQuery("CREATE TABLE IF NOT EXISTS ? (isme INT, who VARCHAR(20), content VARCHAR(2048))",
-                new ArrayList<>(Arrays.asList(idContact)));
+            return modifyQuery("CREATE TABLE IF NOT EXISTS " + idContact + " (isme INT, who VARCHAR(20), content VARCHAR(2048))",
+                new ArrayList<>());
         }
         else return r1;
     }

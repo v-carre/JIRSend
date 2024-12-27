@@ -9,6 +9,7 @@ import java.util.concurrent.CountDownLatch;
 
 import com.JIRSend.controller.MainController;
 import com.JIRSend.model.Message;
+import com.JIRSend.model.db.LocalDatabase.IDandUsername;
 import com.JIRSend.model.user.UserEntry;
 import com.JIRSend.view.cli.Log;
 
@@ -80,6 +81,10 @@ public class Net {
             MainController.contactsChange.safePut(value);
     }
 
+    private void contactDBUpdate(String ip, String username) {
+        MainController.databaseContact.safePut(new IDandUsername(ip, username, true));
+    }
+
     /**
      * Takes the username if available
      * 
@@ -129,6 +134,7 @@ public class Net {
                         Log.l("Forbidden username: " + args, Log.WARNING);
                     else {
                         ipToUserEntry.put(senderIP, new UserEntry(true, args));
+                        contactDBUpdate(senderIP, args);
                         contactsChangePut(args + " is now connected");
                     }
                     break;
@@ -144,11 +150,12 @@ public class Net {
                                     ipToUserEntry.get(senderIP).username);
                             ipToUserEntry.get(senderIP).username = args;
                             ipToUserEntry.get(senderIP).online = true;
-
+                            contactDBUpdate(senderIP, args);
                             contactsChangePut(oldUE.username + " changed his username to "
                                     + args + (oldUE.online ? "" : " and is now connected"));
                         } else {
                             ipToUserEntry.put(senderIP, new UserEntry(true, args));
+                            contactDBUpdate(senderIP, args);
                             contactsChangePut(args + " is now connected");
                         }
                     }
@@ -164,6 +171,7 @@ public class Net {
                     } else {
                         if (isUsernameValid(args).equals(okString)) {
                             ipToUserEntry.put(senderIP, new UserEntry(false, args));
+                            contactDBUpdate(senderIP, args);
                             contactsChangePut(args + " has disconnected");
                         } else
                             Log.l("Forbidden username: " + args);
@@ -174,10 +182,12 @@ public class Net {
                         Log.l("Forbidden username: " + args, Log.WARNING);
                     else if (ipToUserEntry.containsKey(senderIP)) {
                         MainController.contactsChange
-                                .safePut(ipToUserEntry.get(senderIP) + " changed his username  to" + args);
+                                .safePut(ipToUserEntry.get(senderIP) + " changed his username to" + args);
                         ipToUserEntry.get(senderIP).username = args;
+                        contactDBUpdate(senderIP, args);
                     } else {
                         ipToUserEntry.put(senderIP, new UserEntry(true, args));
+                        contactDBUpdate(senderIP, args);
                         contactsChangePut(args + " is now connected");
                     }
                     break;
