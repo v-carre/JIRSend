@@ -138,8 +138,10 @@ public class Net {
                     else {
                         if (controller.getUsername().equals(args))
                             break;
-                        else if (ipToUserEntry.containsKey(senderIP) && !ipToUserEntry.get(senderIP).username.equals(args)) {
-                            final UserEntry oldUE = new UserEntry(ipToUserEntry.get(senderIP).online, ipToUserEntry.get(senderIP).username); 
+                        else if (ipToUserEntry.containsKey(senderIP)
+                                && !ipToUserEntry.get(senderIP).username.equals(args)) {
+                            final UserEntry oldUE = new UserEntry(ipToUserEntry.get(senderIP).online,
+                                    ipToUserEntry.get(senderIP).username);
                             ipToUserEntry.get(senderIP).username = args;
                             ipToUserEntry.get(senderIP).online = true;
 

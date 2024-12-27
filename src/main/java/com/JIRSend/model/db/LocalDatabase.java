@@ -9,13 +9,14 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 
+import com.JIRSend.controller.MainController;
 import com.JIRSend.view.cli.Log;
 
 public class LocalDatabase {
     private boolean connected;
     private String database;
-    private String user;
 
     protected Connection connection;
 
@@ -50,10 +51,6 @@ public class LocalDatabase {
         if (connected)
             return true;
         try {
-            // if (!new File("./" + database + ".db").exists()) {
-            // this.connection = DriverManager.getConnection("jdbc:sqlite:" + database +
-            // ".db");
-            // } else
             this.connection = DriverManager.getConnection("jdbc:sqlite:" + database + ".db");
 
             if (connection == null) {
@@ -63,7 +60,17 @@ public class LocalDatabase {
 
             Log.l("Connected.", Log.LOG);
 
+            if (modifyQuery("CREATE TABLE IF NOT EXISTS contacts (id VARCHAR(20), username VARCHAR(20), updtAuthor INT)",
+                    new ArrayList<>()) == -1) {
+                Log.e("Error while preparing contacts table");
+                return false;
+            }
+
             connected = true;
+
+            MainController.databaseMessage.subscribe(dbmsg -> insertMessageInDB(dbmsg));
+            MainController.databaseContact.subscribe(idusrn -> updateContactInDB(idusrn));
+
             return true;
         } catch (Exception e) {
             Log.e("Unable to create local database. Check your permissions!");
@@ -163,6 +170,7 @@ public class LocalDatabase {
      * 
      */
     public int modifyQuery(String query, ArrayList<Object> placeholders) {
+        Log.l(query);
         if (getOccurenceInString("\\?", query) != placeholders.size()) {
             Log.e("QUERY [" + getOccurenceInString("\\?", query)
                     + "] doesn't have the same amount of '?' than PLACEHOLDERS size [" + placeholders.size() + "]");
@@ -203,7 +211,7 @@ public class LocalDatabase {
 
     @Override
     public String toString() {
-        String rtn = "[DATABASE: " + this.database + "] (connected as " + this.user + ")";
+        String rtn = "[DATABASE: " + this.database + "]";
         return rtn;
     }
 
@@ -211,5 +219,59 @@ public class LocalDatabase {
         if (string == null || string.isEmpty())
             return 0;
         return string.split(regex).length - 1;
+    }
+
+    public class IDandUsername {
+        public String id, username;
+        public boolean updateConversation;
+
+        IDandUsername(String id, String username, boolean update) {
+            this.id = id;
+            this.username = username;
+            this.updateConversation = update;
+        }
+    }
+
+    public class DatabaseMessage {
+        public String id, username, message;
+
+        DatabaseMessage(String id, String username, String message) {
+            this.id = id;
+            this.username = username;
+            this.message = message;
+        }
+    }
+
+    private int insertContactInDB(IDandUsername idusrn, String idContact) {
+        int r1 = modifyQuery("INSERT INTO contacts (id,username,updtAuthor) values (?,?,?)",
+                new ArrayList<>(Arrays.asList(idContact, idusrn.username, idusrn.updateConversation)));
+        if (r1 > 0) {
+            return modifyQuery("CREATE TABLE IF NOT EXISTS ? (isme INT, who VARCHAR(20), content VARCHAR(2048))",
+                new ArrayList<>(Arrays.asList(idContact)));
+        }
+        else return r1;
+    }
+
+    private void updateMessageAuthorInDB(IDandUsername idusrn, String idContact) {
+
+    }
+
+    public void updateContactInDB(IDandUsername idusrn) {
+        String idContact = "c" + idusrn.id.replace(".", "_");
+
+        ArrayList<Row> contact = selectQuery("SELECT * FROM contacts WHERE id = ?",
+                new ArrayList<>(Arrays.asList(idContact)));
+
+        if (!contact.isEmpty()) {
+            int res = modifyQuery("UPDATE contacts SET username = ? WHERE id = ?",
+                    new ArrayList<>(Arrays.asList(idusrn.username, idContact)));
+            if (res > 0 && (int) contact.get(0).getValue("updtAuthor") == 1)
+                updateMessageAuthorInDB(idusrn, idContact);
+        } else
+            insertContactInDB(idusrn, idContact);
+    }
+
+    public void insertMessageInDB(DatabaseMessage dbmsg) {
+
     }
 }

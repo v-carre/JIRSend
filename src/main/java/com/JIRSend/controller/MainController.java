@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 import com.JIRSend.model.Message;
 import com.JIRSend.model.db.LocalDatabase;
+import com.JIRSend.model.db.LocalDatabase.DatabaseMessage;
+import com.JIRSend.model.db.LocalDatabase.IDandUsername;
 import com.JIRSend.model.network.Net;
 import com.JIRSend.model.user.BaseUser;
 import com.JIRSend.model.user.Conversation;
@@ -34,8 +36,10 @@ public class MainController {
     public static Pipe<String> lostContact = new Pipe<>("Lost Contact");
     public static Pipe<String> localUsernameChange = new Pipe<>("Local Username Changed");
     public static Pipe<String> contactsChange = new Pipe<>("Contacts Changed");
+    public static Pipe<IDandUsername> databaseContact = new Pipe<>("Contact update in DB");
     public static Pipe<Message> sendMessage = new Pipe<>("Sending Message");
     public static Pipe<Message> messageReceived = new Pipe<>("Message received");
+    public static Pipe<DatabaseMessage> databaseMessage = new Pipe<>("Message update in DB");
 
     public MainController(String name, boolean usingGUI) throws SocketException {
         this.controllerName = name;
