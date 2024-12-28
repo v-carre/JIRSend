@@ -14,12 +14,12 @@ import com.JIRSend.model.user.BaseUser;
 import com.JIRSend.model.user.Conversation;
 import com.JIRSend.model.user.User;
 import com.JIRSend.model.user.UserEntry;
-import com.JIRSend.mods.ModController;
 import com.JIRSend.view.MainAbstractView;
 import com.JIRSend.view.cli.CliTools;
 import com.JIRSend.view.cli.MainCLI;
 import com.JIRSend.view.gui.ErrorPopup;
 import com.JIRSend.view.gui.MainGUI;
+import com.JIRSendAPI.ModController;
 
 public class MainController {
     private String controllerName;

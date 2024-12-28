@@ -1,4 +1,4 @@
-package com.JIRSend.mods;
+package com.JIRSendAPI;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,9 +6,9 @@ import java.util.List;
 
 import com.JIRSend.controller.MainController;
 import com.JIRSend.controller.Pipe;
-import com.JIRSend.mods.JIRSendMod.JIRSendModInformation;
 import com.JIRSend.view.cli.Log;
 import com.JIRSend.view.gui.ErrorPopup;
+import com.JIRSendAPI.JIRSendMod.JIRSendModInformation;
 
 public class ModController {
     private String controllerName;

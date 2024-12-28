@@ -1,4 +1,4 @@
-package com.JIRSend.mods;
+package com.JIRSendAPI;
 
 import java.io.File;
 import java.io.IOException;

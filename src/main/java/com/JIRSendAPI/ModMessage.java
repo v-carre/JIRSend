@@ -1,6 +1,6 @@
-package com.JIRSend.mods;
+package com.JIRSendAPI;
 
-import com.JIRSend.mods.JIRSendMod.JIRSendModInformation;
+import com.JIRSendAPI.JIRSendMod.JIRSendModInformation;
 
 public class ModMessage {
     public final JIRSendModInformation mod;
