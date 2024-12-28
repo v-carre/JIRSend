@@ -37,12 +37,12 @@ public abstract class BaseUser {
         MainController.messageReceived.subscribe((msg) -> {
             String senderIp = controller.getIPFromUsername(msg.sender);
             if (senderIp != null)
-                addToConversation(senderIp, new Message(senderString, youString, msg.message));
+                addToConversation(senderIp, new Message(senderString, youString, msg.message, msg.time));
         });
         MainController.sendMessage.subscribe((msg) -> {
             String recipientIp = controller.getIPFromUsername(msg.receiver);
             if (recipientIp != null)
-                addToConversation(recipientIp, new Message(youString, recipientString, msg.message));
+                addToConversation(recipientIp, new Message(youString, recipientString, msg.message, msg.time));
         });
         MainController.contactsChange.subscribe((ch) -> {
             if (controller.getIPFromUsername(currentConversationName) == null && currentConversationIP != null)
@@ -53,8 +53,7 @@ public abstract class BaseUser {
     private void retrieveConversationsFromDB() {
         ArrayList<DatabaseMessage> msgs = controller.getAllMessagesFromDB();
         for (DatabaseMessage msg : msgs) {
-            addToConversation(msg.id, new Message(msg.isMe ? youString : senderString,
-                    msg.isMe ? recipientString : youString, msg.message), msg.isRead);
+            addToConversation(msg.id, new Message(msg.isMe ? youString : senderString, msg.isMe ? recipientString : youString, msg.message, msg.time), msg.isRead);
         }
     }
 

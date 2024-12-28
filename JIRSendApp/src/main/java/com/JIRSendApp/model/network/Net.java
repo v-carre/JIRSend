@@ -47,7 +47,7 @@ public class Net {
             final String addrDest = getIpFromUsername(message.receiver);
             send(addrDest, "SendMessage " + message.message.replaceAll("\\n", "\\\\n"));
             MainController.databaseMessage
-                    .safePut(new DatabaseMessage(addrDest, message.sender, message.message, true, true));
+                    .safePut(new DatabaseMessage(addrDest, message.sender, message.message, message.time, true, true));
         });
         if (test)
             this.netIO = new NetworkIO(new NetworkCallback(), () -> {
@@ -213,10 +213,11 @@ public class Net {
                             contactsChangePut(senderUsername + " is now connected");
                         }
                         final String messageContent = args.replaceAll("\\\\n", "\n");
+                        final String time = controller.getTime();
                         MainController.databaseMessage
-                                .safePut(new DatabaseMessage(senderIP, senderUsername, messageContent, false, false));
+                                .safePut(new DatabaseMessage(senderIP, senderUsername, messageContent, time, false, false));
                         MainController.messageReceived
-                                .safePut(new Message(senderUsername, controller.getUsername(), messageContent));
+                                .safePut(new Message(senderUsername, controller.getUsername(), messageContent, time));
                     } else {
                         // TODO recover "lost" message
                         send(senderIP, "GetUser");
