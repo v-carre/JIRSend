@@ -11,12 +11,13 @@ public class UserTest {
     @Test
     void testAddToConversation() {
         BaseUser user = new User(null, "username");
-        user.addToConversation("127.0.0.1", new Message("me", "other", "msg"));
+        user.addToConversation("127.0.0.1", new Message("me", "other", "msg", "now"));
         Conversation conv = user.getConversation("127.0.0.1");
         assertEquals(1, conv.getMessages().size());
         assertEquals("me", conv.getMessages().get(0).sender);
         assertEquals("other", conv.getMessages().get(0).receiver);
         assertEquals("msg", conv.getMessages().get(0).message);
+        assertEquals("now", conv.getMessages().get(0).time);
     }
 
     @Test

@@ -3,6 +3,8 @@ package com.JIRSend.controller;
 import java.awt.GraphicsEnvironment;
 import java.awt.HeadlessException;
 import java.net.SocketException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import com.JIRSend.model.Message;
@@ -228,5 +230,11 @@ public class MainController {
 
     public ArrayList<DatabaseMessage> getAllMessagesFromDB() {
         return db.getAllMessagesFromDB();
+    }
+
+    public String getTime() {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return now.format(formatter);
     }
 }

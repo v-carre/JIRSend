@@ -6,10 +6,12 @@ public class Message {
     public final String receiver;
     // public final String receiverIP;
     public final String message;
+    public final String time;
 
-    public Message(String sender, String receiver, String message) {
+    public Message(String sender, String receiver, String message, String time) {
         this.sender = sender;
         this.receiver = receiver;
         this.message = message;
+        this.time = time;
     }
 }

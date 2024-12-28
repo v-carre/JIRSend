@@ -69,7 +69,7 @@ public class LocalDatabase {
             }
 
             if (modifyQuery(
-                    "CREATE TABLE IF NOT EXISTS messages (id VARCHAR(20), isme INT, who VARCHAR(20), content VARCHAR(2048), read INT)",
+                    "CREATE TABLE IF NOT EXISTS messages (id VARCHAR(20), isme INT, who VARCHAR(20), content VARCHAR(2048), read INT, time VARCHAR(30))",
                     new ArrayList<>()) == -1) {
                 Log.e("Error while preparing messages table");
                 return false;
@@ -243,13 +243,14 @@ public class LocalDatabase {
     }
 
     public static class DatabaseMessage {
-        public String id, username, message;
+        public String id, username, message, time;
         public boolean isMe, isRead;
 
-        public DatabaseMessage(String id, String username, String message, boolean isMe, boolean isRead) {
+        public DatabaseMessage(String id, String username, String message, String time, boolean isMe, boolean isRead) {
             this.id = id;
             this.username = username;
             this.message = message;
+            this.time = time;
             this.isMe = isMe;
             this.isRead = isRead;
         }
@@ -279,8 +280,9 @@ public class LocalDatabase {
     }
 
     public void insertMessageInDB(DatabaseMessage dbmsg) {
-        modifyQuery("INSERT INTO messages (id,isme,who,content,read) values (?,?,?,?,0)",
-                new ArrayList<>(Arrays.asList(dbmsg.id, dbmsg.isMe ? 1 : 0, dbmsg.username, dbmsg.message)));
+        modifyQuery("INSERT INTO messages (id,isme,who,content,read, time) values (?,?,?,?,0,?)",
+                new ArrayList<>(
+                        Arrays.asList(dbmsg.id, dbmsg.isMe ? 1 : 0, dbmsg.username, dbmsg.message, dbmsg.time)));
     }
 
     public ArrayList<IDandUsername> getDBContacts() {
@@ -300,7 +302,7 @@ public class LocalDatabase {
                 new ArrayList<>(Arrays.asList(idContact)));
         for (Row message : rows) {
             rtn.add(new DatabaseMessage(idContact, (String) message.getValue("who"),
-                    (String) message.getValue("content"),
+                    (String) message.getValue("content"), (String) message.getValue("time"),
                     (int) message.getValue("isme") == 1, (int) message.getValue("read") == 1));
         }
         return rtn;
@@ -312,7 +314,7 @@ public class LocalDatabase {
         ArrayList<Row> rows = selectQuery("SELECT * FROM messages", new ArrayList<>());
         for (Row message : rows) {
             rtn.add(new DatabaseMessage((String) message.getValue("id"), (String) message.getValue("who"),
-                    (String) message.getValue("content"),
+                    (String) message.getValue("content"), (String) message.getValue("time"),
                     (int) message.getValue("isme") == 1, (int) message.getValue("read") == 1));
         }
         return rtn;
