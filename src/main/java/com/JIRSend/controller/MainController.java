@@ -226,11 +226,6 @@ public class MainController {
     }
 
     public ArrayList<DatabaseMessage> getAllMessagesFromDB() {
-        ArrayList<DatabaseMessage> rtn = new ArrayList<>();
-        ArrayList<IDandUsername> contacts = db.getDBContacts();
-        for (IDandUsername contact : contacts) {
-            rtn.addAll(db.getMessagesFromContact(contact.id));
-        }
-        return rtn;
+        return db.getAllMessagesFromDB();
     }
 }

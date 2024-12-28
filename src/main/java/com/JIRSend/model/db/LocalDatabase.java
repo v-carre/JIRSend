@@ -66,6 +66,13 @@ public class LocalDatabase {
                 Log.e("Error while preparing contacts table");
                 return false;
             }
+            
+            if (modifyQuery(
+                "CREATE TABLE IF NOT EXISTS messages (id VARCHAR(20), isme INT, who VARCHAR(20), content VARCHAR(2048))",
+                new ArrayList<>()) == -1) {
+            Log.e("Error while preparing messages table");
+            return false;
+        }
 
             connected = true;
 
@@ -246,67 +253,65 @@ public class LocalDatabase {
         }
     }
 
-    private int insertContactInDB(IDandUsername idusrn, String idContact) {
-        int r1 = modifyQuery("INSERT INTO contacts (id,username,updtAuthor) values (?,?,?)",
-                new ArrayList<>(Arrays.asList(idContact, idusrn.username, idusrn.updateConversation)));
-        if (r1 > 0) {
-            return modifyQuery(
-                    "CREATE TABLE IF NOT EXISTS " + idContact + " (isme INT, who VARCHAR(20), content VARCHAR(2048))",
-                    new ArrayList<>());
-        } else
-            return r1;
+    private int insertContactInDB(IDandUsername idusrn) {
+        return modifyQuery("INSERT INTO contacts (id,username,updtAuthor) values (?,?,?)",
+                new ArrayList<>(Arrays.asList(idusrn.id, idusrn.username, idusrn.updateConversation)));
     }
 
-    private void updateMessageAuthorInDB(IDandUsername idusrn, String idContact) {
-        modifyQuery("UPDATE " + idContact + " SET who = ? WHERE isme = 0",
-                new ArrayList<>(Arrays.asList(idusrn.username)));
+    private void updateMessageAuthorInDB(IDandUsername idusrn) {
+        modifyQuery("UPDATE messages SET who = ? WHERE isme = 0 AND id = ?",
+                new ArrayList<>(Arrays.asList(idusrn.username, idusrn.id)));
     }
 
     public void updateContactInDB(IDandUsername idusrn) {
-        String idContact = "c" + idusrn.id.replace(".", "_");
-
         ArrayList<Row> contact = selectQuery("SELECT * FROM contacts WHERE id = ?",
-                new ArrayList<>(Arrays.asList(idContact)));
+                new ArrayList<>(Arrays.asList(idusrn.id)));
 
         if (!contact.isEmpty()) {
             int res = modifyQuery("UPDATE contacts SET username = ? WHERE id = ?",
-                    new ArrayList<>(Arrays.asList(idusrn.username, idContact)));
+                    new ArrayList<>(Arrays.asList(idusrn.username, idusrn.id)));
             if (res > 0 && (int) contact.get(0).getValue("updtAuthor") == 1)
-                updateMessageAuthorInDB(idusrn, idContact);
+                updateMessageAuthorInDB(idusrn);
         } else
-            insertContactInDB(idusrn, idContact);
+            insertContactInDB(idusrn);
     }
 
     public void insertMessageInDB(DatabaseMessage dbmsg) {
-        String idContact = "c" + dbmsg.id.replace(".", "_");
-        modifyQuery("INSERT INTO " + idContact + " (isme,who,content) values (?,?,?)",
-                new ArrayList<>(Arrays.asList(dbmsg.isMe ? 1 : 0, dbmsg.username, dbmsg.message)));
+        modifyQuery("INSERT INTO messages (id, isme,who,content) values (?,?,?,?)",
+                new ArrayList<>(Arrays.asList(dbmsg.id, dbmsg.isMe ? 1 : 0, dbmsg.username, dbmsg.message)));
     }
 
     public ArrayList<IDandUsername> getDBContacts() {
         ArrayList<IDandUsername> rtn = new ArrayList<>();
         ArrayList<Row> rows = selectQuery("SELECT * FROM contacts", new ArrayList<>());
         for (Row contact : rows) {
-            String ip = ((String) contact.getValue("id")).replace("c", "").replace("_", ".");
-            rtn.add(new IDandUsername(ip, (String) contact.getValue("username"),
+            rtn.add(new IDandUsername((String) contact.getValue("id"), (String) contact.getValue("username"),
                     (int) contact.getValue("updtAuthor") == 1));
         }
         return rtn;
     }
 
-    public ArrayList<DatabaseMessage> getMessagesFromContact(String contactID) {
-        if (!contactID.startsWith("c"))
-            contactID =  "c" + contactID.replace(".", "_");
+    public ArrayList<DatabaseMessage> getMessagesFromContact(String idContact) {
         ArrayList<DatabaseMessage> rtn = new ArrayList<>();
-        ArrayList<Row> contact = selectQuery("SELECT * FROM contacts WHERE id = ?",
-                new ArrayList<>(Arrays.asList(contactID)));
-        if (contact.isEmpty())
-            return rtn;
+        // ArrayList<Row> contact = selectQuery("SELECT * FROM contacts WHERE id = ?",
+        //         new ArrayList<>(Arrays.asList(idContact)));
+        // if (contact.isEmpty())
+        //     return rtn;
 
-        ArrayList<Row> rows = selectQuery("SELECT * FROM " + contactID, new ArrayList<>());
+        ArrayList<Row> rows = selectQuery("SELECT * FROM messages WHERE id = ?", new ArrayList<>(Arrays.asList(idContact)));
         for (Row message : rows) {
-            String ip = contactID.replace("c", "").replace("_", ".");
-            rtn.add(new DatabaseMessage(ip, (String) message.getValue("who"), (String) message.getValue("content"),
+            rtn.add(new DatabaseMessage(idContact, (String) message.getValue("who"), (String) message.getValue("content"),
+                    (int) message.getValue("isme") == 1));
+        }
+        return rtn;
+    }
+
+    public ArrayList<DatabaseMessage> getAllMessagesFromDB() {
+        ArrayList<DatabaseMessage> rtn = new ArrayList<>();
+
+        ArrayList<Row> rows = selectQuery("SELECT * FROM messages", new ArrayList<>());
+        for (Row message : rows) {
+            rtn.add(new DatabaseMessage((String) message.getValue("id"), (String) message.getValue("who"), (String) message.getValue("content"),
                     (int) message.getValue("isme") == 1));
         }
         return rtn;
