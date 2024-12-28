@@ -215,6 +215,7 @@ public class MainController {
         if (ip == null)
             return;
         user.markConversationRead(ip);
+        db.markMessagesRead(ip);
     }
 
     public ArrayList<IDandUsername> getDBContacts() {

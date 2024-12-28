@@ -53,7 +53,7 @@ public abstract class BaseUser {
         // TODO: Ajouter unread messages information
         ArrayList<DatabaseMessage> msgs = controller.getAllMessagesFromDB();
         for (DatabaseMessage msg : msgs) {
-            addToConversation(msg.id, new Message(msg.isMe ? youString : senderString, msg.isMe ? recipientString : youString, msg.message), true);
+            addToConversation(msg.id, new Message(msg.isMe ? youString : senderString, msg.isMe ? recipientString : youString, msg.message), msg.isRead);
         }
     }
 

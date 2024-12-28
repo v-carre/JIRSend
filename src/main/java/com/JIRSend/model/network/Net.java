@@ -47,7 +47,7 @@ public class Net {
             final String addrDest = getIpFromUsername(message.receiver);
             send(addrDest, "SendMessage " + message.message.replaceAll("\\n", "\\\\n"));
             MainController.databaseMessage
-                    .safePut(new DatabaseMessage(addrDest, message.sender, message.message, true));
+                    .safePut(new DatabaseMessage(addrDest, message.sender, message.message, true, true));
         });
         if (test)
             this.netIO = new NetworkIO(new NetworkCallback(), () -> {
@@ -214,7 +214,7 @@ public class Net {
                         }
                         final String messageContent = args.replaceAll("\\\\n", "\n");
                         MainController.databaseMessage
-                                .safePut(new DatabaseMessage(senderIP, senderUsername, messageContent, false));
+                                .safePut(new DatabaseMessage(senderIP, senderUsername, messageContent, false, false));
                         MainController.messageReceived
                                 .safePut(new Message(senderUsername, controller.getUsername(), messageContent));
                     } else {
