@@ -35,6 +35,9 @@ public class ModController {
             }
             mods.put(modID, jirSendMod);
         }
+        for (JIRSendMod mod : mods.values()) {
+            mod.initialize(this);
+        }
     }
 
     public ModController(MainController mainController) throws SocketException {
@@ -49,17 +52,24 @@ public class ModController {
      * Will stop the mods
      */
     public void stop() {
-        // TODO: unhandled
+        for (JIRSendMod mod : mods.values()) {
+            mod.stop();
+        }
     }
 
     /// Setters
     public void changeUsername(String username) {
-        // TODO: implementation
+        for (JIRSendMod mod : mods.values()) {
+            mod.changeUsername(username);
+        }
     }
 
     public boolean isUsernameAvailable(String username) {
-        // TODO: implementation
-        return false;
+        for (JIRSendMod mod : mods.values()) {
+            if (!mod.isUsernameAvailable(username))
+                return false;
+        }
+        return true;
     }
 
     /// Getters

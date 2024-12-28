@@ -4,18 +4,25 @@ import javax.swing.ImageIcon;
 
 /**
  * GENERAL INFORMATION about JIRSend mods
- * @implSpec identifiants and usernames for users (recipientID/userID, username in ModUser) must not exceed 20 chars
- * @implSpec mod identifiant (id in JIRSendModInformation) must not exceed 20 chars
  * 
- * @implNote be sure to have a unique mod id, because it will be used to route messages to your mod
- * @implNote You might need to send information using the ModController's pipes (contactChange, messageReceived)
+ * @implSpec identifiants and usernames for users (recipientID/userID, username
+ *           in ModUser) must not exceed 20 chars
+ * @implSpec mod identifiant (id in JIRSendModInformation) must not exceed 20
+ *           chars
+ * 
+ * @implNote be sure to have a unique mod id, because it will be used to route
+ *           messages to your mod
+ * @implNote You might need to send information using the ModController's pipes
+ *           (contactChange, messageReceived)
  * 
  */
 public interface JIRSendMod {
 
     /**
      * Will be executed at JIRSend startup (after all JIRSend's routines)
-     * @param controller to communicate information to JIRSend app and get some information such as username.
+     * 
+     * @param controller to communicate information to JIRSend app and get some
+     *                   information such as username.
      */
     public void initialize(ModController controller);
 
@@ -31,9 +38,12 @@ public interface JIRSendMod {
      */
     public JIRSendModInformation getModInformation();
 
-
     /**
-     * Return if a username is available
+     * Return if a username is available. No need to check if there is are contacts
+     * that have the same name: this is checked internally according to the
+     * contactChange given. Made for specific cases like username length or specific
+     * chars
+     * 
      * @param username
      * @return if it is available
      */
@@ -41,6 +51,7 @@ public interface JIRSendMod {
 
     /**
      * Announce that our user has taken this username
+     * 
      * @param username
      */
     public void changeUsername(String username);
