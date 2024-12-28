@@ -14,6 +14,7 @@ import com.JIRSend.model.user.BaseUser;
 import com.JIRSend.model.user.Conversation;
 import com.JIRSend.model.user.User;
 import com.JIRSend.model.user.UserEntry;
+import com.JIRSend.mods.ModController;
 import com.JIRSend.view.MainAbstractView;
 import com.JIRSend.view.cli.CliTools;
 import com.JIRSend.view.cli.MainCLI;
@@ -22,6 +23,7 @@ import com.JIRSend.view.gui.MainGUI;
 
 public class MainController {
     private String controllerName;
+    public final ModController modc;
 
     // View objects
     private MainAbstractView view;
@@ -65,6 +67,7 @@ public class MainController {
             System.exit(4);
         }
         this.user = new User(this);
+        this.modc = new ModController(this);
         // start UI when Net is setup
         this.net = new Net(this, () -> {
             startUI();
@@ -100,6 +103,8 @@ public class MainController {
     public void stoppingApp(int exitStatus) {
         net.sendGoingOfflineMessage();
         stopNet();
+        if (modc != null)
+            modc.stop();
         System.exit(exitStatus);
     }
 
@@ -110,18 +115,17 @@ public class MainController {
         stoppingApp(0);
     }
 
-    //////// VIEW
-    /// Setters
     public String changeUsername(String username) {
         String res = this.net.usernameAvailable(username);
+        res += modc.isUsernameAvailable(username) ? "" : " [MOD] Not a valid username.";
         if (res.equals(Net.okString)) {
             this.user.setUsername(username);
+            modc.changeUsername(username);
             return Net.okString;
         }
         return res;
     }
 
-    /// Getters
     public String getUsername() {
         return this.user.getUsername();
     }
