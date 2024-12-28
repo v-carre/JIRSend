@@ -51,6 +51,7 @@ public class LocalDatabase {
         if (connected)
             return true;
         try {
+            Class.forName("org.sqlite.JDBC");
             this.connection = DriverManager.getConnection("jdbc:sqlite:" + database + ".db");
 
             if (connection == null) {
