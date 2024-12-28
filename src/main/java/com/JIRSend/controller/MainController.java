@@ -97,10 +97,17 @@ public class MainController {
     /**
      * Will stop the app
      */
-    public void stoppingApp() {
+    public void stoppingApp(int exitStatus) {
         net.sendGoingOfflineMessage();
         stopNet();
-        System.exit(0);
+        System.exit(exitStatus);
+    }
+
+    /**
+     * Will stop the app normally
+     */
+    public void stoppingApp() {
+        stoppingApp(0);
     }
 
     //////// VIEW
@@ -228,5 +235,9 @@ public class MainController {
 
     public ArrayList<DatabaseMessage> getAllMessagesFromDB() {
         return db.getAllMessagesFromDB();
+    }
+
+    public boolean isUsingGUI() {
+        return usingGUI;
     }
 }

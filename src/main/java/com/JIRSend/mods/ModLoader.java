@@ -1,10 +1,15 @@
 package com.JIRSend.mods;
 
 import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 public class ModLoader {
     private static final String MODS_DIR = "mods";
@@ -18,7 +23,7 @@ public class ModLoader {
             if (modFiles != null) {
                 for (File modFile : modFiles) {
                     try {
-                        URL[] urls = {modFile.toURI().toURL()};
+                        URL[] urls = { modFile.toURI().toURL() };
                         try (URLClassLoader classLoader = new URLClassLoader(urls, getClass().getClassLoader())) {
                             for (Class<?> clazz : findImplementingClasses(classLoader)) {
                                 if (JIRSendMod.class.isAssignableFrom(clazz)) {
@@ -35,9 +40,29 @@ public class ModLoader {
         return mods;
     }
 
-    private List<Class<?>> findImplementingClasses(URLClassLoader classLoader) {
+    private List<Class<?>> findImplementingClasses(URLClassLoader classLoader) throws IOException {
         // Implementation for discovering classes within a JAR file
-        // and checking if they implement JIRSendMod (requires scanning)
-        return new ArrayList<>();
+        List<Class<?>> classes = new ArrayList<>();
+        URL jarUrl = classLoader.getURLs()[0];
+        try (JarFile jarFile = new JarFile(jarUrl.getFile())) {
+            Enumeration<JarEntry> entries = jarFile.entries();
+            while (entries.hasMoreElements()) {
+                JarEntry entry = entries.nextElement();
+                if (entry.getName().endsWith(".class")) {
+                    String className = entry.getName()
+                            .replace('/', '.')
+                            .replace(".class", "");
+                    try {
+                        Class<?> clazz = classLoader.loadClass(className);
+                        if (!clazz.isInterface() && !Modifier.isAbstract(clazz.getModifiers())) {
+                            classes.add(clazz);
+                        }
+                    } catch (ClassNotFoundException | NoClassDefFoundError ignored) {
+                        // Ignore classes that cannot be loaded
+                    }
+                }
+            }
+        }
+        return classes;
     }
 }

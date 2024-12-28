@@ -310,6 +310,7 @@ public class Net {
     }
 
     public void sendGoingOfflineMessage() {
+        if (controller.getUsername() == null) return;
         Log.l("Broadcasting: Going offline", Log.LOG);
         netIO.broadcast("SetOfflineUser " + controller.getUsername());
     }

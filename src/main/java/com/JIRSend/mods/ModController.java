@@ -1,21 +1,20 @@
 package com.JIRSend.mods;
 
 import java.net.SocketException;
+import java.util.HashMap;
+import java.util.List;
 
 import com.JIRSend.controller.MainController;
 import com.JIRSend.controller.Pipe;
-import com.JIRSend.model.db.LocalDatabase;
-import com.JIRSend.model.network.Net;
-import com.JIRSend.model.user.BaseUser;
+import com.JIRSend.view.cli.Log;
+import com.JIRSend.view.gui.ErrorPopup;
 
 public class ModController {
     private String controllerName;
     private final MainController mainController;
 
-    // Model objects
-    protected BaseUser user;
-    protected Net net;
-    protected LocalDatabase db;
+    // Mods
+    HashMap<String, JIRSendMod> mods;
 
     // Pipes
     public static Pipe<ModUser> contactChange = new Pipe<>("MOD: contact change");
@@ -24,6 +23,18 @@ public class ModController {
     public ModController(String name, MainController mainController) throws SocketException {
         this.controllerName = name;
         this.mainController = mainController;
+        this.mods = new HashMap<>();
+        ModLoader modLoader = new ModLoader();
+        List<JIRSendMod> modList = modLoader.loadMods();
+        for (JIRSendMod jirSendMod : modList) {
+            String modID = jirSendMod.getModInformation().id;
+            if (this.mods.containsKey(modID)) {
+                signalError("2 mods are using the same ID: " + this.mods.get(modID)
+                        + " and " + jirSendMod);
+                mainController.stoppingApp(15);
+            }
+            mods.put(modID, jirSendMod);
+        }
     }
 
     public ModController(MainController mainController) throws SocketException {
@@ -33,6 +44,7 @@ public class ModController {
     public String getName() {
         return controllerName;
     }
+
     /**
      * Will stop the mods
      */
@@ -48,10 +60,17 @@ public class ModController {
     public boolean isUsernameAvailable(String username) {
         // TODO: implementation
         return false;
-    } 
+    }
 
     /// Getters
     public String getUsername() {
         return this.mainController.getUsername();
+    }
+
+    public void signalError(String error) {
+        Log.e("MOD ERROR: " + error);
+        if (mainController.isUsingGUI()) {
+            ErrorPopup.show("MOD ERROR", error);
+        }
     }
 }
