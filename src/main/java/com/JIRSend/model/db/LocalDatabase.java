@@ -61,16 +61,23 @@ public class LocalDatabase {
             Log.l("Connected.", Log.LOG);
 
             if (modifyQuery(
-                    "CREATE TABLE IF NOT EXISTS contacts (id VARCHAR(20), username VARCHAR(20), updtAuthor INT)",
+                    "CREATE TABLE IF NOT EXISTS contacts (id VARCHAR(42), username VARCHAR(20), updtAuthor INT)",
                     new ArrayList<>()) == -1) {
                 Log.e("Error while preparing contacts table");
                 return false;
             }
 
             if (modifyQuery(
-                    "CREATE TABLE IF NOT EXISTS messages (id VARCHAR(20), isme INT, who VARCHAR(20), content VARCHAR(2048), read INT)",
+                    "CREATE TABLE IF NOT EXISTS messages (id VARCHAR(42), isme INT, who VARCHAR(20), content VARCHAR(2048), read INT)",
                     new ArrayList<>()) == -1) {
                 Log.e("Error while preparing messages table");
+                return false;
+            }
+
+            if (modifyQuery(
+                    "CREATE TABLE IF NOT EXISTS mods (modid VARCHAR(20), ifversion INT, modversion INT)",
+                    new ArrayList<>()) == -1) {
+                Log.e("Error while preparing mods table");
                 return false;
             }
 
