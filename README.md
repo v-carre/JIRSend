@@ -36,7 +36,7 @@ git clone git@github.com:insa-4ir-chatsystem/chatsystem-lasserre-servieres.git
 cd chatsystem-lasserre-servieres
 mvn package clean
 ```
-This should create a .jar file in *target/*.
+This should create a .jar file *`JIRSendApp/target/JIRSendApplication-jar-with-dependencies.jar`*.
 
 ## How to run the project
 
@@ -73,3 +73,44 @@ java -jar path-to-file.jar --cli
 <div style="text-align:center">
 <img src="wiki/2CLI-2GUI.png" width="100%"><br>
 </div>
+
+---
+
+## To build mods
+
+### Install JIRSendAPI
+Install the dependency JIRSendAPI.
+
+```sh
+mvn clean install
+```
+
+### Build the mod
+Then go in the directory of the mod you want to build and execute
+```sh
+mvn clean package
+```
+
+### Install the mod
+Copy the `target/*-jar-with-dependencies.jar` into your `mods/`.\
+Launch.\
+You should see a button `Mods`. Click on it, you should see your mod in it.
+<img src="wiki/modloader.png" width="70%">
+
+## To create mods
+
+### Import in Maven
+Once you installed the JIRSendAPI dependency, you will be able to import it in your Maven configuration
+```xml
+<dependency>
+    <groupId>com.JIRSend</groupId>
+    <artifactId>JIRSendAPI</artifactId>
+    <version>1.0-SNAPSHOT</version> <!--you might check the version-->
+</dependency>
+```
+
+### Implement JIRSendMod.java interface
+The easiest way might be to look at the existing source of the mods in `mods/`
+
+### Build
+Export your .jar, put it in `mods/`, enjoy !
