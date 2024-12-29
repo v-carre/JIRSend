@@ -11,22 +11,28 @@ import java.awt.*;
 public class GUISectionConnection extends GUISection {
     private JTextField username;
     private JLabel JIRSendLogo;
-    private JButton connect;
+    private JButton connect, mods;
 
-    private Action submitAction;
+    private Action submitAction, getmodsAction;
 
     public GUISectionConnection(MainGUI window, Frame frame) {
         super(window, frame, "Connection");
     }
 
     public JPanel createPanel() {
-        return new ConnectionPanel();
+        JPanel panel = new ConnectionPanel();
+        if (mods != null && window.controller.modc != null)
+            mods.setText(window.controller.modc.getModsInformation().size() > 0
+                    ? "Mods (" + window.controller.modc.getModsInformation().size() + ")"
+                    : "No mods loaded");
+        return panel;
     }
 
     protected void createActions() {
         // subIcon = new
         // ImageIcon(Connection.class.getResource("assets/connect-button.jpg"));
         submitAction = new SubmitConnectionAction();
+        getmodsAction = new GetModsAction();
     }
 
     private class ConnectionPanel extends JPanel {
@@ -80,6 +86,20 @@ public class GUISectionConnection extends GUISection {
             connect.setCursor(new Cursor(Cursor.HAND_CURSOR));
             connect.setHorizontalAlignment(SwingConstants.CENTER);
 
+            // MODS
+            mods = new JButton(getmodsAction);
+            // mods.setBorder(BorderFactory.createEmptyBorder(10, 40, 10, 40));
+            mods.setBorder(new EmptyBorder(10, 10, 10, 10));
+            mods.setBackground(GuiPanelMainChatSystem.headerFooterBGColor);
+            mods.setForeground(GuiPanelMainChatSystem.almostWhiteColor);
+            mods.setMargin(new Insets(10, 10, 10, 10));
+            Font modsFont = GuiTools.getFont("Monospaced", Font.ITALIC, 16, username.getFont());
+            mods.setFont(modsFont);
+            ui.setPressedColor(mods.getBackground().darker());
+            mods.setUI(ui);
+            mods.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            mods.setHorizontalAlignment(SwingConstants.CENTER);
+
             JPanel panel0 = new JPanel();
             panel0.setOpaque(false);
             // panel0.setOpaque(false);
@@ -99,7 +119,13 @@ public class GUISectionConnection extends GUISection {
             JPanel panel2 = new JPanel();
             panel2.setOpaque(false);
 
-            setLayout(new GridLayout(3, 0));
+            JPanel panel3 = new JPanel();
+            // panel3.setLayout(new GridLayout(1, 0, 5, 5));
+            // panel3.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            panel3.setOpaque(false);
+            panel3.add(mods);
+
+            setLayout(new GridLayout(4, 0));
 
             add(JIRSendLogo);// , BorderLayout.CENTER);
             // panel2.setLayout(new BoxLayout(panel2, BoxLayout.Y_AXIS));
@@ -116,6 +142,7 @@ public class GUISectionConnection extends GUISection {
             // panel2.setHorizontalAlignment(SwingConstants.CENTER);
             add(panel1);// , BorderLayout.SOUTH);
             add(panel2);// , BorderLayout.SOUTH);
+            add(panel3);
         }
     }
 
@@ -137,6 +164,16 @@ public class GUISectionConnection extends GUISection {
             }
 
             Log.l("Connecting as '" + usernameAsked + "'", Log.LOG);
+        }
+    }
+
+    private class GetModsAction extends AbstractAction {
+        public GetModsAction() {
+            super("No mods loaded");
+        }
+
+        public void actionPerformed(ActionEvent action) {
+            ModsPopup.show(window.controller.modc.getModsInformation());
         }
     }
 }

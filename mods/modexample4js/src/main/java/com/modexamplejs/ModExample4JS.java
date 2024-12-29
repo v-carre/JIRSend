@@ -1,31 +1,31 @@
-package com.micasend4js;
+package com.example;
 
 import javax.swing.ImageIcon;
 import com.JIRSendAPI.*;
 
-public class MicaSend4JS implements JIRSendMod {
+public class ModExample4JS implements JIRSendMod {
 
     private ModController controller;
     private String username;
     private final JIRSendModInformation MOD_INFO = new JIRSendModInformation(
-        "micasend4js",
+        "modexample4js",
         "MicaSend for JIRSend",
         "A mod to talk on MicaSend chat from JIRSend",
         "MagicTINTIN", // author
         1, // interface version
         0, // mod version
-        new ImageIcon("assets/micasend.png")
+        new ImageIcon("assets/example.png")
     );
 
     @Override
     public void initialize(ModController controller) {
         this.controller = controller;
-        System.out.println("MicaSend4JS initialized. Welcome!");
+        System.out.println("ModExample4JS initialized. Welcome!");
     }
 
     @Override
     public void stop() {
-        System.out.println("MicaSend4JS is stopping. Goodbye!");
+        System.out.println("ModExample4JS is stopping. Goodbye!");
     }
 
     @Override
@@ -35,7 +35,8 @@ public class MicaSend4JS implements JIRSendMod {
 
     @Override
     public boolean isUsernameAvailable(String username) {
-        return !username.equals("micasend") && username.length() <= 20 && username.matches("^[a-zA-Z0-9_-]+$");
+        // force username to match certain pattern matching and forbids the user to user "forbidden" as a username
+        return !username.equals("forbidden") && username.length() <= 20 && username.matches("^[a-zA-Z0-9_-]+$");
     }
 
     @Override

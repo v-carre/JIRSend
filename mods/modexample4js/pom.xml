@@ -2,10 +2,10 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.micasend</groupId>
-    <artifactId>micasend4js</artifactId>
+    <groupId>com.example</groupId>
+    <artifactId>modexample4js</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>micasend4js</name>
+    <name>modexample4js</name>
     <dependencies>
         <dependency>
             <groupId>com.JIRSend</groupId>
@@ -15,7 +15,7 @@
     </dependencies>
 
     <build>
-        <finalName>micasend4js</finalName>
+        <finalName>modexample4js</finalName>
         <resources>
             <resource>
                 <directory>assets</directory>

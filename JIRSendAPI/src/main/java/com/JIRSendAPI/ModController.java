@@ -45,7 +45,7 @@ public class ModController {
         return controllerName;
     }
 
-    public ArrayList<JIRSendModInformation> getModsInformation(String username) {
+    public ArrayList<JIRSendModInformation> getModsInformation() {
         ArrayList<JIRSendModInformation> infos = new ArrayList<>();
         for (JIRSendMod mod : mods.values()) {
             infos.add(mod.getModInformation());
