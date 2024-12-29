@@ -62,6 +62,12 @@ public class ModController {
         }
     }
 
+    public void nowConnected() {
+        for (JIRSendMod mod : mods.values()) {
+            mod.connected();
+        }
+    }
+
     public void changeUsername(String username) {
         for (JIRSendMod mod : mods.values()) {
             mod.changeUsername(username);

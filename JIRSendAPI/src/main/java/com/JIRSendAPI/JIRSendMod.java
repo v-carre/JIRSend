@@ -27,6 +27,11 @@ public interface JIRSendMod {
     public void initialize(ModController controller);
 
     /**
+     * Executed when the user will be connected for the first time
+     */
+    public void connected();
+
+    /**
      * Will be normally executed when JIRSend is closing
      */
     public void stop();

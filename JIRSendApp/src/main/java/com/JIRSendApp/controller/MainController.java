@@ -34,6 +34,7 @@ public class MainController {
 
     // Model objects
     protected BaseUser user;
+    private boolean connnected = false;
     protected Net net;
     protected LocalDatabase db;
 
@@ -49,6 +50,7 @@ public class MainController {
     public MainController(String name, boolean usingGUI) throws SocketException {
         this.controllerName = name;
         this.usingGUI = usingGUI;
+        this.connnected = false;
         if (usingGUI)
             if (!GraphicsEnvironment.isHeadless())
                 this.view = new MainGUI(this);
@@ -127,6 +129,10 @@ public class MainController {
         res += modc.isUsernameAvailable(username) ? "" : " [MOD] Not a valid username.";
         if (res.equals(Net.okString)) {
             this.user.setUsername(username);
+            if (!this.connnected) {
+                this.connnected = true;
+                modc.nowConnected();
+            }
             modc.changeUsername(username);
             return Net.okString;
         }
