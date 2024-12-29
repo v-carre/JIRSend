@@ -215,7 +215,8 @@ public class Net {
                         final String messageContent = args.replaceAll("\\\\n", "\n");
                         final String time = controller.getTime();
                         MainController.databaseMessage
-                                .safePut(new DatabaseMessage(senderIP, senderUsername, messageContent, time, false, false));
+                                .safePut(new DatabaseMessage(senderIP, senderUsername, messageContent, time, false,
+                                        false));
                         MainController.messageReceived
                                 .safePut(new Message(senderUsername, controller.getUsername(), messageContent, time));
                     } else {
@@ -254,6 +255,13 @@ public class Net {
             l.add(ue);
         }
         return l;
+    }
+
+    public UserEntry getUserEntryIfExist(String ip) {
+        if (ipToUserEntry.containsKey(ip))
+            return ipToUserEntry.get(ip);
+        else
+            return null;
     }
 
     /**
@@ -295,6 +303,10 @@ public class Net {
         }
     }
 
+    public void updateContacts(String id, UserEntry ue) {
+        ipToUserEntry.put(id, ue);
+    }
+
     /**
      * Get IP associated to a username
      * 
@@ -311,7 +323,8 @@ public class Net {
     }
 
     public void sendGoingOfflineMessage() {
-        if (controller.getUsername() == null) return;
+        if (controller.getUsername() == null)
+            return;
         Log.l("Broadcasting: Going offline", Log.LOG);
         netIO.broadcast("SetOfflineUser " + controller.getUsername());
     }

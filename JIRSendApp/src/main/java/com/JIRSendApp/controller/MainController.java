@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import com.JIRSendAPI.ModController;
+import com.JIRSendAPI.ModUser;
 import com.JIRSendApp.model.Message;
 import com.JIRSendApp.model.db.LocalDatabase;
 import com.JIRSendApp.model.db.LocalDatabase.DatabaseMessage;
@@ -72,6 +73,7 @@ public class MainController {
             System.exit(4);
         }
         this.user = new User(this);
+        setupLink();
 
         this.apiActions = new APIControllerActions(this);
         this.modc = new ModController(apiActions);
@@ -262,5 +264,48 @@ public class MainController {
 
     public boolean isUsingGUI() {
         return usingGUI;
+    }
+
+    // MODS
+
+    public static class ModIDAndUserID {
+        public String modID, userID;
+
+        public ModIDAndUserID(String modID, String userID) {
+            this.modID = modID;
+            this.userID = userID;
+        }
+    }
+
+    public static String getContactFromModUser(ModUser user) {
+        return "-" + user.mod.id + " " + user.userID;
+    }
+
+    public static ModIDAndUserID getContactFromModUser(String idContact) {
+        String[] parts = idContact.split("\\ ");
+        return new ModIDAndUserID(parts[0].substring(1), parts[1]);
+    }
+
+    private void setupLink() {
+        ModController.contactChange.subscribe(user -> {
+
+            UserEntry c = net.getUserEntryIfExist(getContactFromModUser(user));
+            net.updateContacts(getContactFromModUser(user), new UserEntry(user.online, user.username));
+            db.updateContactInDB(new IDandUsername(getContactFromModUser(user), user.username, false)); // TODO: change false
+
+            if (c == null || c.username == user.username) {
+                if (user.online && (c == null || !c.online))
+                    contactsChange.safePut("[" + user.mod.name + "] " + user.username + " is now connected");
+                else if (!user.online && (c == null || c.online))
+                    contactsChange.safePut("[" + user.mod.name + "] " + user.username + " has disconnected");
+            } else {
+                if (user.online && !c.online)
+                    contactsChange.safePut("[" + user.mod.name + "] " + c.username + " changed his username to "
+                            + user.username + " and is now connected");
+                else if (!user.online && c.online)
+                    contactsChange.safePut("[" + user.mod.name + "] " + c.username + " changed his username to "
+                            + user.username + " and has disconnected");
+            }
+        });
     }
 }
