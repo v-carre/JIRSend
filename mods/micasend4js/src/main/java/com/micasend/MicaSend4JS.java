@@ -14,7 +14,7 @@ public class MicaSend4JS implements JIRSendMod {
         "MagicTINTIN", // author
         1, // interface version
         0, // mod version
-        new ImageIcon("assets/micasend.png")
+        new ImageIcon(getClass().getResource("/assets/micasend.png"))
     );
 
     @Override

@@ -356,6 +356,7 @@ public class GuiPanelMainChatSystem {
                                                 com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null,
                                                 null, null, 0, false));
                 contactsListScroll = new JScrollPane();
+                contactsListScroll.getVerticalScrollBar().setUI(new JSScrollBarUI());
                 contactsListScroll.setBackground(contactSectionBGColor);
                 contactsContent.add(contactsListScroll,
                                 new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1,
@@ -466,6 +467,7 @@ public class GuiPanelMainChatSystem {
                                                 com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null,
                                                 null, null, 0, false));
                 messageToSendScroll = new JScrollPane();
+                messageToSendScroll.getVerticalScrollBar().setUI(new JSScrollBarUI());
                 messageToSendScroll.setBackground(messageBGColor);
                 SendMessageSection.add(messageToSendScroll,
                                 new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1,
@@ -491,6 +493,7 @@ public class GuiPanelMainChatSystem {
                 messageToSendScroll.setViewportView(inputMessage);
 
                 messagesScroll = new JScrollPane();
+                messagesScroll.getVerticalScrollBar().setUI(new JSScrollBarUI());
                 messagesScroll.setAutoscrolls(true);
                 messagesScroll.setBackground(chatBGColor);
                 messagesScroll.setHorizontalScrollBarPolicy(31);

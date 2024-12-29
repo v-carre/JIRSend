@@ -9,17 +9,33 @@ public class ErrorPopup {
         dialog.setUndecorated(true); // Removes window decorations
         dialog.setAlwaysOnTop(true); // Keeps the dialog on top of other windows
 
+
+        dialog.setLayout(new BorderLayout());
+
         JLabel errorLabel = new JLabel("ERROR!");
         errorLabel.setForeground(GuiPanelMainChatSystem.whitestColor);
         errorLabel.setBackground(Color.RED);
         errorLabel.setOpaque(true);
         errorLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-        JLabel messageLabel = new JLabel(message);
-        messageLabel.setForeground(GuiPanelMainChatSystem.whitestColor);
-        messageLabel.setBackground(GuiPanelMainChatSystem.bodyBGColor);
-        messageLabel.setOpaque(true);
-        messageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        if (message.length() > 50) {
+            JTextPane messageLabel = new JTextPane();
+            messageLabel.setContentType("text/html");
+            messageLabel.setText("<html><div style='text-align: center; color:white; font-family:monospaced;'>"
+                    + message + "</div></html>");
+            messageLabel.setEditable(false);
+            messageLabel.setForeground(GuiPanelMainChatSystem.whitestColor);
+            messageLabel.setBackground(GuiPanelMainChatSystem.bodyBGColor);
+            messageLabel.setOpaque(true);
+            dialog.add(messageLabel, BorderLayout.CENTER);
+        } else {
+            JLabel messageLabel = new JLabel(message);
+            messageLabel.setForeground(GuiPanelMainChatSystem.whitestColor);
+            messageLabel.setBackground(GuiPanelMainChatSystem.bodyBGColor);
+            messageLabel.setOpaque(true);
+            messageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            dialog.add(messageLabel, BorderLayout.CENTER);
+        }
 
         JButton okButton = new JButton("OK");
         okButton.setForeground(GuiPanelMainChatSystem.whitestColor);
@@ -29,14 +45,10 @@ public class ErrorPopup {
         okButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         okButton.setContentAreaFilled(false);
         okButton.setOpaque(true);
-
         okButton.setBorder(new RoundedBorder(15));
-        
         okButton.addActionListener(e -> dialog.dispose());
 
-        dialog.setLayout(new BorderLayout());
         dialog.add(errorLabel, BorderLayout.NORTH);
-        dialog.add(messageLabel, BorderLayout.CENTER);
         dialog.add(okButton, BorderLayout.SOUTH);
 
         dialog.setSize(300, 150);

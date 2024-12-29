@@ -18,6 +18,7 @@ public class APIControllerActions implements ModControllerActions {
      */
     public void signalError(String error) {
         Log.e("MOD ERROR: " + error);
+        System.err.println("MOD ERROR: " + error);
         if (mainController.isUsingGUI()) {
             ErrorPopup.show("MOD ERROR", error);
         }
@@ -32,6 +33,7 @@ public class APIControllerActions implements ModControllerActions {
      */
     public void signalErrorAndStop(String error, int exitStatus) {
         Log.e("MOD ERROR: " + error);
+        System.err.println("MOD ERROR: " + error);
         if (mainController.isUsingGUI()) {
             ErrorPopup.show("MOD ERROR", error);
         }

@@ -99,14 +99,16 @@ public class MainController {
     }
 
     public void stopNet() {
+        if (net == null)
+            return;
         this.net.stop();
+        this.net.sendGoingOfflineMessage();
     }
 
     /**
      * Will stop the app
      */
     public void stoppingApp(int exitStatus) {
-        net.sendGoingOfflineMessage();
         stopNet();
         if (modc != null)
             modc.stop();

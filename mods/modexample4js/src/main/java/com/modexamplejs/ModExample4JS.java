@@ -9,12 +9,12 @@ public class ModExample4JS implements JIRSendMod {
     private String username;
     private final JIRSendModInformation MOD_INFO = new JIRSendModInformation(
         "modexample4js",
-        "MicaSend for JIRSend",
-        "A mod to talk on MicaSend chat from JIRSend",
+        "ModExample for JIRSend",
+        "A mod to create your own",
         "MagicTINTIN", // author
         1, // interface version
         0, // mod version
-        new ImageIcon("assets/example.png")
+        new ImageIcon(getClass().getResource("/assets/example.png"))
     );
 
     @Override

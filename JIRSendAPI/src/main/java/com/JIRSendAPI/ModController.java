@@ -27,8 +27,8 @@ public class ModController {
         for (JIRSendMod jirSendMod : modList) {
             String modID = jirSendMod.getModInformation().id;
             if (this.mods.containsKey(modID))
-                mainController.signalErrorAndStop("2 mods are using the same ID: " + this.mods.get(modID)
-                        + " and " + jirSendMod, 0);
+                mainController.signalErrorAndStop("2 mods are using the same ID: " + this.mods.get(modID).getModInformation()
+                        + " and " + jirSendMod.getModInformation(), 0);
             mods.put(modID, jirSendMod);
         }
         for (JIRSendMod mod : mods.values()) {
