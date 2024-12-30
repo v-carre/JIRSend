@@ -10,7 +10,8 @@ import com.JIRSendAPI.ModUser.Status;
 public class MicaSend4JS implements JIRSendMod {
     private final static String micasendJsonURL = "https://micasend.magictintin.fr/msg?getmsg=json";
     private ModController controller;
-    private String username;
+    private final static String INSTANCE_USERID = "instance";
+
     private final JIRSendModInformation MOD_INFO = new JIRSendModInformation(
             "micasend4js",
             "MicaSend for JIRSend",
@@ -44,8 +45,6 @@ public class MicaSend4JS implements JIRSendMod {
 
     @Override
     public void changeUsername(String username) {
-        this.username = username;
-        System.out.println("Username changed to: " + username);
     }
 
     @Override
@@ -55,10 +54,15 @@ public class MicaSend4JS implements JIRSendMod {
 
     @Override
     public void connected() {
-        ModController.contactChange.put(new ModUser(MOD_INFO, "instance", "MicaSend", Status.Away, false));
+        ModController.contactChange.put(new ModUser(MOD_INFO, INSTANCE_USERID, "MicaSend", Status.Online, false));
         ArrayList<Message> list = Connector.fetchMessages(micasendJsonURL);
         for (Message msg : list) {
-            System.out.println("MICASEND >>> [" + msg.sender + "]: " + msg.content.replace("§", " "));
+            if (msg.id() <= Database.getLast())
+                continue;
+            ModController.storeMessage
+                    .put(new ModMessage(MOD_INFO, INSTANCE_USERID, msg.sender.substring(0, 19), null, msg.content.replace("§", " "), true, false));
+            Database.saveLast(msg.id());
+            // System.out.println(" MICASEND (" + i + ") >>> [" + msg.sender + "]: " + msg.content.replace("§", " "));
         }
     }
 }

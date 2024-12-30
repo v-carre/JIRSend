@@ -8,4 +8,12 @@ public class Message {
         return "Message{" +
                 "id='" + id + "'}";
     }
+
+    public int id() {
+        try {
+            return Integer.parseInt(id);
+        } catch (Exception e) {
+            return -1;
+        }
+    }
 }
