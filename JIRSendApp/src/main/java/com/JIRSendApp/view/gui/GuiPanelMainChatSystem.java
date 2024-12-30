@@ -8,6 +8,7 @@ import javax.swing.text.StyleContext;
 
 import com.JIRSendApp.controller.MainController;
 import com.JIRSendApp.model.Message;
+import com.JIRSendApp.model.user.BaseUser;
 import com.JIRSendApp.model.user.Conversation;
 import com.JIRSendApp.model.user.UserEntry;
 import com.JIRSendApp.model.user.UserEntry.Status;
@@ -77,6 +78,9 @@ public class GuiPanelMainChatSystem {
             updateGUI();
         });
         MainController.messageReceived.subscribe((msg) -> {
+            updateGUI();
+        });
+        MainController.sendMessage.subscribe((msg) -> {
             updateGUI();
         });
         updateGUI();
@@ -149,7 +153,10 @@ public class GuiPanelMainChatSystem {
         for (Message msg : conv.getMessages()) {
             if (msgNb == unReadThreshold && conv.numberUnRead() > 0)
                 createUnreadBar();
-            createMessageElement(msg.sender.equals("you") ? you : recipient, msg.time, msg.message);
+            if (msg.sender.equals(BaseUser.youString) || msg.sender.equals(BaseUser.senderString))
+                createMessageElement(msg.sender.equals(BaseUser.youString) ? you : recipient, msg.time, msg.message);
+            else
+                createMessageElement(msg.sender, msg.time, msg.message);
             msgNb++;
         }
         controller.markConversationRead(recipient);

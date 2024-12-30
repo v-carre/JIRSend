@@ -36,12 +36,12 @@ public abstract class BaseUser {
 
         MainController.messageReceived.subscribe((msg) -> {
             String senderIp = controller.getIPFromUsername(msg.sender);
-            if (senderIp != null)
+            if (senderIp != null && !msg.modMessage)
                 addToConversation(senderIp, new Message(senderString, youString, msg.message, msg.time));
         });
         MainController.sendMessage.subscribe((msg) -> {
             String recipientIp = controller.getIPFromUsername(msg.receiver);
-            if (recipientIp != null)
+            if (recipientIp != null && !msg.modMessage)
                 addToConversation(recipientIp, new Message(youString, recipientString, msg.message, msg.time));
         });
         MainController.contactsChange.subscribe((ch) -> {

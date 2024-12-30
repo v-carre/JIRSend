@@ -13,7 +13,7 @@ import javax.swing.ImageIcon;
  * @implNote be sure to have a unique mod id, because it will be used to route
  *           messages to your mod
  * @implNote You might need to send information using the ModController's pipes
- *           (contactChange, messageReceived)
+ *           (contactChange, storeMessage)
  * 
  */
 public interface JIRSendMod {

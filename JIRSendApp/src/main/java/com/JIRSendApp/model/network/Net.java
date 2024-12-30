@@ -45,6 +45,8 @@ public class Net {
             lostContact(ip);
         });
         MainController.sendMessage.subscribe((message) -> {
+            if (message.modMessage)
+                return;
             final String addrDest = getIpFromUsername(message.receiver);
             send(addrDest, "SendMessage " + message.message.replaceAll("\\n", "\\\\n"));
             MainController.databaseMessage

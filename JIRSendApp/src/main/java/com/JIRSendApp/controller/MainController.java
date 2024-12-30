@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 import com.JIRSendAPI.ModController;
+import com.JIRSendAPI.ModMessage;
 import com.JIRSendAPI.ModUser;
 import com.JIRSendApp.model.Message;
 import com.JIRSendApp.model.db.LocalDatabase;
@@ -200,9 +201,11 @@ public class MainController {
 
     public ImageIcon getConversationIcon() {
         String ip = user.getCurrentConversationIP();
-        if (ip == null) return null;
+        if (ip == null)
+            return null;
         UserEntry ue = net.getUserEntryIfExist(ip);
-        if (ue == null) return null;
+        if (ue == null)
+            return null;
         return ue.icon;
     }
 
@@ -292,6 +295,10 @@ public class MainController {
         return "-" + user.mod.id + " " + user.userID;
     }
 
+    public static String getContactFromModMessage(ModMessage msg) {
+        return "-" + msg.mod.id + " " + (msg.incommingMessage ? msg.senderID : msg.receiverID);
+    }
+
     public static ModIDAndUserID getContactFromModUser(String idContact) {
         String[] parts = idContact.split("\\ ");
         return new ModIDAndUserID(parts[0].substring(1), parts[1]);
@@ -317,7 +324,8 @@ public class MainController {
         ModController.contactChange.subscribe(user -> {
 
             UserEntry c = net.getUserEntryIfExist(getContactFromModUser(user));
-            net.updateContacts(getContactFromModUser(user), new UserEntry(statusConverter(user.online), user.username, user.mod.modIcon));
+            net.updateContacts(getContactFromModUser(user),
+                    new UserEntry(statusConverter(user.online), user.username, user.mod.modIcon));
             db.updateContactInDB(new IDandUsername(getContactFromModUser(user), user.username, user.updateUsername));
 
             if (c == null || c.username == user.username) {
@@ -333,6 +341,28 @@ public class MainController {
                     contactsChange.safePut("[" + user.mod.name + "] " + c.username + " changed his username to "
                             + user.username + " and has disconnected");
             }
+        });
+
+        ModController.storeMessage.subscribe(message -> {
+            String time = getTime();
+            String senderUsername = message.senderUsernameUpdatable
+                    ? (message.incommingMessage ? BaseUser.senderString : BaseUser.youString)
+                    : (message.incommingMessage ? message.senderUsername : getUsername());
+            String receiverUsername = message.senderUsernameUpdatable
+                    ? (message.incommingMessage ? BaseUser.senderString : BaseUser.youString)
+                    : (message.incommingMessage ? message.senderUsername : getUsername());
+            MainController.databaseMessage
+                    .safePut(new DatabaseMessage(message.incommingMessage ? message.senderID : message.receiverID,
+                            message.senderUsername, message.message, time, !message.incommingMessage, false));
+            if (message.incommingMessage)
+                MainController.messageReceived
+                        .safePut(new Message(message.senderUsername, getUsername(), message.message, time, true));
+            else
+                MainController.sendMessage
+                        .safePut(new Message(getUsername(), getConversationName(), message.message, time));
+                        
+            user.addToConversation(getContactFromModMessage(message),
+                    new Message(senderUsername, receiverUsername, message.message, time));
         });
     }
 }

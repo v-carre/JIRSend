@@ -287,7 +287,7 @@ public class LocalDatabase {
     }
 
     public void insertMessageInDB(DatabaseMessage dbmsg) {
-        modifyQuery("INSERT INTO messages (id,isme,who,content,read, time) values (?,?,?,?,0,?)",
+        modifyQuery("INSERT INTO messages (id,isme,who,content,read,time) values (?,?,?,?,0,?)",
                 new ArrayList<>(
                         Arrays.asList(dbmsg.id, dbmsg.isMe ? 1 : 0, dbmsg.username, dbmsg.message, dbmsg.time)));
     }

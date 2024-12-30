@@ -15,7 +15,7 @@ public class ModController {
 
     // Pipes
     public static DataPipe<ModUser> contactChange = new DataPipe<>("MOD: contact change");
-    public static DataPipe<ModMessage> messageReceived = new DataPipe<>("MOD: Message received");
+    public static DataPipe<ModMessage> storeMessage = new DataPipe<>("MOD: Store message");
 
     public ModController(String name, ModControllerActions actions) {
         this.controllerName = name;
