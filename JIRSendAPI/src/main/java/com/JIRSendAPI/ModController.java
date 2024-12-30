@@ -82,6 +82,14 @@ public class ModController {
         return true;
     }
 
+    public void sendMessageViaMod(String modID, String recipientID, String message) {
+        if (!mods.containsKey(modID)) {
+            mainController.signalError("MOD NOT FOUND: " + modID);
+            return;
+        }
+        mods.get(modID).sendMessage(recipientID, message);
+    }
+
     public static interface ModControllerActions {
 
         public String getUsername();

@@ -312,6 +312,11 @@ public class MainController {
         return new ModIDAndUserID(parts[0].substring(1), parts[1]);
     }
 
+    public void sendMessageToMod(String contactID, String messsage) {
+        ModIDAndUserID modUsrID = getContactFromModUser(contactID);
+        modc.sendMessageViaMod(modUsrID.modID, modUsrID.userID, messsage);
+    }
+
     public static Status statusConverter(ModUser.Status status) {
         switch (status) {
             case Offline:

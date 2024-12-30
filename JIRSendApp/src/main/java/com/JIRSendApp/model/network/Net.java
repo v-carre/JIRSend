@@ -48,6 +48,13 @@ public class Net {
             if (message.modMessage)
                 return;
             final String addrDest = getIpFromUsername(message.receiver);
+
+            // reroute to mod if it is a user id of a mod
+            if (addrDest.startsWith("-")) {
+                controller.sendMessageToMod(addrDest, message.message);
+                return;
+            }
+
             send(addrDest, "SendMessage " + message.message.replaceAll("\\n", "\\\\n"));
             MainController.databaseMessage
                     .safePut(new DatabaseMessage(addrDest, message.sender, message.message, message.time, true, true));
