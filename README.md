@@ -1,6 +1,6 @@
 # JIRSend
 <div style="text-align:center">
-<img src="assets/jirsend_logo.png" width="100"><br>
+<img src="JIRSendApp/assets/jirsend_logo.png" width="100"><br>
 </div>
 
 ## What is JIRSend ?
@@ -93,9 +93,11 @@ mvn clean package
 
 ### Install the mod
 Copy the `target/*-jar-with-dependencies.jar` into your `mods/`.\
-Launch.\
-You should see a button `Mods`. Click on it, you should see your mod in it.
-<img src="wiki/modloader.png" width="70%">
+Launch the app.\
+You will see a button `Mods`.\
+<img src="wiki/modsButton.jpg" width="30%">\
+Click on it, you should see your mod in it.\
+<img src="wiki/loadedMods.jpg" width="40%">
 
 ## To create mods
 
@@ -114,3 +116,4 @@ The easiest way might be to look at the existing source of the mods in `mods/`
 
 ### Build
 Export your .jar, put it in `mods/`, enjoy !
+<img src="wiki/modloader.png" width="70%">
