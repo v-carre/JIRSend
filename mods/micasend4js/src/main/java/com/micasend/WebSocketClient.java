@@ -41,20 +41,26 @@ public class WebSocketClient {
     @OnOpen
     public void onOpen(Session session) {
         this.session = session;
-        System.out.println("Connected to WebSocket server");
+        // System.out.println("Connected to WebSocket server");
     }
 
     @OnMessage
     public void onMessage(String message) {
-        System.out.println("Received message: " + message);
+        // System.out.println("Received message: " + message);
         callback.execute();
     }
 
     @OnClose
     public void onClose(Session session, CloseReason closeReason) {
         // System.out.println("Connection closed: " + closeReason.getReasonPhrase());
-        // System.out.println("REFRESHING WEBSOCKET CONNECTION");
-        connect();
+        // System.out.println("REFRESHING WEBSOCKET CONNECTION"); 
+        // delay before reconnect
+        try {
+            Thread.sleep(1000);
+            connect();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     @OnError
