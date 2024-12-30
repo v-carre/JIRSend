@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
+import org.apache.commons.text.StringEscapeUtils;
+
 import com.JIRSendAPI.*;
 import com.JIRSendAPI.ModUser.Status;
 
@@ -60,7 +62,7 @@ public class MicaSend4JS implements JIRSendMod {
             if (msg.id() <= Database.getLast())
                 continue;
             ModController.storeMessage
-                    .put(new ModMessage(MOD_INFO, INSTANCE_USERID, msg.sender.substring(0, Math.min(msg.sender.length(), 19)), null, msg.content.replace("§", " "), msg.date_time, true, false));
+                    .put(new ModMessage(MOD_INFO, INSTANCE_USERID, msg.sender.substring(0, Math.min(msg.sender.length(), 19)), null, StringEscapeUtils.unescapeHtml4(msg.content.replace("§", " ")), msg.date_time, true, false));
             Database.saveLast(msg.id());
             // System.out.println(" MICASEND (" + i + ") >>> [" + msg.sender + "]: " + msg.content.replace("§", " "));
         }
