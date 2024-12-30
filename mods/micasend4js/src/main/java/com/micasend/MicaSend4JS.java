@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 import com.JIRSendAPI.*;
+import com.JIRSendAPI.ModUser.Status;
 
 public class MicaSend4JS implements JIRSendMod {
     private final static String micasendJsonURL = "https://micasend.magictintin.fr/msg?getmsg=json";
@@ -54,7 +55,7 @@ public class MicaSend4JS implements JIRSendMod {
 
     @Override
     public void connected() {
-        ModController.contactChange.put(new ModUser(MOD_INFO, "instance", "MicaSend", true));
+        ModController.contactChange.put(new ModUser(MOD_INFO, "instance", "MicaSend", Status.Away, false));
         ArrayList<Message> list = Connector.fetchMessages(micasendJsonURL);
         for (Message msg : list) {
             System.out.println("MICASEND >>> [" + msg.sender + "]: " + msg.content.replace("§", " "));

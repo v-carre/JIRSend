@@ -20,6 +20,7 @@ import org.jline.reader.impl.history.DefaultHistory;
 import com.JIRSendApp.controller.MainController;
 import com.JIRSendApp.model.Message;
 import com.JIRSendApp.model.user.UserEntry;
+import com.JIRSendApp.model.user.UserEntry.Status;
 import com.JIRSendApp.view.MainAbstractView;
 
 public class MainCLI extends MainAbstractView {
@@ -195,8 +196,7 @@ public class MainCLI extends MainAbstractView {
                             controller.getNumberConnected() + " people connected.\n");
                     for (UserEntry ue : controller.getContacts()) {
                         System.out.println(" - " + ue.username + " (" +
-                                (ue.online ? CliTools.colorize(CliTools.GREEN_NORMAL_COLOR, "ONLINE")
-                                        : CliTools.colorize(CliTools.RED_NORMAL_COLOR, "OFFLINE"))
+                                userStatus(ue.online)
                                 + ")");
                     }
 
@@ -236,6 +236,22 @@ public class MainCLI extends MainAbstractView {
                             CliTools.colorize(CliTools.PURPLE_DESAT_COLOR,
                                     " to get the list of the available commands."));
                     break;
+            }
+        }
+
+        private static String userStatus(Status status) {
+            switch (status) {
+                case Offline:
+                    return CliTools.colorize(CliTools.RED_NORMAL_COLOR, "OFFLINE");
+                case Busy:
+                    return CliTools.colorize(CliTools.RED_NORMAL_COLOR, "BUSY");
+                case Away:
+                    return CliTools.colorize(CliTools.YELLOW_NORMAL_COLOR, "AWAY");
+                case Online:
+                    return CliTools.colorize(CliTools.GREEN_NORMAL_COLOR, "ONLINE");
+
+                default:
+                    return CliTools.colorize(CliTools.GREEN_NORMAL_COLOR, "ONLINE");
             }
         }
 
@@ -293,7 +309,7 @@ public class MainCLI extends MainAbstractView {
             for (UserEntry entry : controller.getContacts()) {
                 if (entry.username.equals(dest)) {
                     found = true;
-                    isOnline = entry.online;
+                    isOnline = entry.online();
                     break;
                 }
             }

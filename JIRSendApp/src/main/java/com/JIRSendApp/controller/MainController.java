@@ -18,6 +18,7 @@ import com.JIRSendApp.model.user.BaseUser;
 import com.JIRSendApp.model.user.Conversation;
 import com.JIRSendApp.model.user.User;
 import com.JIRSendApp.model.user.UserEntry;
+import com.JIRSendApp.model.user.UserEntry.Status;
 import com.JIRSendApp.view.MainAbstractView;
 import com.JIRSendApp.view.cli.CliTools;
 import com.JIRSendApp.view.cli.MainCLI;
@@ -152,7 +153,7 @@ public class MainController {
     public int getNumberConnected() {
         int connected = 0;
         for (UserEntry ue : net.getUserEntries()) {
-            if (ue.online)
+            if (ue.online())
                 connected++;
         }
         return connected;
@@ -162,7 +163,7 @@ public class MainController {
         boolean connected = false;
         for (UserEntry ue : net.getUserEntries()) {
             if (ue.username == name) {
-                connected = ue.online;
+                connected = ue.online();
                 break;
             }
         }
@@ -172,7 +173,7 @@ public class MainController {
     public ArrayList<String> getConnectedUsernames() {
         ArrayList<String> connected = new ArrayList<>();
         for (UserEntry ue : net.getUserEntries()) {
-            if (ue.online)
+            if (ue.online())
                 connected.add(ue.username);
         }
         return connected;
@@ -286,23 +287,39 @@ public class MainController {
         return new ModIDAndUserID(parts[0].substring(1), parts[1]);
     }
 
+    public static Status statusConverter(ModUser.Status status) {
+        switch (status) {
+            case Offline:
+                return Status.Offline;
+            case Busy:
+                return Status.Busy;
+            case Away:
+                return Status.Away;
+            case Online:
+                return Status.Online;
+
+            default:
+                return Status.Online;
+        }
+    }
+
     private void setupLink() {
         ModController.contactChange.subscribe(user -> {
 
             UserEntry c = net.getUserEntryIfExist(getContactFromModUser(user));
-            net.updateContacts(getContactFromModUser(user), new UserEntry(user.online, user.username));
-            db.updateContactInDB(new IDandUsername(getContactFromModUser(user), user.username, false)); // TODO: change false
+            net.updateContacts(getContactFromModUser(user), new UserEntry(statusConverter(user.online), user.username));
+            db.updateContactInDB(new IDandUsername(getContactFromModUser(user), user.username, user.updateUsername));
 
             if (c == null || c.username == user.username) {
-                if (user.online && (c == null || !c.online))
+                if (user.online() && (c == null || !c.online()))
                     contactsChange.safePut("[" + user.mod.name + "] " + user.username + " is now connected");
-                else if (!user.online && (c == null || c.online))
+                else if (!user.online() && (c == null || c.online()))
                     contactsChange.safePut("[" + user.mod.name + "] " + user.username + " has disconnected");
             } else {
-                if (user.online && !c.online)
+                if (user.online() && !c.online())
                     contactsChange.safePut("[" + user.mod.name + "] " + c.username + " changed his username to "
                             + user.username + " and is now connected");
-                else if (!user.online && c.online)
+                else if (!user.online() && c.online())
                     contactsChange.safePut("[" + user.mod.name + "] " + c.username + " changed his username to "
                             + user.username + " and has disconnected");
             }

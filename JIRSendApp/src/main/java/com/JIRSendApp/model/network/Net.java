@@ -12,6 +12,7 @@ import com.JIRSendApp.model.Message;
 import com.JIRSendApp.model.db.LocalDatabase.DatabaseMessage;
 import com.JIRSendApp.model.db.LocalDatabase.IDandUsername;
 import com.JIRSendApp.model.user.UserEntry;
+import com.JIRSendApp.model.user.UserEntry.Status;
 import com.JIRSendApp.view.cli.Log;
 
 /*
@@ -81,7 +82,7 @@ public class Net {
             return;
         ArrayList<IDandUsername> dbc = controller.getDBContacts();
         for (IDandUsername c : dbc) {
-            this.ipToUserEntry.put(c.id, new UserEntry(false, c.username));
+            this.ipToUserEntry.put(c.id, new UserEntry(Status.Offline, c.username));
         }
     }
 
@@ -147,7 +148,7 @@ public class Net {
                     if (!isUsernameValid(args).equals(okString))
                         Log.l("Forbidden username: " + args, Log.WARNING);
                     else {
-                        ipToUserEntry.put(senderIP, new UserEntry(true, args));
+                        ipToUserEntry.put(senderIP, new UserEntry(Status.Online, args));
                         contactDBUpdate(senderIP, args);
                         contactsChangePut(args + " is now connected");
                     }
@@ -163,12 +164,12 @@ public class Net {
                             final UserEntry oldUE = new UserEntry(ipToUserEntry.get(senderIP).online,
                                     ipToUserEntry.get(senderIP).username);
                             ipToUserEntry.get(senderIP).username = args;
-                            ipToUserEntry.get(senderIP).online = true;
+                            ipToUserEntry.get(senderIP).online = Status.Online;
                             contactDBUpdate(senderIP, args);
                             contactsChangePut(oldUE.username + " changed his username to "
-                                    + args + (oldUE.online ? "" : " and is now connected"));
+                                    + args + (oldUE.online() ? "" : " and is now connected"));
                         } else {
-                            ipToUserEntry.put(senderIP, new UserEntry(true, args));
+                            ipToUserEntry.put(senderIP, new UserEntry(Status.Online, args));
                             contactDBUpdate(senderIP, args);
                             contactsChangePut(args + " is now connected");
                         }
@@ -177,14 +178,14 @@ public class Net {
                 case "SetOfflineUser":
                     if (ipToUserEntry.containsKey(senderIP)) {
                         boolean change = false;
-                        if (ipToUserEntry.get(senderIP).online)
+                        if (ipToUserEntry.get(senderIP).online())
                             change = true;
-                        ipToUserEntry.get(senderIP).online = false;
+                        ipToUserEntry.get(senderIP).online = Status.Offline;
                         if (change)
                             contactsChangePut(args + " has disconnected");
                     } else {
                         if (isUsernameValid(args).equals(okString)) {
-                            ipToUserEntry.put(senderIP, new UserEntry(false, args));
+                            ipToUserEntry.put(senderIP, new UserEntry(Status.Offline, args));
                             contactDBUpdate(senderIP, args);
                             contactsChangePut(args + " has disconnected");
                         } else
@@ -200,7 +201,7 @@ public class Net {
                         ipToUserEntry.get(senderIP).username = args;
                         contactDBUpdate(senderIP, args);
                     } else {
-                        ipToUserEntry.put(senderIP, new UserEntry(true, args));
+                        ipToUserEntry.put(senderIP, new UserEntry(Status.Online, args));
                         contactDBUpdate(senderIP, args);
                         contactsChangePut(args + " is now connected");
                     }
@@ -208,8 +209,8 @@ public class Net {
                 case "SendMessage":
                     if (ipToUserEntry.containsKey(senderIP)) {
                         final String senderUsername = ipToUserEntry.get(senderIP).username;
-                        if (ipToUserEntry.get(senderIP).online == false) {
-                            ipToUserEntry.get(senderIP).online = true;
+                        if (ipToUserEntry.get(senderIP).online() == false) {
+                            ipToUserEntry.get(senderIP).online = Status.Online;
                             contactsChangePut(senderUsername + " is now connected");
                         }
                         final String messageContent = args.replaceAll("\\\\n", "\n");
@@ -295,9 +296,9 @@ public class Net {
     private void lostContact(String ip) {
         if (ipToUserEntry.containsKey(ip)) {
             boolean change = false;
-            if (ipToUserEntry.get(ip).online)
+            if (ipToUserEntry.get(ip).online())
                 change = true;
-            ipToUserEntry.get(ip).online = false;
+            ipToUserEntry.get(ip).online = Status.Offline;
             if (change)
                 contactsChangePut(ipToUserEntry.get(ip).username + " has disconnected");
         }
