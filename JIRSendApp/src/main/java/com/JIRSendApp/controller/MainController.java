@@ -226,6 +226,10 @@ public class MainController {
         return getConversationIP(user.getCurrentConversationName());
     }
 
+    public UserEntry getUserEntryIfExists(String ip) {
+        return net.getUserEntryIfExist(ip);
+    }
+
     public int getConversationUnreadNumber(String name) {
         String ip = getConversationIP(name);
         if (ip == null)
@@ -260,6 +264,10 @@ public class MainController {
 
     public ArrayList<IDandUsername> getDBContacts() {
         return db.getDBContacts();
+    }
+
+    public boolean isDBContactUpdatable(String contactID) {
+        return db.isDBContactUpdatable(contactID);
     }
 
     public ArrayList<DatabaseMessage> getMessagesFromContact(String contactID) {
@@ -351,18 +359,19 @@ public class MainController {
             String receiverUsername = message.senderUsernameUpdatable
                     ? (message.incommingMessage ? BaseUser.senderString : BaseUser.youString)
                     : (message.incommingMessage ? message.senderUsername : getUsername());
+
+            user.addToConversation(getContactFromModMessage(message),
+                    new Message(senderUsername, receiverUsername, message.message, time));
+                    
             MainController.databaseMessage
-                    .safePut(new DatabaseMessage(message.incommingMessage ? message.senderID : message.receiverID,
+                    .safePut(new DatabaseMessage(getContactFromModMessage(message),
                             message.senderUsername, message.message, time, !message.incommingMessage, false));
             if (message.incommingMessage)
                 MainController.messageReceived
                         .safePut(new Message(message.senderUsername, getUsername(), message.message, time, true));
             else
                 MainController.sendMessage
-                        .safePut(new Message(getUsername(), getConversationName(), message.message, time));
-                        
-            user.addToConversation(getContactFromModMessage(message),
-                    new Message(senderUsername, receiverUsername, message.message, time));
+                        .safePut(new Message(getUsername(), getConversationName(), message.message, time, true));
         });
     }
 }

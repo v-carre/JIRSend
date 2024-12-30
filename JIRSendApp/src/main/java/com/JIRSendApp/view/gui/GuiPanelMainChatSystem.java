@@ -703,7 +703,7 @@ public class GuiPanelMainChatSystem {
             case Away:
                 return "<br><span color=\"yellow\">(away)</span>";
             case Online:
-                return "<br><span color=\"red\">(offline)</span>";
+                return "";
 
             default:
                 return "";

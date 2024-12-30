@@ -53,7 +53,11 @@ public abstract class BaseUser {
     private void retrieveConversationsFromDB() {
         ArrayList<DatabaseMessage> msgs = controller.getAllMessagesFromDB();
         for (DatabaseMessage msg : msgs) {
-            addToConversation(msg.id, new Message(msg.isMe ? youString : senderString, msg.isMe ? recipientString : youString, msg.message, msg.time), msg.isRead);
+            if (controller.isDBContactUpdatable(msg.id))
+                addToConversation(msg.id, new Message(msg.isMe ? youString : senderString,
+                        msg.isMe ? recipientString : youString, msg.message, msg.time), msg.isRead);
+            else
+                addToConversation(msg.id, new Message(msg.username, msg.username, msg.message, msg.time), msg.isRead);
         }
     }
 

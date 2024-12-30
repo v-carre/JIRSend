@@ -7,3 +7,4 @@ target/
 .vscode
 build.sh
 *.db
+*.db.old

@@ -302,6 +302,13 @@ public class LocalDatabase {
         return rtn;
     }
 
+    public boolean isDBContactUpdatable(String idContact) {
+        ArrayList<Row> rows = selectQuery("SELECT * FROM contacts WHERE id = ?", new ArrayList<>(Arrays.asList(idContact)));
+        if (rows == null || rows.isEmpty())
+            return true;
+        return (int) rows.get(0).getValue("updtAuthor") == 1;
+    }
+
     public ArrayList<DatabaseMessage> getMessagesFromContact(String idContact) {
         ArrayList<DatabaseMessage> rtn = new ArrayList<>();
 

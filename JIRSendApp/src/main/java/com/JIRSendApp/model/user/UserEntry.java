@@ -15,7 +15,8 @@ public class UserEntry {
     }
 
     public UserEntry(Status online, String username) {
-        this(online, username, null);
+        this.online = online;
+        this.username = username;
     }
 
     @Override
