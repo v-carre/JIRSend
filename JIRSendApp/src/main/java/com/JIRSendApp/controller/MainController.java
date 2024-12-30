@@ -352,7 +352,6 @@ public class MainController {
         });
 
         ModController.storeMessage.subscribe(message -> {
-            String time = getTime();
             String senderUsername = message.senderUsernameUpdatable
                     ? (message.incommingMessage ? BaseUser.senderString : BaseUser.youString)
                     : (message.incommingMessage ? message.senderUsername : getUsername());
@@ -361,17 +360,17 @@ public class MainController {
                     : (message.incommingMessage ? message.senderUsername : getUsername());
 
             user.addToConversation(getContactFromModMessage(message),
-                    new Message(senderUsername, receiverUsername, message.message, time));
+                    new Message(senderUsername, receiverUsername, message.message, message.time));
                     
             MainController.databaseMessage
                     .safePut(new DatabaseMessage(getContactFromModMessage(message),
-                            message.senderUsername, message.message, time, !message.incommingMessage, false));
+                            message.senderUsername, message.message, message.time, !message.incommingMessage, false));
             if (message.incommingMessage)
                 MainController.messageReceived
-                        .safePut(new Message(message.senderUsername, getUsername(), message.message, time, true));
+                        .safePut(new Message(message.senderUsername, getUsername(), message.message, message.time, true));
             else
                 MainController.sendMessage
-                        .safePut(new Message(getUsername(), getConversationName(), message.message, time, true));
+                        .safePut(new Message(getUsername(), getConversationName(), message.message, message.time, true));
         });
     }
 }

@@ -427,6 +427,7 @@ public class GuiPanelMainChatSystem {
         contactsListScroll.setViewportView(contactsList);
         contactsListScroll.setBorder(new EmptyBorder(0, 0, 0, 0));
         contactsListScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        contactsListScroll.getVerticalScrollBar().setUnitIncrement(6);
         chatSection = new JPanel();
         chatSection.setLayout(new CardLayout(0, 0));
         chatSection.setBackground(chatBGColor);
@@ -540,6 +541,7 @@ public class GuiPanelMainChatSystem {
         inputMessage.setText("");
         inputMessage.setToolTipText("Enter your message here");
         messageToSendScroll.setViewportView(inputMessage);
+        messageToSendScroll.getVerticalScrollBar().setUnitIncrement(4);
 
         messagesScroll = new JScrollPane();
         messagesScroll.getVerticalScrollBar().setUI(new JSScrollBarUI());
@@ -564,6 +566,7 @@ public class GuiPanelMainChatSystem {
         messagesList.setBackground(chatBGColor);
         messagesList.setForeground(almostWhiteColor);
         messagesScroll.setViewportView(messagesList);
+        messagesScroll.getVerticalScrollBar().setUnitIncrement(10);
 
         Footer = new JPanel();
         Footer.setLayout(
