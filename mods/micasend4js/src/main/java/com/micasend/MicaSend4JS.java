@@ -6,13 +6,18 @@ import javax.swing.ImageIcon;
 
 import org.apache.commons.text.StringEscapeUtils;
 
-import com.JIRSendAPI.*;
+import com.JIRSendAPI.JIRSendMod;
+import com.JIRSendAPI.ModController;
+import com.JIRSendAPI.ModMessage;
+import com.JIRSendAPI.ModUser;
 import com.JIRSendAPI.ModUser.Status;
 
 public class MicaSend4JS implements JIRSendMod {
     private final static String MICASEND_URL = "https://micasend.magictintin.fr";
+    private static final String WS_URL = "wss://msws.magictintin.fr:8443";
     private ModController controller;
     private final static String INSTANCE_USERID = "instance";
+    private WebSocketClient ws;
 
     private final JIRSendModInformation MOD_INFO = new JIRSendModInformation(
             "micasend4js",
@@ -26,6 +31,9 @@ public class MicaSend4JS implements JIRSendMod {
     @Override
     public void initialize(ModController controller) {
         this.controller = controller;
+        System.out.println("dejdo1");
+        this.ws = new WebSocketClient(WS_URL, () -> fetchMessages());
+        // ws.sendMessage("Hello world!");
         System.out.println("MicaSend4JS initialized. Welcome!");
 
     }
@@ -52,7 +60,10 @@ public class MicaSend4JS implements JIRSendMod {
     @Override
     public void sendMessage(String recipientID, String message) {
         // System.out.println("Sending message to " + recipientID + ": " + message);
-        Connector.sendMessage(MICASEND_URL, controller.mainController.getUsername(), message, () -> fetchMessages());
+        Connector.sendMessage(MICASEND_URL, controller.mainController.getUsername(), message, () -> {
+            ws.sendMessage("new micasend message");
+            fetchMessages();
+        });
         // fetchMessages();
     }
 
@@ -77,5 +88,10 @@ public class MicaSend4JS implements JIRSendMod {
     @FunctionalInterface
     public static interface VoidCallback {
         public void execute();
+    }
+
+    public static void main(String[] args) {
+        MicaSend4JS mod = new MicaSend4JS();
+        mod.initialize(null);
     }
 }
