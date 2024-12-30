@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
+
 import com.JIRSendAPI.ModController;
 import com.JIRSendAPI.ModUser;
 import com.JIRSendApp.model.Message;
@@ -196,6 +198,14 @@ public class MainController {
         return user.getCurrentConversationName();
     }
 
+    public ImageIcon getConversationIcon() {
+        String ip = user.getCurrentConversationIP();
+        if (ip == null) return null;
+        UserEntry ue = net.getUserEntryIfExist(ip);
+        if (ue == null) return null;
+        return ue.icon;
+    }
+
     public Conversation getConversation() {
         String convIp = getConversationIP();
         if (convIp == null)
@@ -307,7 +317,7 @@ public class MainController {
         ModController.contactChange.subscribe(user -> {
 
             UserEntry c = net.getUserEntryIfExist(getContactFromModUser(user));
-            net.updateContacts(getContactFromModUser(user), new UserEntry(statusConverter(user.online), user.username));
+            net.updateContacts(getContactFromModUser(user), new UserEntry(statusConverter(user.online), user.username, user.mod.modIcon));
             db.updateContactInDB(new IDandUsername(getContactFromModUser(user), user.username, user.updateUsername));
 
             if (c == null || c.username == user.username) {

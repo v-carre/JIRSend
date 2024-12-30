@@ -93,7 +93,7 @@ public class GuiPanelMainChatSystem {
         String currentConvName = controller.getConversationName();
         contactsList.removeAll();
         for (UserEntry ue : controller.getContacts()) {
-            createContactElement(ue.username, ue.online, currentConvName == ue.username, false);
+            createContactElement(ue.username, ue.online, ue.icon, currentConvName == ue.username, false);
         }
     }
 
@@ -112,6 +112,34 @@ public class GuiPanelMainChatSystem {
         String recipient = controller.getConversationName();
         String you = controller.getUsername();
         chatContactLabel.setText(recipient);
+        ImageIcon convIcon = controller.getConversationIcon();
+        chatContactName.removeAll();
+        if (convIcon != null) {
+            JLabel convIconLabel = new JLabel(new ImageIcon(convIcon.getImage()
+                    .getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+            chatContactName.add(convIconLabel,
+                    new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1,
+                            com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST,
+                            com.intellij.uiDesigner.core.GridConstraints.FILL_NONE,
+                            com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED,
+                            com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null,
+                            null, null, 1, false));
+            chatContactName.add(chatContactLabel,
+                    new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1,
+                            com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST,
+                            com.intellij.uiDesigner.core.GridConstraints.FILL_NONE,
+                            com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED,
+                            com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null,
+                            null, null, 1, false));
+        } else {
+            chatContactName.add(chatContactLabel,
+                    new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1,
+                            com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
+                            com.intellij.uiDesigner.core.GridConstraints.FILL_NONE,
+                            com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED,
+                            com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null,
+                            null, null, 1, false));
+        }
         if (controller.isConnected(recipient))
             SendMessageSection.setVisible(true);
         else
@@ -127,14 +155,20 @@ public class GuiPanelMainChatSystem {
         controller.markConversationRead(recipient);
     }
 
-    private void createContactElement(String username, Status status, boolean currentConv, boolean hasNewMessage) {
+    private void createContactElement(String username, Status status, ImageIcon icon, boolean currentConv,
+            boolean hasNewMessage) {
         JPanel contactElement = new JPanel();
-        contactElement.setMinimumSize(new Dimension(50, 20));
+        contactElement.setMinimumSize(new Dimension(50, 5));
         contactElement.setMaximumSize(new Dimension(1920, 100));
+        if (icon != null)
+            contactElement.setLayout(new GridLayout(2, 1));
+        else
+            contactElement.setLayout(new GridLayout(1, 1));
         contactElement.setCursor(new Cursor(Cursor.HAND_CURSOR));
         contactElement.setBackground(
                 currentConv ? contactElementBGColor.brighter().brighter()
-                        : (status != Status.Offline ? contactElementBGColor.brighter() : contactElementBGColor));
+                        : (status != Status.Offline ? contactElementBGColor.brighter()
+                                : contactElementBGColor));
         contactElement.setBorder(new GuiRoundedBorder(10));
         contactElement.addMouseListener(new MouseAdapter() {
             @Override
@@ -159,7 +193,8 @@ public class GuiPanelMainChatSystem {
             public void mouseExited(MouseEvent e) {
                 contactElement.setBackground(
                         currentConv ? contactElementBGColor.brighter().brighter()
-                                : (status != Status.Offline ? contactElementBGColor.brighter()
+                                : (status != Status.Offline
+                                        ? contactElementBGColor.brighter()
                                         : contactElementBGColor));
             }
         });
@@ -176,13 +211,19 @@ public class GuiPanelMainChatSystem {
                         + ")</span>")
                         : "")
                 + "</body></html>");
-        contactElement.add(contactName,
-                new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1,
-                        com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST,
-                        com.intellij.uiDesigner.core.GridConstraints.FILL_NONE,
-                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED,
-                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null,
-                        null, null, 0, false));
+
+        if (icon != null) {
+            JLabel modIcon = new JLabel(new ImageIcon(icon.getImage()
+                    .getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
+            modIcon.setBorder(null);
+            contactElement.add(modIcon);
+        }
+        JPanel subP = new JPanel();
+        subP.setOpaque(false);
+        subP.add(contactName);
+        contactName.setBorder(null);
+        contactElement.setBorder(null);
+        contactElement.add(subP);
     }
 
     private void createUnreadBar() {
@@ -398,7 +439,7 @@ public class GuiPanelMainChatSystem {
         chatSection.add(chatContent, "Card1");
         chatContactName = new JPanel();
         chatContactName
-                .setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 1,
+                .setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 2,
                         new Insets(0, 0, 0, 0), -1, -1));
         chatContactName.setBackground(headerContactColor);
         chatContactName.setBorder(new MatteBorder(0, 0, 2, 0, headerContactColor.brighter()));
@@ -420,7 +461,7 @@ public class GuiPanelMainChatSystem {
         chatContactLabel.setIconTextGap(10);
         chatContactLabel.setText("<- Choose a conversation");
         chatContactName.add(chatContactLabel,
-                new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1,
+                new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1,
                         com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST,
                         com.intellij.uiDesigner.core.GridConstraints.FILL_NONE,
                         com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED,

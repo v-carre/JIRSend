@@ -113,6 +113,10 @@ public abstract class BaseUser {
         return currentConversationName;
     }
 
+    public String getCurrentConversationIP() {
+        return currentConversationIP;
+    }
+
     public void setCurrentConversationName(String convName) {
         this.currentConversationName = convName;
         this.currentConversationIP = controller.getIPFromUsername(convName);
