@@ -1,6 +1,9 @@
 package com.JIRSendApp.controller;
 
+import java.util.ArrayList;
+
 import com.JIRSendAPI.ModController.ModControllerActions;
+import com.JIRSendApp.model.user.UserEntry;
 import com.JIRSendApp.view.cli.Log;
 import com.JIRSendApp.view.gui.ErrorPopup;
 
@@ -43,5 +46,21 @@ public class APIControllerActions implements ModControllerActions {
 
     public String getUsername() {
         return this.mainController.getUsername();
+    }
+
+    @Override
+    public boolean isUsernameAvailable(String username) {
+        return this.mainController.isUsernameAvailableLocal(username);
+    }
+
+    @Override
+    public ArrayList<String> getConnectedUsernames() {
+        ArrayList<String> rtn = new ArrayList<>();
+        ArrayList<UserEntry> uelist = this.mainController.getContacts();
+        for (UserEntry ue : uelist) {
+            if (ue.online())
+                rtn.add(ue.username);
+        }
+        return rtn;
     }
 }

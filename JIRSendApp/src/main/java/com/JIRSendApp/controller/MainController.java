@@ -145,6 +145,13 @@ public class MainController {
         return res;
     }
 
+    public boolean isUsernameAvailableLocal(String username) {
+        String res = this.net.usernameAvailable(username);
+        if (res.equals(Net.okString))
+            return true;
+        return false;
+    }
+
     public String getUsername() {
         return this.user.getUsername();
     }

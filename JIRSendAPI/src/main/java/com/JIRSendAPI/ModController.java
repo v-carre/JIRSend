@@ -94,6 +94,10 @@ public class ModController {
 
         public String getUsername();
 
+        public boolean isUsernameAvailable(String username);
+
+        public ArrayList<String> getConnectedUsernames();
+
         /**
          * To signal error with popup (if GUI)
          * 
