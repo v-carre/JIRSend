@@ -49,4 +49,9 @@ public class ModExample4JS implements JIRSendMod {
     public void sendMessage(String recipientID, String message) {
         System.out.println("Sending message to " + recipientID + ": " + message);
     }
+
+    @Override
+    public void connected() {
+        System.out.println("User is now connected");
+    }
 }

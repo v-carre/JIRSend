@@ -71,7 +71,7 @@ public class WebSocketClient {
     public void sendMessage(String message) {
         try {
             session.getBasicRemote().sendText(message);
-            System.out.println("Pinged");
+            // System.out.println("Pinged");
         } catch (Exception e) {
             e.printStackTrace();
         }

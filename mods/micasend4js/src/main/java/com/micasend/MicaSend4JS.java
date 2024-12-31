@@ -31,7 +31,6 @@ public class MicaSend4JS implements JIRSendMod {
     @Override
     public void initialize(ModController controller) {
         this.controller = controller;
-        System.out.println("dejdo1");
         this.ws = new WebSocketClient(WS_URL, () -> fetchMessages());
         // ws.sendMessage("Hello world!");
         System.out.println("MicaSend4JS initialized. Welcome!");
