@@ -126,6 +126,26 @@ public class Net {
         return okString;
     }
 
+    /**
+     * Takes the username if available for a mod
+     * 
+     * @param modID    will
+     * @param username
+     * @return if available
+     */
+    public boolean usernameAvailable(String username, String modID) {
+        String isSyntaxValid = isUsernameValid(username);
+        if (!isSyntaxValid.equals(okString))
+            return false;
+        for (String id : ipToUserEntry.keySet()) {
+            UserEntry ue = ipToUserEntry.get(id);
+            if (ue.username.equals(username) && !id.startsWith("-" + modID + " "))
+                return false;
+        }
+        // broadcast("NewUser " + username);
+        return true;
+    }
+
     private class NetworkCallback extends NetCallback {
         @Override
         public void execute(InetAddress senderAddress, int senderPort, String value, boolean isBroadcast,

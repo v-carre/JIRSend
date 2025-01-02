@@ -72,7 +72,7 @@ public class MicaSend4JS implements JIRSendMod {
         fetchMessages();
     }
 
-    private void fetchMessages() {
+    private synchronized void fetchMessages() {
         ArrayList<Message> list = Connector.fetchMessages(MICASEND_URL);
         for (Message msg : list) {
             if (msg.id() <= Database.getLast())

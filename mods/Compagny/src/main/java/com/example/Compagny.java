@@ -97,6 +97,7 @@ public class Compagny implements JIRSendMod {
 
                 // Sleep for a random interval between 1 and 8 seconds
                 int randomDelay = random.nextInt(8) + 1;
+                randomDelay = 1;
                 Thread.sleep(randomDelay * 1000L); // Convert to milliseconds
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -109,7 +110,7 @@ public class Compagny implements JIRSendMod {
     }
 
     private void executeRandomAction() {
-        System.out.println("Simulation action");
+        System.out.print("Simulation action : ");
         int actionIndex = random.nextInt(2); // There are 6 actions (0 to 5)
         switch (actionIndex) {
             case 0:
@@ -126,6 +127,8 @@ public class Compagny implements JIRSendMod {
     private void contactChange() {
         int randomStatus = random.nextInt(status.length);
         int randomName = random.nextInt(users.length);
+        if (!controller.mainController.isUsernameAvailable(users[randomName], MOD_INFO)) return;
+        System.out.println(users[randomName]);
         ModController.contactChange
                 .put(new ModUser(MOD_INFO, users[randomName], users[randomName], status[randomStatus]));
     }
@@ -133,6 +136,8 @@ public class Compagny implements JIRSendMod {
     private void newMessage() {
         int randomName = random.nextInt(users.length);
         int randomDialog = random.nextInt(dialogs.length);
+        if (!controller.mainController.isUsernameAvailable(users[randomName], MOD_INFO)) return;
+        System.out.println(users[randomName]);
         ModController.contactChange
                 .put(new ModUser(MOD_INFO, users[randomName], users[randomName], Status.Online));
         ModController.storeMessage.put(new ModMessage(MOD_INFO, users[randomName], users[randomName],

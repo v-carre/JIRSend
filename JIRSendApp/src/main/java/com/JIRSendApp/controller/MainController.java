@@ -152,6 +152,10 @@ public class MainController {
         return false;
     }
 
+    public boolean isUsernameAvailableMod(String username, String modID) {
+        return this.net.usernameAvailable(username, modID);
+    }
+
     public String getUsername() {
         return this.user.getUsername();
     }

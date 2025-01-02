@@ -94,7 +94,7 @@ public class ModController {
 
         public String getUsername();
 
-        public boolean isUsernameAvailable(String username);
+        public boolean isUsernameAvailable(String username, JIRSendModInformation info);
 
         public ArrayList<String> getConnectedUsernames();
 

@@ -2,6 +2,7 @@ package com.JIRSendApp.controller;
 
 import java.util.ArrayList;
 
+import com.JIRSendAPI.JIRSendMod.JIRSendModInformation;
 import com.JIRSendAPI.ModController.ModControllerActions;
 import com.JIRSendApp.model.user.UserEntry;
 import com.JIRSendApp.view.cli.Log;
@@ -49,8 +50,8 @@ public class APIControllerActions implements ModControllerActions {
     }
 
     @Override
-    public boolean isUsernameAvailable(String username) {
-        return this.mainController.isUsernameAvailableLocal(username);
+    public boolean isUsernameAvailable(String username, JIRSendModInformation info) {
+        return this.mainController.isUsernameAvailableMod(username, info.id) && !username.equals(this.mainController.getUsername());
     }
 
     @Override
