@@ -18,6 +18,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Locale;
 
 public class GuiPanelMainChatSystem {
@@ -96,7 +98,20 @@ public class GuiPanelMainChatSystem {
     private void updateContactList() {
         String currentConvName = controller.getConversationName();
         contactsList.removeAll();
-        for (UserEntry ue : controller.getContacts()) {
+        var list = controller.getContacts();
+        Collections.sort(list, (a,b) -> {
+                Message ma = controller.getConversationLastMessage(a.username);
+                Message mb = controller.getConversationLastMessage(b.username);
+                if(ma==null && mb==null)
+                        return a.username.compareTo(b.username);
+                if(mb == null)
+                        return -1;
+                if(ma == null)
+                        return 1;
+                return mb.time.compareTo(ma.time);
+
+        });
+        for (UserEntry ue : list) {
             createContactElement(ue.username, ue.online, ue.icon, currentConvName == ue.username, false);
         }
     }

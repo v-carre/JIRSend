@@ -261,6 +261,18 @@ public class MainController {
         return conv;
     }
 
+    public Message getConversationLastMessage(String name) {
+        if (name == null)
+            return null;
+        String ip = net.getIpFromUsername(name);
+        if (ip == null)
+            return null;
+        Conversation conv = user.getConversation(ip);
+        if (conv.getMessages().isEmpty())
+            return null;
+        return conv.getMessages().get(conv.getMessages().size()-1);
+    }
+
     public int getTotalUnread() {
         return user.getTotalUnread();
     }

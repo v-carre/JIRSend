@@ -26,6 +26,15 @@
             </resource>
         </resources>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version> <!-- Use the latest version of the plugin -->
+                <configuration>
+                    <source>17</source> <!-- Set the Java source version -->
+                    <target>17</target> <!-- Set the Java target version -->
+                </configuration>
+            </plugin>
             <!-- Maven Assembly Plugin for creating an uber/fat JAR with dependencies -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
