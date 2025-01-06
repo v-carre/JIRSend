@@ -5,9 +5,9 @@ import javax.swing.ImageIcon;
 /**
  * GENERAL INFORMATION about JIRSend mods
  * 
- * @implSpec identifiants and usernames for users (recipientID/userID, username
+ * @implSpec ID and username for users (recipientID/userID, username
  *           in ModUser) must not exceed 20 chars
- * @implSpec mod identifiant (id in JIRSendModInformation) must not exceed 20
+ * @implSpec mod ID (id in JIRSendModInformation) must not exceed 20
  *           chars
  * 
  * @implNote be sure to have a unique mod id, because it will be used to route
@@ -19,7 +19,7 @@ import javax.swing.ImageIcon;
 public interface JIRSendMod {
 
     /**
-     * Will be executed at JIRSend startup (after all JIRSend's routines)
+     * Will be executed at JIRSend startup (after every JIRSend routines)
      * 
      * @param controller to communicate information to JIRSend app and get some
      *                   information such as username.
@@ -50,7 +50,7 @@ public interface JIRSendMod {
      * chars
      * 
      * @param username
-     * @return if it is available
+     * @return if username is available
      */
     public boolean isUsernameAvailable(String username);
 
