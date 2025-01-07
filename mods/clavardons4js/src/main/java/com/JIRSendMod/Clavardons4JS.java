@@ -3,18 +3,18 @@ package com.JIRSendMod;
 import javax.swing.ImageIcon;
 import com.JIRSendAPI.*;
 
-public class ModExample4JS implements JIRSendMod {
+public class Clavardons4JS implements JIRSendMod {
 
     private ModController controller;
     private String username;
-    private final JIRSendModInformation MOD_INFO = new JIRSendModInformation(
+    static public final JIRSendModInformation MOD_INFO = new JIRSendModInformation(
         "clavardons4js",
         "Clavardons for JIRSend",
         "A mod to talk to JP from JIRSend",
         "Atsuyo64", // author
         1, // interface version
         0, // mod version
-        new ImageIcon(getClass().getResource("/assets/clavardons.png"))
+        new ImageIcon(Clavardons4JS.class.getResource("/assets/clavardons.png"))
     );
 
     @Override

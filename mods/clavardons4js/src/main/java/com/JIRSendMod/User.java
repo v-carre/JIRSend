@@ -1,6 +1,7 @@
 package com.JIRSendMod;
 
 import com.JIRSendAPI.ModMessage;
+import com.JIRSendAPI.ModUser;
 
 import java.util.ArrayList;
 
@@ -11,27 +12,29 @@ public class User {
     // Nevertheless, an ArrayList of User is enough.
 
 
-
+    public ModUser modUser;
     private String username;
     private final String ipAddress;
-    private boolean state;
+    private boolean active;
     private boolean change;
     private final String logiciel;
     private TCPClient socket;
     private int timeToLive=10;
     private ArrayList<ModMessage> messages=new ArrayList<>();
-    public User(String username, String ipAddress, boolean state, String logiciel){
+
+    public User(String username, String ipAddress, boolean active, String logiciel){
+        this.modUser = new ModUser(Clavardons4JS.MOD_INFO, ipAddress,username,active ? ModUser.Status.Online : ModUser.Status.Offline);
         this.username=username;
         this.ipAddress=ipAddress;
-        this.state=state; // true if active, false if passive
+        this.active=active;
         this.change=false;
         this.logiciel=logiciel;
         this.socket=null;
     }
-    public User(String username, String ipAddress, boolean state, boolean change, String logiciel){
+    public User(String username, String ipAddress, boolean active, boolean change, String logiciel){
         this.username=username;
         this.ipAddress=ipAddress;
-        this.state=state; // true if active, false if passive
+        this.active=active;
         this.change=change;
         this.logiciel=logiciel;
         this.socket=null;
@@ -45,7 +48,7 @@ public class User {
     public String getIpAddress(){
         return this.ipAddress;
     }
-    public boolean getState(){return this.state;}
+    public boolean isActive(){return this.active;}
     public boolean getChange(){return this.change;}
     public String getLogiciel(){return this.logiciel;}
     public int getTimeToLive(){return this.timeToLive;}
@@ -55,9 +58,9 @@ public class User {
     public void setUsername(String username){
         this.username=username;
     }
-    public void setState(boolean state){
-        this.state=state;
-        if(state)this.setTimeToLive();
+    public void setActive(boolean active){
+        this.active=active;
+        if(active)this.setTimeToLive();
     }
     public void setChange(boolean change){this.change=change;}
     public void setTimeToLive(){this.timeToLive=10;}
@@ -78,7 +81,7 @@ public class User {
 
     @Override
     public String toString() {
-        if(this.state)return String.format("Username: %s, Adresse IP: %s, Logiciel: %s, Statut: Online", this.username,this.ipAddress,this.logiciel);
+        if(this.active)return String.format("Username: %s, Adresse IP: %s, Logiciel: %s, Statut: Online", this.username,this.ipAddress,this.logiciel);
         else return String.format("Username: %s, Adresse IP: %s, Logiciel: %s, Statut: Offline", this.username,this.ipAddress,this.logiciel);
     }
     @Override
