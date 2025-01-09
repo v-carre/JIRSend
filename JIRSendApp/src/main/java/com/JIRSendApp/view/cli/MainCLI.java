@@ -332,6 +332,8 @@ public class MainCLI extends MainAbstractView {
                 msg = acu;
             }
 
+            if (msg.isEmpty() || msg.isBlank()) return;
+
             MainController.sendMessage.safePut(new Message(controller.getUsername(), dest, msg, controller.getTime()));
         }
     }

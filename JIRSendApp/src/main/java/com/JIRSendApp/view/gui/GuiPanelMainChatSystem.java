@@ -700,7 +700,7 @@ public class GuiPanelMainChatSystem {
 
         public void actionPerformed(ActionEvent action) {
             String messageToSend = inputMessage.getText();
-            if (messageToSend == null || messageToSend.isEmpty()
+            if (messageToSend == null || messageToSend.isEmpty() || messageToSend.isBlank()
                     || controller.getConversationName() == null)
                 return;
             MainController.sendMessage.safePut(new Message(controller.getUsername(),
