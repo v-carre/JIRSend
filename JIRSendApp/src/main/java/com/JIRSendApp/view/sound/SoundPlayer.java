@@ -58,6 +58,9 @@ public class SoundPlayer implements LineListener {
             clip.open(ais);
             ais.close();
             return clip;
+        } catch (IllegalArgumentException e) {
+            Log.e("Could not load audio: no mixer available");
+            return null;
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             Log.e("Could not load audio \"" + path + "\": " + e);
             return null;
