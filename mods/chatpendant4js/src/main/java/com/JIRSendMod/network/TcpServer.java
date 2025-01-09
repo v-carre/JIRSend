@@ -1,17 +1,12 @@
-package party.loveto.chatsystem.network;
+package com.JIRSendMod.network;
 
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import party.loveto.chatsystem.cli.Colors;
 
 public class TcpServer extends Thread {
-
-    private static final Logger LOGGER = LogManager.getLogger(TcpServer.class);
 
     public static int PORT;
 
@@ -59,7 +54,6 @@ public class TcpServer extends Thread {
                 }
             }
         } catch (IOException e) {
-            Colors.errorMessage(LOGGER, e, "start");
         }
     }
 
@@ -91,7 +85,7 @@ public class TcpServer extends Thread {
 
         @Override
         public void run() {
-            Colors.printSuccessfulCommandOutput(
+            System.out.println(
                 "A connexion has been established with " +
                 clientSocket.getInetAddress().getHostName()
             );
@@ -109,13 +103,13 @@ public class TcpServer extends Thread {
                     }
                 }
             } catch (IOException e) {
-                Colors.errorPrinting("Error closing input stream: " + e.getMessage());
+                System.out.println("Error closing input stream: " + e.getMessage());
             }
         }
 
         public void sendMessage(String msg) throws IOException, InterruptedException {
             if (msg == null || msg.isBlank()) {
-                Colors.errorPrinting("Empty message, skipping...");
+                System.out.println("Empty message, skipping...");
             } else {
                 out.println(msg);
             }

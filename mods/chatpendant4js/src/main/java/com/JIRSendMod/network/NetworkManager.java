@@ -1,4 +1,4 @@
-package party.loveto.chatsystem.network;
+package com.JIRSendMod.network;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -175,19 +175,19 @@ public class NetworkManager {
                     message.usernameSource().equals(user.getNickname()) ||
                     message.ipSource().equals(user.getIp())
                 ) {
-                    LOGGER.info("NetworkManager: received own discovery request");
+                    System.out.println("NetworkManager: received own discovery request");
                     break;
                 }
 
                 if (user.getNickname().isEmpty()) {
-                    LOGGER.info(
+                    System.out.println(
                         "NetworkManager: Edge case : no AnswerDiscovery reply " +
                         "when user didn't register yet but started client"
                     );
                     break;
                 }
 
-                LOGGER.info(
+                System.out.println(
                     "NetworkManager: received Discovery Request from " +
                     message.usernameSource() +
                     ", replying..."
@@ -214,7 +214,7 @@ public class NetworkManager {
                 }
                 break;
             case Answer_Discovery:
-                LOGGER.info(
+                System.out.println(
                     "NetworkManager: received Discovery Reply from " +
                     message.usernameSource()
                 );
@@ -226,7 +226,7 @@ public class NetworkManager {
                 }
                 break;
             case Change_Name:
-                LOGGER.info(
+                System.out.println(
                     "NetworkManager: received Change_Name from " +
                     message.usernameSource()
                 );

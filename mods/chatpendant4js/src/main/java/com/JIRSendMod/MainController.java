@@ -9,57 +9,28 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.util.concurrent.ExecutionException;
 import javax.swing.SwingWorker;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.config.Configurator;
-import party.loveto.chatsystem.cli.Colors;
-import party.loveto.chatsystem.cli.MinimalCli;
-import party.loveto.chatsystem.gui.components.UserList;
-import party.loveto.chatsystem.model.DatabaseError;
-import party.loveto.chatsystem.model.DbConnection;
-import party.loveto.chatsystem.model.DbConnectionImpl;
-import party.loveto.chatsystem.model.User;
-import party.loveto.chatsystem.model.UserStatus;
-import party.loveto.chatsystem.network.DiscussionManager;
-import party.loveto.chatsystem.network.NetworkManager;
-import party.loveto.chatsystem.network.NetworkUtils;
-import party.loveto.chatsystem.network.TcpClient;
-import party.loveto.chatsystem.network.TcpServer;
-import party.loveto.chatsystem.network.TcpServer.DiscussionListener;
 
-// Create a test class for this class that checks we add users to the list correctly...
-// (list that should have been create in a separate class)
-/**
- * Controller for main window
- *
- * Special care must be used to do tasks in the right thread and not stall the UI.
- * See https://docs.oracle.com/javase/tutorial/uiswing/concurrency/index.html
- */
+import com.JIRSendMod.model.User;
+import com.JIRSendMod.model.UserStatus;
+import com.JIRSendMod.network.DiscussionManager;
+import com.JIRSendMod.network.NetworkManager;
+import com.JIRSendMod.network.NetworkUtils;
+import com.JIRSendMod.network.TcpClient;
+
 public class MainController {
-
-    private MainFrame frame;
-    private DbConnection db;
-    private NetworkManager network;
-    private DiscussionManager discussionManager;
-
-    private static final Logger LOGGER = LogManager.getLogger(MainController.class);
 
     /**
      * Constructor
      * Runs in Event thread
      * @param frame
      */
-    protected MainController(MainFrame frame) {
-        this.frame = frame;
-
-        Configurator.setRootLevel(Level.INFO);
+    protected MainController() {
 
         // relay username update from ui to db
         frame.onLocalUsernameUpdate(e -> {
             System.out.println("Calling onLocalUsernameUpdate");
             String newUsername = e.getActionCommand();
-            LOGGER.info("new username:" + newUsername);
+            System.out.println("new username:" + newUsername);
             try {
                 User newUser = new User(
                     NetworkUtils.getFirstPublicIPAddress(),
@@ -70,7 +41,7 @@ public class MainController {
                 // If a username is already set then we send a change name message
                 if (db.getLocalUserManager().isUsernameSet()) {
                     network.requestChangeName(newUser);
-                    LOGGER.info("Username is set and is: " + newUser.getNickname());
+                    System.out.println("Username is set and is: " + newUser.getNickname());
                 } else { // else we send a user discovery
                     network.requestUserDiscovery(newUser);
                 }
@@ -124,13 +95,13 @@ public class MainController {
                             // event thread
                             System.out.println("Closing down db...");
                             db.close();
-                            network.disconnect();
                             e.getWindow().dispose();
                         }
                     }
                 );
 
                 try {
+                    User localUser = new User(NetworkUtils.getFirstPublicIPAddress(), , null, null)
                     network = new NetworkManager(db.getLocalUserManager().getUser());
                     discussionManager = new DiscussionManager(
                         db.getLocalUserManager().getUser()
@@ -245,7 +216,6 @@ public class MainController {
                         );
 
                     networkGUIBehaviour();
-                    network.start();
                 } catch (IOException e1) {
                     e1.printStackTrace();
                     frame.showErrorPopup(
@@ -291,7 +261,7 @@ public class MainController {
                     "",
                     UserStatus.AVAILABLE
                 );
-                LOGGER.info("trying to add user with IP: " + newUser.getIp());
+                System.out.println("trying to add user with IP: " + newUser.getIp());
                 if (!newUser.getIp().equals(network.getUser().getIp())) {
                     db.getUserManager().safeCreateUser(newUser);
                     if (
@@ -321,7 +291,7 @@ public class MainController {
                     UserStatus.AVAILABLE
                 );
                 User oldUser = db.getUserManager().getUserFromIP(newUser.getIp());
-                LOGGER.info("Entering in change username: " + newUser.getNickname());
+                System.out.println("Entering in change username: " + newUser.getNickname());
                 // To update a user, we must ensure the new username is available and the user already exists in db
                 if (
                     db.getUserManager().isUsernameAvailable(newUser.getNickname()) &&
@@ -332,7 +302,7 @@ public class MainController {
                     frame.getUserList().getContactList().updateUsername(newUser);
                     // frame.removeUser(oldUser);
                     // frame.addUser(newUser);
-                    LOGGER.info("Username changed: " + newUser.getNickname());
+                    System.out.println("Username changed: " + newUser.getNickname());
                 }
             } catch (DatabaseError error) {
                 error.printStackTrace();

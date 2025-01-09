@@ -1,9 +1,7 @@
-package party.loveto.chatsystem.network;
+package com.JIRSendMod.network;
 
 import java.net.*;
 import java.util.Enumeration;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * Network utility class for local address resolution
@@ -15,7 +13,6 @@ public class NetworkUtils {
      * @return corresponding IP address
      * @throws SocketException
      */
-    private static final Logger LOGGER = LogManager.getLogger(NetworkUtils.class);
 
     public static InetAddress getFirstPublicIPAddress() throws SocketException {
         System.out.println("Calling getFirstPublicIPAddress");

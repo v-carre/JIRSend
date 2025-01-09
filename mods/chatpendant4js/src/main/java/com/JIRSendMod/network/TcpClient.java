@@ -1,17 +1,13 @@
-package party.loveto.chatsystem.network;
+package com.JIRSendMod.network;
 
 import java.io.*;
 import java.net.*;
 import java.util.LinkedList;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import party.loveto.chatsystem.cli.Colors;
-import party.loveto.chatsystem.model.User;
+
+import com.JIRSendMod.model.User;
 
 public class TcpClient {
-
-    private static final Logger LOGGER = LogManager.getLogger(TcpClient.class);
 
     private Socket clientSocket;
     public static PrintWriter out;
@@ -66,7 +62,7 @@ public class TcpClient {
 
     public void sendMessage(String msg) throws IOException, InterruptedException {
         if (msg == null || msg.isBlank()) {
-            Colors.errorPrinting("Empty message, skipping...");
+            System.out.println("Empty message, skipping...");
         } else {
             out.println(msg);
         }
@@ -107,7 +103,7 @@ public class TcpClient {
 
         @Override
         public void run() {
-            Colors.printSuccessfulCommandOutput(
+            System.out.println(
                 "A connexion has been established with " +
                 clientSocket.getInetAddress().getHostName()
             );
@@ -125,13 +121,13 @@ public class TcpClient {
                     }
                 }
             } catch (IOException e) {
-                Colors.errorPrinting("Error closing input stream: " + e.getMessage());
+                System.out.println("Error closing input stream: " + e.getMessage());
             }
         }
 
         public void sendMessage(String msg) throws IOException, InterruptedException {
             if (msg == null || msg.isBlank()) {
-                Colors.errorPrinting("Empty message, skipping...");
+                System.out.println("Empty message, skipping...");
             } else {
                 out.println(msg);
             }

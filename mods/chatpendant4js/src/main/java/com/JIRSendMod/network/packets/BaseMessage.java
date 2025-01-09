@@ -1,4 +1,4 @@
-package party.loveto.chatsystem.network.packets;
+package com.JIRSendMod.network.packets;
 
 import java.net.InetAddress;
 import java.util.Date;

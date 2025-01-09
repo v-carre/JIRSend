@@ -1,4 +1,4 @@
-package party.loveto.chatsystem.network;
+package com.JIRSendMod.network;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -6,14 +6,12 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
-import java.util.EventListener;
 import java.util.LinkedList;
 import java.util.List;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-// TODO :  integrate interface directly into publisher class for every observer pattern
 /**
  * Listens for JSON datagrams on an address-port pair
  *
