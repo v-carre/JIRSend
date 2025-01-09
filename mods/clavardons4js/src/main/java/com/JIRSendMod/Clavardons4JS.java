@@ -26,6 +26,23 @@ public class Clavardons4JS implements JIRSendMod {
     public void initialize(ModController controller) {
         this.controller = controller;
         UserList.setInstanceController(controller);
+        try {
+            net = new MyNetworkInterface();
+            net.startUDPListeningThread();
+            net.subscribeOnUDPServer(UserList.getInstance());
+            net.startTCPListeningThread();
+            try {
+                net.getAllUser();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            timer = new Timer();
+            timer.scheduleAtFixedRate(new TimeToLiveTask(net), 0, 5000);
+            UserList.getInstance().subscribe(new OnReveive(this));
+
+        } catch (IOException e) {
+            System.err.println("Could not create server socket /!\\ " + e);
+        }
         System.out.println("Clavardons4JS initialized. Welcome!");
     }
 
@@ -96,24 +113,7 @@ public class Clavardons4JS implements JIRSendMod {
 
     @Override
     public void connected() {
-        try {
-            net = new MyNetworkInterface();
-            net.startUDPListeningThread();
-            net.subscribeOnUDPServer(UserList.getInstance());
-            net.startTCPListeningThread();
-            try {
-                net.getAllUser();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            timer = new Timer();
-            timer.scheduleAtFixedRate(new TimeToLiveTask(net), 0, 5000);
-            UserList.getInstance().subscribe(new OnReveive(this));
-
-        } catch (IOException e) {
-            System.err.println("Could not create server socket /!\\ " + e);
-        }
-        System.out.println("Clavardons is now connected");
+        //System.out.println("Clavardons is now connected");
     }
 
     static public String getTime() {
