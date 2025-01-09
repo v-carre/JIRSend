@@ -18,35 +18,39 @@ import com.JIRSendApp.view.cli.Log;
 public class SoundPlayer implements LineListener {
 
     static private String msgSoundPath = "assets/sound3.wav";
-    //static private String newContactSoundPath = "/assets/sound2.wav";
+    // static private String newContactSoundPath = "/assets/sound2.wav";
     private Clip msgSoundClip = getFileClip(msgSoundPath);
-    //private Clip newContactSoundClip = getFileClip(newContactSoundPath);
+    // private Clip newContactSoundClip = getFileClip(newContactSoundPath);
     private boolean isPlaying = false;
 
     public SoundPlayer() {
-        MainController.messageReceived.subscribe((msg) -> {this.playMsgSound();});
-        //MainController.contactsChange.subscribe((str) -> {this.playNewContactSound();});
+        MainController.messageReceived.subscribe((msg) -> {
+            this.playMsgSound();
+        });
+        // MainController.contactsChange.subscribe((str) ->
+        // {this.playNewContactSound();});
     }
 
     public void playMsgSound() {
-        if(msgSoundClip == null)
+        if (msgSoundClip == null)
             return;
-        msgSoundClip.setMicrosecondPosition(0);
+        if (isPlaying || true)
+            msgSoundClip.setMicrosecondPosition(0);
         msgSoundClip.start();
     }
 
-    //public void playNewContactSound() {
-    //    newContactSoundClip.start();
-    //}
+    // public void playNewContactSound() {
+    // newContactSoundClip.start();
+    // }
 
     @Override
     public void update(LineEvent event) {
-        if(event.getType() == LineEvent.Type.START)
+        if (event.getType() == LineEvent.Type.START)
             isPlaying = true;
         else if (event.getType() == LineEvent.Type.STOP)
             isPlaying = false;
     }
-    
+
     private Clip getFileClip(String path) {
         try {
             InputStream is = new BufferedInputStream(SoundPlayer.class.getClassLoader().getResourceAsStream(path));
@@ -57,7 +61,7 @@ public class SoundPlayer implements LineListener {
             ais.close();
             return clip;
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-            Log.e("Could not load audio \""+path+"\": "+e);
+            Log.e("Could not load audio \"" + path + "\": " + e);
             return null;
         }
     }
