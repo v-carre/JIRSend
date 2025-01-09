@@ -1,8 +1,6 @@
 package com.JIRSendMod;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import com.JIRSendAPI.ModController;
 import com.JIRSendAPI.ModMessage;
@@ -39,9 +37,7 @@ public class UserList implements UDPServer.Observer, TCPClient.Observer {
         // this.arrayUsers.remove(me);
         // }
         // ArrayList<ModMessage> messages = bdd.getAllMessages();
-        // for (ModMessage message : messages) {
-        // User user;
-        // if (message.getReceiver().equals(this.me))
+        // for (ModMessage message : messagthis.lists(this.me))
         // user = this.getUserByIpAddress(message.getSender().getIpAddress());
         // else
         // user = this.getUserByIpAddress(message.getReceiver().getIpAddress());
@@ -55,38 +51,42 @@ public class UserList implements UDPServer.Observer, TCPClient.Observer {
         // }
     }
 
-    // public void UserListDel() {
-    //     if (this.bdd != null) {
-    //         for (User user : this.arrayUsers)
-    //             if (user.getSocket() != null)
-    //                 user.getSocket().stopThread();
-    //         ArrayList<User> users = new ArrayList<>(this.arrayUsers);
-    //         users.add(this.me);
-    //         this.bdd.saveUsers(users);
-    //         for (User user : this.arrayUsers)
-    //             this.bdd.saveMessages(user.getMessages());
-    //         this.bdd.BDDInterfaceDel();
-    //     }
-    // }
+    public void UserListDel() {
+        for (User user : this.arrayUsers)
+            if (user.getSocket() != null)
+                user.getSocket().stopThread();
+        // if (this.bdd != null) {
+        // ArrayList<User> users = new ArrayList<>(this.arrayUsers);
+        // users.add(this.me);
+        // this.bdd.saveUsers(users);
+        // for (User user : this.arrayUsers)
+        // this.bdd.saveMessages(user.getMessages());
+        // this.bdd.BDDInterfaceDel();
+        // }
+    }
 
     public static UserList getInstance() {
         return instance;
     }
-    
+
     public boolean usernameIsAvailable(String username) {
-        if(controller==null) return false;
+        if (controller == null)
+            return false;
+        for (User user : arrayUsers) if(user.getUsername().equals(username)){
+            return false;
+        }
         return controller.mainController.isUsernameAvailable(username, Clavardons4JS.MOD_INFO);
     }
 
-    //TODO: JIRSend-ify
     public void addUser(User user) {
-        if (this.me != null && user.getUsername().equals(this.me.getUsername()))
+        if (me != null && user.getUsername().equals(me.getUsername()))
             return;
         for (User thisUser : this.arrayUsers) {
             if (thisUser.getIpAddress().equals(user.getIpAddress())) {
                 if (!thisUser.isActive()) {
                     thisUser.setActive(true);
-                    thisUser.modUser = new ModUser(thisUser.modUser.mod,thisUser.modUser.userID,thisUser.modUser.username,ModUser.Status.Online);
+                    thisUser.modUser = new ModUser(thisUser.modUser.mod, thisUser.modUser.userID,
+                            thisUser.modUser.username, ModUser.Status.Online);
                 }
                 if (!thisUser.getUsername().equals(user.getUsername())) {
                     thisUser.setUsername(user.getUsername());
@@ -112,7 +112,8 @@ public class UserList implements UDPServer.Observer, TCPClient.Observer {
         for (User user : this.arrayUsers)
             if (user.getIpAddress().equals(ipAddress)) {
                 user.setActive(true);
-                user.modUser = new ModUser(user.modUser.mod,user.modUser.userID,user.modUser.username,ModUser.Status.Online);
+                user.modUser = new ModUser(user.modUser.mod, user.modUser.userID, user.modUser.username,
+                        ModUser.Status.Online);
             }
     }
 
@@ -120,7 +121,8 @@ public class UserList implements UDPServer.Observer, TCPClient.Observer {
         for (User user : this.arrayUsers)
             if (user.getUsername().equals(username) && user.isActive()) {
                 user.setActive(false);
-                user.modUser = new ModUser(user.modUser.mod,user.modUser.userID,user.modUser.username,ModUser.Status.Offline);
+                user.modUser = new ModUser(user.modUser.mod, user.modUser.userID, user.modUser.username,
+                        ModUser.Status.Offline);
                 if (user.getSocket() != null)
                     user.getSocket().stopThread();
             }
@@ -140,7 +142,7 @@ public class UserList implements UDPServer.Observer, TCPClient.Observer {
                     observer.updateUserList("setUsername", new String[] { user.getUsername(), newUsername });
                 user.setUsername(newUsername);
                 user.setChange(true);
-                user.modUser = new ModUser(user.modUser.mod,user.modUser.userID,newUsername,user.modUser.online);
+                user.modUser = new ModUser(user.modUser.mod, user.modUser.userID, newUsername, user.modUser.online);
             }
 
     }
@@ -212,7 +214,6 @@ public class UserList implements UDPServer.Observer, TCPClient.Observer {
         return null;
     }
 
-    //TODO: 
     public void updateUDPServer(String type, String[] args) {
         switch (type) {
             case "NewUser":
@@ -232,7 +233,8 @@ public class UserList implements UDPServer.Observer, TCPClient.Observer {
                     else {
                         System.err.println("User is offline");
                         user.setActive(true);
-                        user.modUser = new ModUser(user.modUser.mod,user.modUser.userID,user.modUser.username,ModUser.Status.Online);
+                        user.modUser = new ModUser(user.modUser.mod, user.modUser.userID, user.modUser.username,
+                                ModUser.Status.Online);
                         for (Observer observer : this.observers)
                             observer.updateUserList("addUser", new String[] { "DA", user.getUsername() });
                     }
@@ -241,7 +243,6 @@ public class UserList implements UDPServer.Observer, TCPClient.Observer {
         }
     }
 
-    //TODO: le reste !
     public void connectTCP(String ipAddr, TCPClient socket) {
         User user = this.getUserByIpAddress(ipAddr);
         if (user != null) {
@@ -249,7 +250,7 @@ public class UserList implements UDPServer.Observer, TCPClient.Observer {
             for (Observer observer : this.observers)
                 observer.updateUserList("connectTCP", new String[] { user.getUsername() });
         } else
-            LOGGER.warn("User not found");
+            System.err.println("User not found: " + ipAddr);
     }
 
     public void connectResponseTCP(String ipAddr, boolean response) {
@@ -269,7 +270,8 @@ public class UserList implements UDPServer.Observer, TCPClient.Observer {
         User user = this.getUserByIpAddress(ipAddr);
         if (user == null)
             return;
-        user.addMessage(new Message(user, this.me, message, true));
+        user.addMessage(new ModMessage(Clavardons4JS.MOD_INFO, me.modUser.userID, me.modUser.username, ipAddr, message,
+                Clavardons4JS.getTime(), false));
         for (Observer observer : this.observers)
             observer.updateUserList("messageTCP", new String[] { user.getUsername(), message });
     }

@@ -28,8 +28,7 @@ public class TCPClient extends Thread{
             this.in = new BufferedReader(new InputStreamReader(this.socket.getInputStream())); // pour lire des messages entrants
             this.observer=UserList.getInstance();
         }catch (IOException e){
-            e.printStackTrace();
-            System.exit(1);
+            System.err.println("Critical error: could not create TCP Client in Clavardons: "+socket+"\n"+e);
         }
     }
     public TCPClient(String ipAddr) {
@@ -40,8 +39,7 @@ public class TCPClient extends Thread{
             this.in = new BufferedReader(new InputStreamReader(this.socket.getInputStream())); // pour lire des messages entrants
             this.observer=UserList.getInstance();
         }catch (IOException e){
-            e.printStackTrace();
-            System.exit(1);
+            System.err.println("Critical error: could not create TCP Client in Clavardons: "+ipAddr+"\n"+e);
         }
         this.sendConnect();
     }

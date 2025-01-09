@@ -83,7 +83,7 @@ public class MyNetworkInterface {
                 }
             }
         } catch (SocketException e) {
-            System.out.println("Erreur lors de la récupération des adresses IP.");
+            System.err.println("Erreur lors de la récupération des adresses IP.");
             e.printStackTrace();
         }
         return "Not found";

@@ -22,22 +22,18 @@ public class User {
     private int timeToLive=10;
     private ArrayList<ModMessage> messages=new ArrayList<>();
 
-    public User(String username, String ipAddress, boolean active, String logiciel){
-        this.modUser = new ModUser(Clavardons4JS.MOD_INFO, ipAddress,username,active ? ModUser.Status.Online : ModUser.Status.Offline);
-        this.username=username;
-        this.ipAddress=ipAddress;
-        this.active=active;
-        this.change=false;
-        this.logiciel=logiciel;
-        this.socket=null;
-    }
     public User(String username, String ipAddress, boolean active, boolean change, String logiciel){
+        this.modUser = new ModUser(Clavardons4JS.MOD_INFO, ipAddress,username,active ? ModUser.Status.Online : ModUser.Status.Offline);
         this.username=username;
         this.ipAddress=ipAddress;
         this.active=active;
         this.change=change;
         this.logiciel=logiciel;
         this.socket=null;
+    }
+
+    public User(String username, String ipAddress, boolean active, String logiciel){
+        this(username, ipAddress, active, false, logiciel);
     }
     public void addMessage(ModMessage message){
         this.messages.add(message);
@@ -70,12 +66,10 @@ public class User {
     public void decrementTTL(){this.timeToLive--;}
 
     public static void DisplayUsernames(ArrayList<User> arrayUsers){
-        int i=0;
+        System.out.println("Total d'utilisateurs: "+arrayUsers.size());
         for (User user : arrayUsers){
             System.out.println(user);
-            i++;
         }
-        System.out.println("Total d'utilisateurs: "+i);
     }
 
 

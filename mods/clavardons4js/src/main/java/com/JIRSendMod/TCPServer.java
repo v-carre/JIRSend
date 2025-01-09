@@ -21,8 +21,7 @@ public class TCPServer extends Thread {
         try {
             listener();
         } catch (Exception e) {
-            System.out.println("Pb: listener");
-            System.exit(1);
+            System.err.println("Critical error: Clavardon TCPServer Thread stopped: "+e);
         }
     }
 
@@ -33,7 +32,7 @@ public class TCPServer extends Thread {
                 new TCPClient(clientSocket).start();
             } catch (IOException e) {
                 if (!state) {
-                    System.out.println("<Clavardon-Arrêt> -> Arrêt du thread d'écoute TCP");
+                    //System.out.println("<Clavardon-Arrêt> -> Arrêt du thread d'écoute TCP");
                 } else {
                     e.printStackTrace();
                 }

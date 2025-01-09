@@ -20,8 +20,7 @@ public class SoundPlayer implements LineListener {
     static private String msgSoundPath = "assets/sound3.wav";
     // static private String newContactSoundPath = "/assets/sound2.wav";
     private Clip msgSoundClip = getFileClip(msgSoundPath);
-    // private Clip newContactSoundClip = getFileClip(newContactSoundPath);
-    private boolean isPlaying = false;
+    //private Clip newContactSoundClip = getFileClip(newContactSoundPath);
 
     public SoundPlayer() {
         MainController.messageReceived.subscribe((msg) -> {
@@ -34,8 +33,7 @@ public class SoundPlayer implements LineListener {
     public void playMsgSound() {
         if (msgSoundClip == null)
             return;
-        if (isPlaying || true)
-            msgSoundClip.setMicrosecondPosition(0);
+        msgSoundClip.setMicrosecondPosition(0);
         msgSoundClip.start();
     }
 
@@ -44,11 +42,11 @@ public class SoundPlayer implements LineListener {
     // }
 
     @Override
-    public void update(LineEvent event) {
-        if (event.getType() == LineEvent.Type.START)
-            isPlaying = true;
-        else if (event.getType() == LineEvent.Type.STOP)
-            isPlaying = false;
+    public void update(LineEvent event) { // Not quite sure why I have to implement that to be honest..
+        //if(event.getType() == LineEvent.Type.START)
+        //    isplaying = true;
+        //else if (event.getType() == LineEvent.Type.STOP)
+        //    isplaying = false;
     }
 
     private Clip getFileClip(String path) {
