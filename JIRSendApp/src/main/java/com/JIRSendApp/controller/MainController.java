@@ -85,6 +85,7 @@ public class MainController {
         // start UI when Net is setup
         this.net = new Net(this, () -> {
             startUI();
+            modc.initializeMods();
         });
         new SoundPlayer();
     }

@@ -31,6 +31,9 @@ public class ModController {
                         + " and " + jirSendMod.getModInformation(), 0);
             mods.put(modID, jirSendMod);
         }
+    }
+
+    public void initializeMods() {
         for (JIRSendMod mod : mods.values()) {
             mod.initialize(this);
             System.out.println(mod.getModInformation() + " loaded.");
