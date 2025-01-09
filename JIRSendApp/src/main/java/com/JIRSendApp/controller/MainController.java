@@ -27,6 +27,7 @@ import com.JIRSendApp.view.cli.CliTools;
 import com.JIRSendApp.view.cli.MainCLI;
 import com.JIRSendApp.view.gui.ErrorPopup;
 import com.JIRSendApp.view.gui.MainGUI;
+import com.JIRSendApp.view.sound.SoundPlayer;
 
 public class MainController {
     private String controllerName;
@@ -85,6 +86,7 @@ public class MainController {
         this.net = new Net(this, () -> {
             startUI();
         });
+        new SoundPlayer();
     }
 
     public MainController(boolean usingGUI) throws SocketException {
