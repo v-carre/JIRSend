@@ -79,6 +79,14 @@
             <version>2.1.5</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/clojure-interop/javax.sound
+        <dependency>
+            <groupId>clojure-interop</groupId>
+            <artifactId>javax.sound</artifactId>
+            <version>1.0.5</version>
+        </dependency> -->
+
     </dependencies>
 
     <build>
