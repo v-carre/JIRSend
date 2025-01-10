@@ -29,7 +29,7 @@ public class GUISectionLoading extends GUISection {
 
             JIRSendLogo = new JLabel(
                     new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/jirsend_logo.png"))
-                            .getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+                            .getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
             JIRSendLogo.setBorder(BorderFactory.createEmptyBorder(50, 10, 10, 10));
 
             JLabel loadingLabel = new JLabel("<html><body><p style=\"width:180px; padding:10px; border-radius:10px; text-align:center;\">"

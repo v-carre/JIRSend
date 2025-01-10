@@ -110,8 +110,11 @@ public class MainGUI extends MainAbstractView {
 
         if (state == State.loadScreen)
             currentSection = new GUISectionLoading(this, frame);
-        else if (state == State.waitConnection)
+        else if (state == State.waitConnection) {
+            frame.setSize(400, 600);
+            frame.setMinimumSize(new Dimension(400, 600));
             currentSection = new GUISectionConnection(this, frame);
+        }
         else if (state == State.personal)
             currentSection = new GUISectionPersonalInfo(this, frame);
         else if (state == State.chat) {
