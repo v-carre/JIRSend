@@ -76,6 +76,11 @@ public class MainCLI extends MainAbstractView {
     }
 
     @Override
+    public void start() {
+        Log.l("Loading JIRSend");
+    }
+
+    @Override
     public void open() {
         Log.l("Starting CLI thread");
         this.thread.start();

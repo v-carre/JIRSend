@@ -13,7 +13,7 @@ import com.JIRSendApp.view.cli.Log;
 
 public class MainGUI extends MainAbstractView {
     private enum State {
-        notInit, waitConnection, chat, personal
+        notInit, loadScreen, waitConnection, chat, personal
     }
 
     protected MainController controller;
@@ -36,13 +36,19 @@ public class MainGUI extends MainAbstractView {
     }
 
     @Override
-    public void open() throws HeadlessException{
+    public void start() throws HeadlessException {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 Log.l("Starting window", Log.LOG);
                 createWindow();
             }
         });
+    }
+
+    @Override
+    public void open() {
+        state = State.waitConnection;
+        refreshSection();
     }
 
     private void createWindow() {
@@ -83,14 +89,15 @@ public class MainGUI extends MainAbstractView {
     }
 
     protected void switchToNextSection() {
-        if (state == State.notInit) {
+        if (state == State.notInit)
+            state = State.loadScreen;
+        else if (state == State.loadScreen)
             state = State.waitConnection;
-        } else if (state == State.waitConnection) {
+        else if (state == State.waitConnection)
             state = State.chat;
-        } else {
             // we should not arrive in that case, for test purpose only
+        else
             state = State.personal;
-        }
         refreshSection();
     }
 
@@ -101,11 +108,13 @@ public class MainGUI extends MainAbstractView {
             frame.remove(currentPanel);
         }
 
-        if (state == State.waitConnection) {
+        if (state == State.loadScreen)
+            currentSection = new GUISectionLoading(this, frame);
+        else if (state == State.waitConnection)
             currentSection = new GUISectionConnection(this, frame);
-        } else if (state == State.personal) {
+        else if (state == State.personal)
             currentSection = new GUISectionPersonalInfo(this, frame);
-        } else if (state == State.chat) {
+        else if (state == State.chat) {
             frame.setSize(800, 400);
             frame.setMinimumSize(new Dimension(800, 400));
             currentSection = new GUISectionMain(this, frame);

@@ -26,6 +26,7 @@ import com.JIRSendApp.view.MainAbstractView;
 import com.JIRSendApp.view.cli.CliTools;
 import com.JIRSendApp.view.cli.MainCLI;
 import com.JIRSendApp.view.gui.ErrorPopup;
+// import com.JIRSendApp.view.gui.LoadingPopup;
 import com.JIRSendApp.view.gui.MainGUI;
 import com.JIRSendApp.view.sound.SoundPlayer;
 
@@ -58,8 +59,11 @@ public class MainController {
         this.usingGUI = usingGUI;
         this.connnected = false;
         if (usingGUI)
-            if (!GraphicsEnvironment.isHeadless())
+            if (!GraphicsEnvironment.isHeadless()) {
+                // LoadingPopup.start();
                 this.view = new MainGUI(this);
+                startUI();
+            }
             else {
                 CliTools.printBigError("No X11 display found. Starting Command Line Interface instead...");
                 this.view = new MainCLI(this);
@@ -84,8 +88,9 @@ public class MainController {
         this.modc = new ModController(apiActions);
         // start UI when Net is setup
         this.net = new Net(this, () -> {
-            startUI();
             modc.initializeMods();
+            this.view.open();
+            // LoadingPopup.stop();
         });
         new SoundPlayer();
     }
@@ -96,12 +101,12 @@ public class MainController {
 
     public void startUI() {
         try {
-            this.view.open();
+            this.view.start();
         } catch (HeadlessException e) {
+            this.usingGUI = false;
             System.err.println(
                     "Could not find X11 display. Opening a Command Line Interface instead. Consider using --cli option.");
             this.view = new MainCLI(this);
-            this.view.open();
         }
     }
 

@@ -20,7 +20,7 @@ public class NetworkIO {
     public static final boolean NO_ACK = true;
     public static final boolean NO_HEADER = false;
     public static final String APP_HEADER = "-JIRSend>";
-    public static final int RECV_PORT = 11572; // FIXME: Clavardons 1610 
+    public static final int RECV_PORT = 11572;
     public static final int TCP_PORT = 11573;
     public static final int BRDC_PORT = 11574;
     public static final int RECV_PORT_TEST = 10572;
