@@ -60,7 +60,6 @@ public class MainController {
         this.connnected = false;
         if (usingGUI)
             if (!GraphicsEnvironment.isHeadless()) {
-                // LoadingPopup.start();
                 this.view = new MainGUI(this);
                 startUI();
             }
@@ -90,7 +89,6 @@ public class MainController {
         this.net = new Net(this, () -> {
             modc.initializeMods();
             this.view.open();
-            // LoadingPopup.stop();
         });
         new SoundPlayer();
     }
@@ -106,6 +104,12 @@ public class MainController {
             this.usingGUI = false;
             System.err.println(
                     "Could not find X11 display. Opening a Command Line Interface instead. Consider using --cli option.");
+            this.view = new MainCLI(this);
+        } catch (Exception other) {
+            this.usingGUI = false;
+            System.err.println(
+                    "Error while starting GUI. Opening a Command Line Interface instead. Consider using --cli option.");
+            other.printStackTrace();
             this.view = new MainCLI(this);
         }
     }

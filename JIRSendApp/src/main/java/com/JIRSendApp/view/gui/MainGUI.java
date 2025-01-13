@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.*;
 
@@ -31,13 +32,13 @@ public class MainGUI extends MainAbstractView {
         this.controller = controller;
         this.state = State.notInit;
         this.noPanel = true;
-        this.currentSection = new GUISectionConnection(this, frame);
+        this.currentSection = new GUISectionLoading(this, frame);
         this.lastError = "";
     }
 
     @Override
-    public void start() throws HeadlessException {
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+    public void start() throws HeadlessException, InvocationTargetException, InterruptedException {
+        javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 Log.l("Starting window", Log.LOG);
                 createWindow();
@@ -47,6 +48,8 @@ public class MainGUI extends MainAbstractView {
 
     @Override
     public void open() {
+        if (frame == null)
+            createWindow();
         state = State.waitConnection;
         refreshSection();
     }
