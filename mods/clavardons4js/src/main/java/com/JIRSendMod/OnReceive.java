@@ -12,18 +12,20 @@ public class OnReceive implements UserList.Observer {
     }
 
     public void updateUserList(String type, String[] args) {
-        //System.out.println("GOT MESSAGE FROM CLAVARDONS:\n[" + type + "] " + String.join(" ", args));
+        System.out.println("GOT MESSAGE FROM CLAVARDONS:\n[" + type + "] " + String.join(" ", args));
         User user;
         switch (type) {
             case "setUsername":
                 user = UserList.getInstance().getActiveUserByUsername(args[0]);
+                user.setUsername(args[1]);
                 ModController.contactChange.put(new ModUser(Clavardons4JS.MOD_INFO,
                         user.modUser.userID,
-                        user.modUser.username,
+                        args[1],
                         ModUser.Status.Online));
                 break;
             case "setUserOffline":
                 user = UserList.getInstance().getActiveUserByUsername(args[0]);
+                if(user==null) break;
                 ModController.contactChange.put(new ModUser(Clavardons4JS.MOD_INFO,
                         user.modUser.userID,
                         user.modUser.username,
@@ -69,7 +71,7 @@ public class OnReceive implements UserList.Observer {
                 ModController.contactChange.put(new ModUser(Clavardons4JS.MOD_INFO,
                         user.modUser.userID,
                         user.modUser.username,
-                        ModUser.Status.Busy));
+                        ModUser.Status.Away));
                 break;
             default:
                 System.err.println("Received unknown message from Clavardon: ["+type+"] "+String.join(" ",args));

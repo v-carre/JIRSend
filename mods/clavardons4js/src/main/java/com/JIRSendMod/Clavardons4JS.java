@@ -52,9 +52,10 @@ public class Clavardons4JS implements JIRSendMod {
         this.net.stopTCPListeningThread();
         this.net.stopUDPListeningThread();
         try {
-            this.net.NetworkInterfaceDel(UserList.getInstance().getMe());
+            this.net.NetworkInterfaceDel(new User(controller.mainController.getUsername(),
+                    MyNetworkInterface.getIpAddr(), true, true, "Clavardons"));
         } catch (IOException e) {
-            System.err.println("Error on deleting Network Interface: "+e);
+            System.err.println("Error on deleting Network Interface: " + e);
         }
         UserList.getInstance().UserListDel();
         System.out.println("Clavardons4JS is stopping. Goodbye!");
@@ -73,16 +74,13 @@ public class Clavardons4JS implements JIRSendMod {
                 && UserList.getInstance().usernameIsAvailable(username);
     }
 
+    private boolean firstTime = true;
     @Override
     public void changeUsername(String username) {
+        if(firstTime) { firstTime = false; return;}
         User user = new User(username, MyNetworkInterface.getIpAddr(), true, true, "Clavardons");
         UserList.getInstance().setMe(user);
-        try {
-            net.sendNewUser(user);
-        } catch (IOException e) {
-            System.err.println("Could not send New User [" + user + "] " + e);
-        }
-        //System.out.println("Username changed to: " + username);
+        net.sendUpdateUsername(username);
     }
 
     @Override
@@ -107,13 +105,21 @@ public class Clavardons4JS implements JIRSendMod {
                 UserList.getInstance().getMe().modUser.username, receiver.modUser.userID, message, getTime(), false);
         receiver.addMessage(msg);
         receiver.getSocket().sendMessage(message);
-        //System.out.println("Sending message to " + recipientID + ": " + message);
+        // System.out.println("Sending message to " + recipientID + ": " + message);
         ModController.storeMessage.put(msg);
     }
 
     @Override
     public void connected() {
-        //System.out.println("Clavardons is now connected");
+        // System.out.println("Clavardons is now connected");
+        User user = new User(controller.mainController.getUsername(), MyNetworkInterface.getIpAddr(), true, true,
+                "Clavardons");
+        UserList.getInstance().setMe(user);
+        try {
+            net.sendNewUser(user);
+        } catch (IOException e) {
+            System.err.println("Could not send New User [" + user + "] " + e);
+        }
     }
 
     static public String getTime() {
