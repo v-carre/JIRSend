@@ -101,6 +101,10 @@ public class GuiPanelMainChatSystem {
         contactsList.removeAll();
         var list = controller.getContacts();
         Collections.sort(list, (a, b) -> {
+            if (a.online() && !b.online())
+                return -1;
+            if (b.online() && !a.online())
+                return 1;
             Message ma = controller.getConversationLastMessage(a.username);
             Message mb = controller.getConversationLastMessage(b.username);
             if (ma == null && mb == null)
