@@ -104,15 +104,15 @@ public class TCPClient extends Thread{
     }
 
     public void sendMessage(String message){
-        out.println("-Clavardons><|SendMessage "+message);
+        out.println("-JIRSend><|SendMessage "+message);
     }
     public void sendConnectResponse(boolean response){
-        out.println("-Clavardons><|ConnectResponse "+response);
+        out.println("-JIRSend><|ConnectResponse "+response);
     }
     public void sendQuit(){
-        out.println("-Clavardons><|Quit");
+        out.println("-JIRSend><|Quit");
     }
     public void sendConnect(){
-        out.println("-Clavardons><|Connect");
+        out.println("-JIRSend><|Connect");
     }
 }

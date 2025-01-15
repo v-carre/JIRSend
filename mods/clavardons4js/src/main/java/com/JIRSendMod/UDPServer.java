@@ -54,7 +54,7 @@ public class UDPServer extends Thread {
                     case "GetUser":
                         User me = this.list.getMe();
                         if(me!=null){
-                            byte[] bufOut = String.format("-Clavardons><|NewUser %s",me.getUsername()).getBytes();
+                            byte[] bufOut = String.format("-JIRSend><|NewUser %s",me.getUsername()).getBytes();
                             DatagramPacket outPacket= new DatagramPacket(bufOut, bufOut.length, inPacket.getAddress(), MyNetworkInterface.USER_PORT);
                             socket.send(outPacket);
                         }

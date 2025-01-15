@@ -31,6 +31,7 @@ public class Clavardons4JS implements JIRSendMod {
             net.startUDPListeningThread();
             net.subscribeOnUDPServer(UserList.getInstance());
             net.startTCPListeningThread();
+            UserList.getInstance().subscribe(new OnReceive(this));
             try {
                 net.getAllUser();
             } catch (IOException e) {
@@ -38,7 +39,6 @@ public class Clavardons4JS implements JIRSendMod {
             }
             timer = new Timer();
             timer.scheduleAtFixedRate(new TimeToLiveTask(net), 0, 5000);
-            UserList.getInstance().subscribe(new OnReveive(this));
 
         } catch (IOException e) {
             System.err.println("Could not create server socket /!\\ " + e);

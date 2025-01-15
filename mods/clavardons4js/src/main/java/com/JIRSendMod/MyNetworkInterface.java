@@ -18,7 +18,7 @@ public class MyNetworkInterface {
 
     public void NetworkInterfaceDel(User sender) throws IOException{
         if(sender==null)return;
-        byte[] bufOut = String.format("-Clavardons><|SetUserOffline %s",sender.getUsername()).getBytes();
+        byte[] bufOut = String.format("-JIRSend><|SetUserOffline %s",sender.getUsername()).getBytes();
         DatagramPacket outPacket= new DatagramPacket(bufOut, bufOut.length,InetAddress.getByName(MULTICAST_ADDRESS), USER_PORT);
         socket.send(outPacket);
         socket.close();
@@ -26,20 +26,20 @@ public class MyNetworkInterface {
 
 
     public void getAllUser() throws IOException{
-        byte[] bufOut= "-Clavardons><|GetUser".getBytes();
+        byte[] bufOut= "-JIRSend><|GetUser".getBytes();
         DatagramPacket outPacket= new DatagramPacket(bufOut, bufOut.length,InetAddress.getByName(MULTICAST_ADDRESS), USER_PORT);
         socket.send(outPacket);
     }
 
     public void sendNewUser(User sender) throws IOException{
-        byte[] buf= String.format("-Clavardons><|NewUser %s",sender.getUsername()).getBytes();
+        byte[] buf= String.format("-JIRSend><|NewUser %s",sender.getUsername()).getBytes();
         DatagramPacket outPacket= new DatagramPacket(buf, buf.length,InetAddress.getByName(MULTICAST_ADDRESS), USER_PORT);
         socket.send(outPacket);
     }
 
     public void sendUpdateUsername(String newUsername){
         try {
-            byte[] buf = String.format("-Clavardons><|UpdateUsername %s", newUsername).getBytes();
+            byte[] buf = String.format("-JIRSend><|UpdateUsername %s", newUsername).getBytes();
             DatagramPacket outPacket = new DatagramPacket(buf, buf.length, InetAddress.getByName(MULTICAST_ADDRESS), USER_PORT);
             socket.send(outPacket);
         }catch(IOException e){
@@ -49,7 +49,7 @@ public class MyNetworkInterface {
 
     public void sendMessageUDP(User sender, User receiver, String msg){
         try {
-            byte[] buf = String.format("-Clavardons><|SendMessage %s:%s", sender.getUsername(), msg).getBytes();
+            byte[] buf = String.format("-JIRSend><|SendMessage %s:%s", sender.getUsername(), msg).getBytes();
             DatagramPacket outPacket = new DatagramPacket(buf, buf.length, InetAddress.getByName(receiver.getIpAddress()), USER_PORT);
             socket.send(outPacket);
         }catch(IOException e){
@@ -59,7 +59,7 @@ public class MyNetworkInterface {
 
     public void sendTimeToLive(){
         try {
-            byte[] buf = "-Clavardons><|TimeToLive".getBytes();
+            byte[] buf = "-JIRSend><|TimeToLive".getBytes();
             DatagramPacket outPacket = new DatagramPacket(buf, buf.length, InetAddress.getByName(MULTICAST_ADDRESS), USER_PORT);
             socket.send(outPacket);
         }catch(IOException e){

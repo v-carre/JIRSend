@@ -4,10 +4,10 @@ import com.JIRSendAPI.ModController;
 import com.JIRSendAPI.ModMessage;
 import com.JIRSendAPI.ModUser;
 
-public class OnReveive implements UserList.Observer {
+public class OnReceive implements UserList.Observer {
     private final Clavardons4JS controller;
 
-    public OnReveive(Clavardons4JS controller) {
+    public OnReceive(Clavardons4JS controller) {
         this.controller = controller;
     }
 
