@@ -36,7 +36,8 @@ public class UDPServer extends Thread {
         try{
             listener();
         }catch (Exception e) {
-            System.err.println("Critical error in Clavardons UDP Server: "+e);
+            System.err.println("Critical error in Clavardons UDP Server: " + e);
+            e.printStackTrace();
         }
     }
     private void listener() throws IOException {

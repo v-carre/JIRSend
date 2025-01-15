@@ -81,15 +81,14 @@ public class MainController {
             System.exit(4);
         }
         this.user = new User(this);
-        setupLink();
 
         this.apiActions = new APIControllerActions(this);
         this.modc = new ModController(apiActions);
         // start UI when Net is setup
-        this.net = new Net(this, () -> {
-            modc.initializeMods();
-            this.view.open();
-        });
+        this.net = new Net(this, () -> {});
+        setupLink();
+        modc.initializeMods();
+        this.view.open();
         new SoundPlayer();
     }
 

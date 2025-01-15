@@ -17,6 +17,7 @@ public class MyNetworkInterface {
     }
 
     public void NetworkInterfaceDel(User sender) throws IOException{
+        if(sender==null)return;
         byte[] bufOut = String.format("-Clavardons><|SetUserOffline %s",sender.getUsername()).getBytes();
         DatagramPacket outPacket= new DatagramPacket(bufOut, bufOut.length,InetAddress.getByName(MULTICAST_ADDRESS), USER_PORT);
         socket.send(outPacket);
