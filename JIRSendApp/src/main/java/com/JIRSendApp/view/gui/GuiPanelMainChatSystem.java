@@ -16,6 +16,8 @@ import com.JIRSendApp.view.cli.Log;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
 import java.util.Collections;
@@ -98,16 +100,16 @@ public class GuiPanelMainChatSystem {
         String currentConvName = controller.getConversationName();
         contactsList.removeAll();
         var list = controller.getContacts();
-        Collections.sort(list, (a,b) -> {
-                Message ma = controller.getConversationLastMessage(a.username);
-                Message mb = controller.getConversationLastMessage(b.username);
-                if(ma==null && mb==null)
-                        return a.username.compareTo(b.username);
-                if(mb == null)
-                        return -1;
-                if(ma == null)
-                        return 1;
-                return mb.time.compareTo(ma.time);
+        Collections.sort(list, (a, b) -> {
+            Message ma = controller.getConversationLastMessage(a.username);
+            Message mb = controller.getConversationLastMessage(b.username);
+            if (ma == null && mb == null)
+                return a.username.compareTo(b.username);
+            if (mb == null)
+                return -1;
+            if (ma == null)
+                return 1;
+            return mb.time.compareTo(ma.time);
 
         });
         for (UserEntry ue : list) {
@@ -554,6 +556,22 @@ public class GuiPanelMainChatSystem {
         inputMessage.setSelectedTextColor(whitestColor);
         inputMessage.setText("");
         inputMessage.setToolTipText("Enter your message here");
+        inputMessage.addKeyListener(new KeyListener() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER && (e.isShiftDown() || e.isControlDown())) {
+                    new SubmitMessageAction().actionPerformed(null);
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent arg0) {
+            }
+
+            @Override
+            public void keyTyped(KeyEvent arg0) {
+            }
+        });
         messageToSendScroll.setViewportView(inputMessage);
         messageToSendScroll.getVerticalScrollBar().setUnitIncrement(4);
 
@@ -700,6 +718,11 @@ public class GuiPanelMainChatSystem {
 
         public void actionPerformed(ActionEvent action) {
             String messageToSend = inputMessage.getText();
+            sendMsg(messageToSend.trim());
+
+        }
+
+        public void sendMsg(String messageToSend) {
             if (messageToSend == null || messageToSend.isEmpty() || messageToSend.isBlank()
                     || controller.getConversationName() == null)
                 return;

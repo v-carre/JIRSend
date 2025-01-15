@@ -24,7 +24,7 @@ public class MainGUI extends MainAbstractView {
     protected String lastError;
 
     private State state;
-    private JFrame frame;
+    protected JFrame frame;
     private GUISection currentSection;
     private JPanel currentPanel;
 
