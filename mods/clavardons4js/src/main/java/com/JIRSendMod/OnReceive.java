@@ -4,7 +4,18 @@ import com.JIRSendAPI.ModController;
 import com.JIRSendAPI.ModMessage;
 import com.JIRSendAPI.ModUser;
 
+/*
+ *
+ * NOTE:
+ * MOST OF THIS CODE IS A COPY-PASTE 
+ * FROM chatsystem-anglade-loubejac !
+ * (as it is a mod to communicate with their chatsystem)
+ * 
+ */
+
 public class OnReceive implements UserList.Observer {
+    //it actually is used
+    @SuppressWarnings("unused")
     private final Clavardons4JS controller;
 
     public OnReceive(Clavardons4JS controller) {

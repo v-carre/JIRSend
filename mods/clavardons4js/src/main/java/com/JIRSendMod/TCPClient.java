@@ -6,8 +6,19 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+/*
+ *
+ * NOTE:
+ * MOST OF THIS CODE IS A COPY-PASTE 
+ * FROM chatsystem-anglade-loubejac !
+ * (as it is a mod to communicate with their chatsystem)
+ * 
+ */
+
 public class TCPClient extends Thread{
     private  Socket socket;
+    //it actually is used
+    @SuppressWarnings("unused")
     private  UserList list;
     private Observer observer;
     private PrintWriter out;

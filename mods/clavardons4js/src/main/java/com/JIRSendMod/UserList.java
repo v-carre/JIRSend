@@ -6,6 +6,15 @@ import com.JIRSendAPI.ModController;
 import com.JIRSendAPI.ModMessage;
 import com.JIRSendAPI.ModUser;
 
+/*
+ *
+ * NOTE:
+ * MOST OF THIS CODE IS A COPY-PASTE 
+ * FROM chatsystem-anglade-loubejac !
+ * (as it is a mod to communicate with their chatsystem)
+ * 
+ */
+
 public class UserList implements UDPServer.Observer, TCPClient.Observer {
     private static final UserList instance = new UserList();
     private ArrayList<User> arrayUsers;

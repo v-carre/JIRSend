@@ -8,6 +8,15 @@ import java.util.Timer;
 import javax.swing.ImageIcon;
 import com.JIRSendAPI.*;
 
+/*
+ *
+ * NOTE:
+ * MOST OF THIS CODE IS A COPY-PASTE 
+ * FROM chatsystem-anglade-loubejac !
+ * (as it is a mod to communicate with their chatsystem)
+ * 
+ */
+
 public class Clavardons4JS implements JIRSendMod {
 
     private ModController controller = null;
