@@ -71,6 +71,23 @@ public class GUISectionConnection extends GUISection {
             username.setCaretColor(GuiPanelMainChatSystem.almostWhiteColor);
             username.setForeground(GuiPanelMainChatSystem.almostWhiteColor);
             username.setBackground(GuiPanelMainChatSystem.chatBGColor);
+            username.addKeyListener(new KeyListener() {
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                        new SubmitConnectionAction().actionPerformed(null);
+                    }
+                }
+    
+                @Override
+                public void keyReleased(KeyEvent arg0) {
+                }
+    
+                @Override
+                public void keyTyped(KeyEvent arg0) {
+                }
+            });
+            username.requestFocus();
             // ImageIcon image = new ImageIcon("");+
             connect = new JButton(submitAction);
             // connect.setBorder(BorderFactory.createEmptyBorder(10, 40, 10, 40));
@@ -152,7 +169,7 @@ public class GUISectionConnection extends GUISection {
         }
 
         public void actionPerformed(ActionEvent action) {
-            String usernameAsked = username.getText();
+            String usernameAsked = username.getText().trim();
             String res = window.controller.changeUsername(usernameAsked);
             if (res.equals("")) {
                 window.switchToNextSection();

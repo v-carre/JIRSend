@@ -3,8 +3,16 @@ import java.io.IOException;
 import java.net.*;
 import java.util.Enumeration;
 
-public class MyNetworkInterface {
+/*
+ *
+ * NOTE:
+ * MOST OF THIS CODE IS A COPY-PASTE 
+ * FROM chatsystem-anglade-loubejac !
+ * (as it is a mod to communicate with their chatsystem)
+ * 
+ */
 
+public class MyNetworkInterface {
     private static final int SERVER_PORT = 1553;
     static final int USER_PORT = 1610;
     static final String MULTICAST_ADDRESS = "233.009.007.034";

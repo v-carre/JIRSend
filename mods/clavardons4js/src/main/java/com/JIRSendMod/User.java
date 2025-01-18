@@ -5,6 +5,15 @@ import com.JIRSendAPI.ModUser;
 
 import java.util.ArrayList;
 
+/*
+ *
+ * NOTE:
+ * MOST OF THIS CODE IS A COPY-PASTE 
+ * FROM chatsystem-anglade-loubejac !
+ * (as it is a mod to communicate with their chatsystem)
+ * 
+ */
+
 public class User {
 
     // private static final Set<User> usernames = new HashSet<>();
