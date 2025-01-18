@@ -128,7 +128,7 @@ public class GuiPanelMainChatSystem {
         Conversation conv = controller.getConversation();
         if (conv == null) {
             chatContactLabel.setText("<- Choose a conversation");
-            createMessageElement("JIRSend", controller.getTime(), "Welcome in JIRSend!\n\n"
+            createMessageElement("JIRSend", " ", "Welcome in JIRSend!\n\n"
                     + "- In the left panel are shown the connected users. You can simply click on them to start a conversation with them.\n"
                     + "You will see a text input at the bottom to send a message.\n\n"
                     + "- To change your username, just modify your username in the footer and click on the refresh button.");
@@ -198,7 +198,8 @@ public class GuiPanelMainChatSystem {
                 currentConv ? contactElementBGColor.brighter().brighter()
                         : (status != Status.Offline ? contactElementBGColor.brighter()
                                 : contactElementBGColor));
-        contactElement.setBorder(new GuiRoundedBorder(10));
+        // contactElement.setBorder(new GuiRoundedBorder(10));
+        contactElement.setBorder(null);
         contactElement.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -474,13 +475,13 @@ public class GuiPanelMainChatSystem {
         contactsList.setAlignmentY(Component.TOP_ALIGNMENT);
 
         // Add some padding around each contact panel
-        contactsList.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        // contactsList.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         // contactsList
         contactsList.setBackground(contactSectionBGColor);
         contactsListScroll.setViewportView(contactsList);
         contactsListScroll.setBorder(new EmptyBorder(0, 0, 0, 0));
         contactsListScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        contactsListScroll.getVerticalScrollBar().setUnitIncrement(6);
+        contactsListScroll.getVerticalScrollBar().setUnitIncrement(9);
         chatSection = new JPanel();
         chatSection.setLayout(new CardLayout(0, 0));
         chatSection.setBackground(chatBGColor);
