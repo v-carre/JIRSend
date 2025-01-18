@@ -51,6 +51,7 @@ public class GuiPanelMainChatSystem {
     private JTextPane messageContent;
     private JLabel chatSystemName;
     private JLabel JIRSendLogo;
+    private RoundJTextField contactSearch;
 
     private MainController controller;
 
@@ -117,7 +118,8 @@ public class GuiPanelMainChatSystem {
 
         });
         for (UserEntry ue : list) {
-            createContactElement(ue.username, ue.online, ue.icon, currentConvName == ue.username, false);
+            if (contactSearch == null || contactSearch.getText() == "" || ue.username.toLowerCase().contains(contactSearch.getText().toLowerCase()))
+                createContactElement(ue.username, ue.online, ue.icon, currentConvName == ue.username, false);
         }
     }
 
@@ -406,7 +408,7 @@ public class GuiPanelMainChatSystem {
                         null, 0, false));
         contactsContent = new JPanel();
         contactsContent
-                .setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1,
+                .setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(3, 1,
                         new Insets(0, 0, 0, 0), -1, -1));
         contactsContent.setBackground(contactSectionBGColor);
         contactsSection.add(contactsContent, "Card1");
@@ -419,6 +421,37 @@ public class GuiPanelMainChatSystem {
         contactsLabel.setText("Contacts");
         contactsContent.add(contactsLabel,
                 new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1,
+                        com.intellij.uiDesigner.core.GridConstraints.ANCHOR_NORTH,
+                        com.intellij.uiDesigner.core.GridConstraints.FILL_NONE,
+                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED,
+                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null,
+                        null, null, 0, false));
+        contactSearch = new RoundJTextField(17);
+        contactSearch.setHorizontalAlignment(SwingConstants.CENTER);
+        contactSearch.setBorder(new GuiRoundedBorder(10));
+        Font normalFont = GuiTools.getFont("Monospaced", Font.PLAIN, 8, contactSearch.getFont());
+        contactSearch.setFont(normalFont);
+        contactSearch.setCaretColor(almostWhiteColor);
+        contactSearch.setForeground(almostWhiteColor);
+        contactSearch.setBackground(chatBGColor);
+        contactSearch.addKeyListener(new KeyListener() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent arg0) {
+                // Log.l("TYPED PRESSED: " + contactSearch.getText());
+                updateContactList();
+                maingui.refreshFrame();
+            }
+
+            @Override
+            public void keyTyped(KeyEvent arg0) {
+            }
+        });
+        contactsContent.add(contactSearch,
+                new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1,
                         com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
                         com.intellij.uiDesigner.core.GridConstraints.FILL_NONE,
                         com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED,
@@ -428,7 +461,7 @@ public class GuiPanelMainChatSystem {
         contactsListScroll.getVerticalScrollBar().setUI(new JSScrollBarUI());
         contactsListScroll.setBackground(contactSectionBGColor);
         contactsContent.add(contactsListScroll,
-                new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1,
+                new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1,
                         com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
                         com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH,
                         com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
