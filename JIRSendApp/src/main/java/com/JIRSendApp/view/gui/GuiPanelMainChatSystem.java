@@ -27,7 +27,7 @@ public class GuiPanelMainChatSystem {
     private JPanel contentPane;
     private JPanel headPane;
     private JPanel bodyPane;
-    private JPanel Footer;
+    private JPanel footer;
     private JPanel contactsSection;
     private JPanel chatSection;
     private JPanel chatContent;
@@ -118,7 +118,8 @@ public class GuiPanelMainChatSystem {
 
         });
         for (UserEntry ue : list) {
-            if (contactSearch == null || contactSearch.getText() == "" || ue.username.toLowerCase().contains(contactSearch.getText().toLowerCase()))
+            if (contactSearch == null || contactSearch.getText() == ""
+                    || ue.username.toLowerCase().contains(contactSearch.getText().toLowerCase()))
                 createContactElement(ue.username, ue.online, ue.icon, currentConvName == ue.username, false);
         }
     }
@@ -495,8 +496,9 @@ public class GuiPanelMainChatSystem {
                                 | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
                         null, null, null, 0, false));
         chatContent = new JPanel();
-        chatContent.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(3, 1, new Insets(0, 0, 0, 0),
-                -1, -1));
+        chatContent.setLayout(new BorderLayout());
+        // .setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(3, 1, new
+        // Insets(0, 0, 0, 0), -1, -1));
         chatContent.setBackground(chatBGColor);
         chatSection.add(chatContent, "Card1");
         chatContactName = new JPanel();
@@ -506,15 +508,15 @@ public class GuiPanelMainChatSystem {
         chatContactName.setBackground(headerContactColor);
         chatContactName.setBorder(new MatteBorder(0, 0, 2, 0, headerContactColor.brighter()));
         chatContactName.setEnabled(true);
-        chatContent.add(chatContactName,
-                new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1,
-                        com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
-                        com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL,
-                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
-                                | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
-                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
-                                | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
-                        null, null, null, 0, false));
+        chatContent.add(chatContactName, BorderLayout.NORTH);
+                // new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1,
+                //         com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
+                //         com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL,
+                //         com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
+                //                 | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
+                //         com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
+                //                 | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
+                //         null, null, null, 0, false));
         chatContactLabel = new JLabel();
         Font chatContactLabelFont = this.getFont("Monospaced", Font.BOLD, 36, chatContactLabel.getFont());
         if (chatContactLabelFont != null)
@@ -534,15 +536,15 @@ public class GuiPanelMainChatSystem {
                 .setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 2,
                         new Insets(0, 0, 0, 0), -1, -1));
         SendMessageSection.setBackground(messageBGColor);
-        chatContent.add(SendMessageSection,
-                new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1,
-                        com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
-                        com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH,
-                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
-                                | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
-                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
-                                | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
-                        null, new Dimension(-1, 80), new Dimension(-1, 300), 0, false));
+        chatContent.add(SendMessageSection, BorderLayout.SOUTH);
+                // new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1,
+                //         com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
+                //         com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH,
+                //         com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
+                //                 | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
+                //         com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
+                //                 | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
+                //         null, new Dimension(-1, 80), new Dimension(-1, 300), 0, false));
 
         sendMessageButton = new JButton(submitMsgAction);
         sendMessageButton.setText("");
@@ -619,15 +621,15 @@ public class GuiPanelMainChatSystem {
         messagesScroll.setBackground(chatBGColor);
         messagesScroll.setHorizontalScrollBarPolicy(31);
         messagesScroll.setBorder(new EmptyBorder(0, 0, 0, 0));
-        chatContent.add(messagesScroll,
-                new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1,
-                        com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
-                        com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH,
-                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
-                                | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW,
-                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
-                                | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW,
-                        null, null, null, 0, false));
+        chatContent.add(messagesScroll, BorderLayout.CENTER);
+                // new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1,
+                //         com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
+                //         com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH,
+                //         com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
+                //                 | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW,
+                //         com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
+                //                 | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW,
+                //         null, null, null, 0, false));
         messagesList = new JPanel();
 
         messagesList.setLayout(new BoxLayout(messagesList, BoxLayout.Y_AXIS));
@@ -638,11 +640,11 @@ public class GuiPanelMainChatSystem {
         messagesScroll.setViewportView(messagesList);
         messagesScroll.getVerticalScrollBar().setUnitIncrement(10);
 
-        Footer = new JPanel();
-        Footer.setLayout(
+        footer = new JPanel();
+        footer.setLayout(
                 new com.intellij.uiDesigner.core.GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), 0, 0));
-        Footer.setBackground(headerFooterBGColor);
-        contentPane.add(Footer,
+        footer.setBackground(headerFooterBGColor);
+        contentPane.add(footer,
                 new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1,
                         com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
                         com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH,
@@ -662,7 +664,7 @@ public class GuiPanelMainChatSystem {
         usernameTextField.setSelectedTextColor(whitestColor);
         usernameTextField.setText("---");
         usernameTextField.setToolTipText("Change your username");
-        Footer.add(usernameTextField,
+        footer.add(usernameTextField,
                 new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1,
                         com.intellij.uiDesigner.core.GridConstraints.ANCHOR_EAST,
                         com.intellij.uiDesigner.core.GridConstraints.FILL_NONE,
@@ -684,7 +686,7 @@ public class GuiPanelMainChatSystem {
         uiReconnect.setPressedColor(reconnectButton.getBackground().darker());
         reconnectButton.setUI(uiReconnect);
         reconnectButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        Footer.add(reconnectButton,
+        footer.add(reconnectButton,
                 new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1,
                         com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
                         com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH,
