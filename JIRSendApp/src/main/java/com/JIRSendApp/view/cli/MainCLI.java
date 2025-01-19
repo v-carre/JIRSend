@@ -19,6 +19,8 @@ import org.jline.reader.impl.history.DefaultHistory;
 
 import com.JIRSendApp.controller.MainController;
 import com.JIRSendApp.model.Message;
+import com.JIRSendApp.model.user.BaseUser;
+import com.JIRSendApp.model.user.Conversation;
 import com.JIRSendApp.model.user.UserEntry;
 import com.JIRSendApp.model.user.UserEntry.Status;
 import com.JIRSendApp.view.MainAbstractView;
@@ -30,7 +32,7 @@ public class MainCLI extends MainAbstractView {
     private List<String> dmTargets = new ArrayList<>();
 
     protected List<String> commands = Arrays.asList("h", "help", "q", "quit", "lc", "list-contacts", "dm",
-            "direct-message",
+            "direct-message", "history", "get-messages", "gm",
             "su", "switch-username");
     protected History history = new DefaultHistory();
 
@@ -40,7 +42,9 @@ public class MainCLI extends MainAbstractView {
         if (words.size() == 1) {
             // complete the main commands only
             commands.forEach(command -> candidates.add(new Candidate(command)));
-        } else if (words.size() == 2 && (words.get(0).equals("dm") || words.get(0).equals("direct-message"))) {
+        } else if (words.size() == 2
+                && (words.get(0).equals("dm") || words.get(0).equals("direct-message") || words.get(0).equals("gm")
+                        || words.get(0).equals("get-messages") || words.get(0).equals("history"))) {
             // dm suggestions based on userlist
             dmTargets.forEach(target -> candidates.add(new Candidate(target)));
         }
@@ -103,13 +107,25 @@ public class MainCLI extends MainAbstractView {
 
     private final String commandInput = CliTools.colorize(CliTools.PURPLE_NORMAL_COLOR, "> ");
 
+    private void printIncomingMessage(String message, boolean printCommandInput) {
+        if (printCommandInput)
+            System.out.print("\r" + message + "\n" + commandInput);
+        else
+            System.out.print("\r" + message + "\n");
+    }
+
     private void printIncomingMessage(String message) {
-        System.out.print("\r" + message + "\n" + commandInput);
+        printIncomingMessage(message, true);
+    }
+
+    private void messageReceived(Message msg, boolean printCommandInput) {
+        printIncomingMessage(
+                "[" + CliTools.colorize(CliTools.PURPLE_NORMAL_COLOR + CliTools.BOLD, msg.sender) + "] " + msg.message,
+                printCommandInput);
     }
 
     private void messageReceived(Message msg) {
-        printIncomingMessage(
-                "[" + CliTools.colorize(CliTools.PURPLE_NORMAL_COLOR + CliTools.BOLD, msg.sender) + "] " + msg.message);
+        messageReceived(msg, true);
     }
 
     private class MainCliThread extends Thread {
@@ -182,6 +198,7 @@ public class MainCLI extends MainAbstractView {
                     commandHelperPrint("q, quit", "quit JIRSend");
                     commandHelperPrint("lc, list-contacts", "list contacts");
                     commandHelperPrint("dm, direct-message", "<username> <message>", "send direct message");
+                    commandHelperPrint("gm, get-messages, history", "<username>", "get all conversation messages from contact");
                     commandHelperPrint("su, switch-username", "[newUsername]", "change your username");
 
                     CliTools.coloredPrintln(CliTools.PURPLE_NORMAL_COLOR + CliTools.BOLD, "================\n");
@@ -211,6 +228,12 @@ public class MainCLI extends MainAbstractView {
                 case "direct-message":
                 case "dm":
                     sendMessage(args);
+                    break;
+
+                case "get-messages":
+                case "history":
+                case "gm":
+                    getMessages(args);
                     break;
 
                 case "switch-username":
@@ -298,6 +321,46 @@ public class MainCLI extends MainAbstractView {
             chooseUsername(change);
         }
 
+        private void getMessages(String[] argv) {
+            final String dest;
+
+            if (argv.length < 2) { // no arg
+                System.out.println("Please enter contact's username: ");
+                dest = oldReadIn();
+            } else {
+                dest = argv[1];
+            }
+
+            boolean found = false;
+            for (UserEntry entry : controller.getContacts()) {
+                if (entry.username.equals(dest)) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                System.out.println(
+                        CliTools.colorize(CliTools.RED_NORMAL_COLOR, "No contact \"" + dest + "\" was found."));
+                return;
+            }
+            Conversation conv = controller.getConversation(dest);
+            if (conv == null || conv.getMessages() == null || conv.getMessages().isEmpty()) {
+                System.out.println(CliTools.colorize(CliTools.BLACK_DESAT_COLOR,
+                        "You do not have messages with \"" + dest + "\"."));
+                return;
+            }
+            String you = controller.getUsername();
+            for (Message msg : conv.getMessages()) {
+                if (msg.sender.equals(BaseUser.youString) || msg.sender.equals(BaseUser.senderString))
+                    messageReceived(
+                            new Message(msg.sender.equals(BaseUser.youString) ? you : dest, "", msg.message, ""),
+                            false);
+                else
+                    messageReceived(msg, false);
+            }
+        }
+
         private void sendMessage(String[] argv) {
             final String dest;
             final String msg;
@@ -337,7 +400,8 @@ public class MainCLI extends MainAbstractView {
                 msg = acu;
             }
 
-            if (msg.isEmpty() || msg.isBlank()) return;
+            if (msg.isEmpty() || msg.isBlank())
+                return;
 
             MainController.sendMessage.safePut(new Message(controller.getUsername(), dest, msg, controller.getTime()));
         }
