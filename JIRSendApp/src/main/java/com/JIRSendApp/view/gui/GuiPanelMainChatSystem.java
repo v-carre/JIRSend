@@ -509,14 +509,6 @@ public class GuiPanelMainChatSystem {
         chatContactName.setBorder(new MatteBorder(0, 0, 2, 0, headerContactColor.brighter()));
         chatContactName.setEnabled(true);
         chatContent.add(chatContactName, BorderLayout.NORTH);
-                // new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1,
-                //         com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
-                //         com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL,
-                //         com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
-                //                 | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
-                //         com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
-                //                 | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
-                //         null, null, null, 0, false));
         chatContactLabel = new JLabel();
         Font chatContactLabelFont = this.getFont("Monospaced", Font.BOLD, 36, chatContactLabel.getFont());
         if (chatContactLabelFont != null)
@@ -537,14 +529,6 @@ public class GuiPanelMainChatSystem {
                         new Insets(0, 0, 0, 0), -1, -1));
         SendMessageSection.setBackground(messageBGColor);
         chatContent.add(SendMessageSection, BorderLayout.SOUTH);
-                // new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1,
-                //         com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
-                //         com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH,
-                //         com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
-                //                 | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
-                //         com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
-                //                 | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
-                //         null, new Dimension(-1, 80), new Dimension(-1, 300), 0, false));
 
         sendMessageButton = new JButton(submitMsgAction);
         sendMessageButton.setText("");
@@ -622,14 +606,6 @@ public class GuiPanelMainChatSystem {
         messagesScroll.setHorizontalScrollBarPolicy(31);
         messagesScroll.setBorder(new EmptyBorder(0, 0, 0, 0));
         chatContent.add(messagesScroll, BorderLayout.CENTER);
-                // new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1,
-                //         com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
-                //         com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH,
-                //         com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
-                //                 | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW,
-                //         com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK
-                //                 | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW,
-                //         null, null, null, 0, false));
         messagesList = new JPanel();
 
         messagesList.setLayout(new BoxLayout(messagesList, BoxLayout.Y_AXIS));
