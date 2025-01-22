@@ -322,7 +322,7 @@ public class GuiPanelMainChatSystem {
                         com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED,
                         com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null,
                         null, null, 0, false));
-        // messageTime.setBorder(new EmptyBorder(3, 3, 3, 3));
+        messageElement.setBorder(new EmptyBorder(9, 9, 9, 9));
     }
 
     public JPanel getPanel() {
@@ -614,7 +614,8 @@ public class GuiPanelMainChatSystem {
 
         messagesList.setLayout(new BoxLayout(messagesList, BoxLayout.Y_AXIS));
         messagesList.setAlignmentY(Component.TOP_ALIGNMENT);
-        messagesList.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        // messagesList.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        messagesList.setBorder(null);
         messagesList.setBackground(chatBGColor);
         messagesList.setForeground(almostWhiteColor);
         messagesScroll.setViewportView(messagesList);
