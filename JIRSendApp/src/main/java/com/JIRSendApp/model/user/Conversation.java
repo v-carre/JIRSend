@@ -12,23 +12,23 @@ public class Conversation {
         this.messages = new ArrayList<>();
     }
 
-    public int numberUnRead() {
+    public synchronized int numberUnRead() {
         return unRead;
     }
 
-    public void setUnread(int unread) {
+    public synchronized void setUnread(int unread) {
         this.unRead = unread;
     }
 
-    public void incrUnread() {
+    public synchronized  void incrUnread() {
         this.unRead++;
     }
 
-    public ArrayList<Message> getMessages() {
+    public synchronized ArrayList<Message> getMessages() {
         return this.messages;
     }
 
-    public void putMessage(Message msg) {
+    public synchronized void putMessage(Message msg) {
         this.messages.add(msg);
     }
 
