@@ -527,7 +527,7 @@ public class GuiPanelMainChatSystem {
         SendMessageSection
                 .setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 2,
                         new Insets(0, 0, 0, 0), -1, -1));
-        SendMessageSection.setBackground(messageBGColor);
+        SendMessageSection.setBackground(messageBGColor.brighter());
         chatContent.add(SendMessageSection, BorderLayout.SOUTH);
 
         sendMessageButton = new JButton(submitMsgAction);
@@ -535,7 +535,7 @@ public class GuiPanelMainChatSystem {
         sendMessageButton.setIcon(
                 new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/send.png"))
                         .getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
-        sendMessageButton.setBackground(headerFooterBGColor);
+        sendMessageButton.setBackground(messageBGColor.brighter());
         sendMessageButton.setPreferredSize(new Dimension(60, 60));
         sendMessageButton.setBorderPainted(true);
         sendMessageButton.setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -558,7 +558,8 @@ public class GuiPanelMainChatSystem {
                         null, null, 0, false));
         messageToSendScroll = new JScrollPane();
         messageToSendScroll.getVerticalScrollBar().setUI(new JSScrollBarUI());
-        messageToSendScroll.setBackground(messageBGColor);
+        messageToSendScroll.setBorder(null);
+        messageToSendScroll.setBackground(messageBGColor.brighter());
         SendMessageSection.add(messageToSendScroll,
                 new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1,
                         com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
@@ -569,7 +570,10 @@ public class GuiPanelMainChatSystem {
                                 | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW,
                         null, null, null, 0, false));
         inputMessage = new JTextPane();
-        inputMessage.setBackground(messageBGColor);
+        inputMessage.setBackground(messageBGColor.brighter());
+        // inputMessage.setBorder(null);
+        inputMessage.setBorder(new EmptyBorder(8,8,8,8));
+        inputMessage.setMargin(new Insets(8,8,8,8));
         inputMessage.setCaretColor(carretColor);
         inputMessage.setDragEnabled(true);
         Font inputMessageFont = this.getFont("Monospaced", -1, -1, inputMessage.getFont());
