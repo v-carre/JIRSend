@@ -183,6 +183,8 @@ public class GuiPanelMainChatSystem {
             msgNb++;
         }
         controller.markConversationRead(recipient);
+        JScrollBar vertical = messagesScroll.getVerticalScrollBar();
+        vertical.setValue(vertical.getMaximum());
     }
 
     private void createContactElement(String username, Status status, ImageIcon icon, boolean currentConv,
@@ -572,8 +574,8 @@ public class GuiPanelMainChatSystem {
         inputMessage = new JTextPane();
         inputMessage.setBackground(messageBGColor.brighter());
         // inputMessage.setBorder(null);
-        inputMessage.setBorder(new EmptyBorder(8,8,8,8));
-        inputMessage.setMargin(new Insets(8,8,8,8));
+        inputMessage.setBorder(new EmptyBorder(8, 8, 8, 8));
+        inputMessage.setMargin(new Insets(8, 8, 8, 8));
         inputMessage.setCaretColor(carretColor);
         inputMessage.setDragEnabled(true);
         Font inputMessageFont = this.getFont("Monospaced", -1, -1, inputMessage.getFont());
