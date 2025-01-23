@@ -59,16 +59,10 @@ public class Net {
             MainController.databaseMessage
                     .safePut(new DatabaseMessage(addrDest, message.sender, message.message, message.time, true, true));
         });
-        if (test)
-            this.netIO = new NetworkIO(new NetworkCallback(), () -> {
-                // signal that setup is complete
-                setupLatch.countDown();
-            }, true);
-        else
-            this.netIO = new NetworkIO(new NetworkCallback(), () -> {
-                // signal that setup is complete
-                setupLatch.countDown();
-            });
+        this.netIO = new NetworkIO(new NetworkCallback(), () -> {
+            // signal that setup is complete
+            setupLatch.countDown();
+        }, test);
         // wait for TCP Server to be started
         try {
             setupLatch.await();
@@ -142,7 +136,6 @@ public class Net {
             if (ue.username.equals(username) && !id.startsWith("-" + modID + " "))
                 return false;
         }
-        // broadcast("NewUser " + username);
         return true;
     }
 
@@ -250,7 +243,6 @@ public class Net {
                         MainController.messageReceived
                                 .safePut(new Message(senderUsername, controller.getUsername(), messageContent, time));
                     } else {
-                        // TODO recover "lost" message
                         send(senderIP, "GetUser");
                         System.out.println("[Unkown user] " + args);
                     }

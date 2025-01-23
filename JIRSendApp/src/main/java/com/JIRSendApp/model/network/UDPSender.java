@@ -18,28 +18,6 @@ public class UDPSender {
     private int receiversPort;
 
     public UDPSender(int broadcastPort, int receiversPort) throws SocketException {
-        // while (true) {
-        // try {
-        // this.socket = new DatagramSocket(broadcastPort);
-        // this.socket.setBroadcast(true);
-        // this.localAddress = InetAddress.getByName("255.255.255.255");
-        // this.receiversPort = receiversPort;
-        // } catch (Exception e) {
-        // Log.e("Failed to create UDP Sender: " + e);
-        // }
-
-        // if (this.socket != null)
-        // break;
-        // }
-        // try {
-        // this.socket = new DatagramSocket(broadcastPort);
-        // this.socket.setBroadcast(true);
-        // this.localAddress = InetAddress.getByName("255.255.255.255");
-        // this.receiversPort = receiversPort;
-        // } catch (Exception e) {
-        // e.printStackTrace();
-        // Log.e("Failed to create UDP Sender: " + e);
-        // }
         this.socket = new DatagramSocket(broadcastPort);
         this.socket.setBroadcast(true);
         try {

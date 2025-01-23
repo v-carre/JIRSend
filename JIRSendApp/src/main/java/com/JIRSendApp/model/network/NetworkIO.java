@@ -44,7 +44,7 @@ public class NetworkIO {
         this.onRunning = onRunning;
         this.callback = callback;
         TCP_SERVER = new TCPServer(test ? TCP_PORT_TEST : TCP_PORT, this.callback, this.onRunning);
-        this.SND = new UDPSender(BRDC_PORT, test ? RECV_PORT_TEST : RECV_PORT);
+        this.SND = new UDPSender(test ? BRDC_PORT_TEST : BRDC_PORT, test ? RECV_PORT_TEST : RECV_PORT);
     }
 
     public NetworkIO(NetCallback callback, VoidCallback onRunning) throws SocketException {

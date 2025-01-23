@@ -167,8 +167,6 @@ public class LocalDatabase {
 
                 for (int index = 1; index < rowCount; index++) {
                     r.add(pmd.getColumnName(index), rs.getObject(pmd.getColumnName(index)));
-                    // Log.l(pmd.getColumnName(index) + ": " +
-                    // rs.getObject(pmd.getColumnName(index)));
                 }
                 rtn.add(r);
             }

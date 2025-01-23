@@ -69,7 +69,6 @@ public class PipeTest {
 
         });
         assertEquals(0, valueToBeChanged);
-        // assertThrows(AssertionError.class, () -> pipe1.put(1));
         pipe1.safePut(1);
         assertEquals(1, valueToBeChanged);
     }

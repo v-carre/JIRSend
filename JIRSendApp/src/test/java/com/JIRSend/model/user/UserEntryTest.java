@@ -12,6 +12,6 @@ public class UserEntryTest {
     void testToString() {
         String username = "someone";
         UserEntry ue = new UserEntry(Status.Offline, username);
-        assertTrue(ue.toString().equals(username + " (Offline)"));
+        assertTrue(ue.toString().equals(username + " (OFFLINE)"));
     }
 }

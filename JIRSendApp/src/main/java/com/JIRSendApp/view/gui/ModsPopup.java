@@ -18,7 +18,6 @@ public class ModsPopup {
         JDialog dialog = new JDialog((Frame) null, "JIRSend mods loaded", true);
         dialog.setUndecorated(false);
         dialog.setAlwaysOnTop(false);
-        // dialog.setLayout(null);
 
         JLabel messageLabel = new JLabel("Loaded mods (" + mods.size() + ")");
         messageLabel.setForeground(GuiPanelMainChatSystem.whitestColor);
@@ -45,7 +44,6 @@ public class ModsPopup {
         modListScroll.getVerticalScrollBar().setUI(new JSScrollBarUI());
         modListScroll.setBackground(GuiPanelMainChatSystem.contactSectionBGColor);
         modList.setBackground(GuiPanelMainChatSystem.contactSectionBGColor);
-        // modList.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         modList.setBorder(null);
         modListScroll.setViewportView(modList);
         modListScroll.setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -74,7 +72,6 @@ public class ModsPopup {
         dialog.setLayout(new BorderLayout());
 
         JPanel subdialog = new JPanel();
-        // subdialog.setLayout(new GridLayout(3, 0));
         subdialog.setLayout(new BorderLayout());
         subdialog.add(messageLabel, BorderLayout.NORTH);
         if (mods.size() > 0)
@@ -83,9 +80,7 @@ public class ModsPopup {
             subdialog.add(contentLabel, BorderLayout.CENTER);
         subdialog.add(okButton, BorderLayout.SOUTH);
         dialog.add(subdialog);
-
-        // dialog.setMinimumSize(new Dimension(300, 150));
-        // dialog.setMaximumSize(new Dimension(1000, 900));
+        
         dialog.setSize(POPUP_WIDTH, 500);
         dialog.setLocationRelativeTo(null); // Center on screen
         dialog.getContentPane().setBackground(GuiPanelMainChatSystem.bodyBGColor);
@@ -118,13 +113,8 @@ public class ModsPopup {
 
     private static void createContactElement(JIRSendModInformation modInfo) {
         JPanel modElement = new JPanel();
-        // modElement.setMinimumSize(new Dimension(50, 20));
-        // modElement.setPreferredSize(new Dimension(300, 500));
-        // modElement.setMaximumSize(new Dimension(POPUP_WIDTH, 800));
         modElement.setCursor(new Cursor(Cursor.HAND_CURSOR));
         modElement.setBackground(GuiPanelMainChatSystem.contactElementBGColor);
-        // modElement.setBorder(new GuiRoundedBorder(10));
-        // modElement.setLayout(new GridBagLayout());
         modElement.setLayout(new GridLayout(3, 1));
         modElement.addMouseListener(new MouseAdapter() {
             @Override
@@ -161,36 +151,6 @@ public class ModsPopup {
         descriptionLabel.setOpaque(false);
         descriptionLabel.setBorder(null);
         modElement.add(descriptionLabel);
-
-        // GridBagConstraints gbc = new GridBagConstraints();
-
-        // gbc.gridx = 0;
-        // gbc.gridy = 0;
-        // gbc.anchor = GridBagConstraints.NORTHWEST;
-        // // gbc.insets = new Insets(5, 5, 5, 5);
-        // gbc.insets = new Insets(0, 0, 0, 0);
-        // modElement.add(modName, gbc);
-
-        // gbc.gridx = 0;
-        // gbc.gridy = 1;
-        // gbc.anchor = GridBagConstraints.SOUTHWEST;
-        // modElement.add(modIcon, gbc);
-
-        // gbc.gridx = 1;
-        // gbc.gridy = 0;
-        // gbc.gridheight = 2; // Span across two rows (right, spanning vertically)
-        // gbc.anchor = GridBagConstraints.EAST;
-        // gbc.fill = GridBagConstraints.BOTH; // let the descriptionLabel take up extra space
-        // modElement.add(descriptionLabel, gbc);
-
-        // modElement.setAlignmentX(Component.CENTER_ALIGNMENT);
-        // modElement.setAlignmentY(Component.TOP_ALIGNMENT);
-        // modElement.setPreferredSize(new Dimension(300, 100));
-
-        // modElement.setBackground(Color.GREEN);
-        // modName.setBackground(Color.BLUE);
-        // modIcon.setBackground(Color.RED);
-        // descriptionLabel.setBackground(Color.YELLOW);
     }
 
 }

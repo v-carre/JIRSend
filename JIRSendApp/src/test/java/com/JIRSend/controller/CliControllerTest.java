@@ -31,12 +31,11 @@ public class CliControllerTest {
             hdbExists = true;
             hdb.renameTo(hdbTemp);
         }
-        controller = new MainController(false);
+        controller = new MainController(false, true);
     }
 
     @AfterAll
     static void cleanup() throws InterruptedException {
-        // controller.stoppingApp();
         controller.stopNet();
         Thread.sleep(100);
         if (hdbExists && hdbTemp.exists()) {

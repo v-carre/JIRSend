@@ -54,7 +54,7 @@ public class MainController {
     public static Pipe<Message> messageReceived = new Pipe<>("Message received");
     public static Pipe<DatabaseMessage> databaseMessage = new Pipe<>("Message update in DB");
 
-    public MainController(String name, boolean usingGUI) throws SocketException {
+    public MainController(String name, boolean usingGUI, boolean isTest) throws SocketException {
         this.controllerName = name;
         this.usingGUI = usingGUI;
         this.connnected = false;
@@ -85,15 +85,19 @@ public class MainController {
         this.apiActions = new APIControllerActions(this);
         this.modc = new ModController(apiActions);
         // start UI when Net is setup
-        this.net = new Net(this, () -> {});
+        this.net = new Net(this, () -> {}, isTest);
         setupLink();
         modc.initializeMods();
         this.view.open();
         new SoundPlayer();
     }
 
+    public MainController(boolean usingGUI, boolean isTest) throws SocketException {
+        this("JIRSend Main", usingGUI, isTest);
+    }
+
     public MainController(boolean usingGUI) throws SocketException {
-        this("JIRSend Main", usingGUI);
+        this("JIRSend Main", usingGUI, false);
     }
 
     public void startUI() {

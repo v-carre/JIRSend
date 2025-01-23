@@ -21,7 +21,7 @@ public class UserEntry {
 
     @Override
     public String toString() {
-        return username + (online + "(" + online + ")");
+        return username + (online() ? " (ONLINE)" : " (OFFLINE)");
     }
 
     public boolean online() {

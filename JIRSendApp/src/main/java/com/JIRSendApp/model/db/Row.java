@@ -45,7 +45,6 @@ public class Row {
         for (String k : values.keySet()) {
             Object o = values.get(k);
             rtn += k + ": " + o.toString();
-            // rtn += " (" + o.getClass() + ")";
             rtn += " | ";
         }
         return rtn + "\n";

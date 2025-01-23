@@ -192,16 +192,12 @@ public class GuiPanelMainChatSystem {
         JPanel contactElement = new JPanel();
         contactElement.setMinimumSize(new Dimension(50, 5));
         contactElement.setMaximumSize(new Dimension(1920, 100));
-        if (icon != null)
-            contactElement.setLayout(new GridLayout(2, 1));
-        else
-            contactElement.setLayout(new GridLayout(1, 1));
+        contactElement.setLayout(new GridLayout(2, 1));
         contactElement.setCursor(new Cursor(Cursor.HAND_CURSOR));
         contactElement.setBackground(
                 currentConv ? contactElementBGColor.brighter().brighter()
                         : (status != Status.Offline ? contactElementBGColor.brighter()
                                 : contactElementBGColor));
-        // contactElement.setBorder(new GuiRoundedBorder(10));
         contactElement.setBorder(null);
         contactElement.addMouseListener(new MouseAdapter() {
             @Override
@@ -248,6 +244,15 @@ public class GuiPanelMainChatSystem {
         if (icon != null) {
             JLabel modIcon = new JLabel(new ImageIcon(icon.getImage()
                     .getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
+            modIcon.setBorder(null);
+            contactElement.add(modIcon);
+        } else {
+            JLabel modIcon = new JLabel(new ImageIcon(
+                    new javax.swing.ImageIcon(getClass().getResource("/assets/jirsend_logo.png")).getImage()
+                            .getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
+
+            // new JLabel(new ImageIcon(icon.getImage()
+            // .getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
             modIcon.setBorder(null);
             contactElement.add(modIcon);
         }
@@ -445,7 +450,6 @@ public class GuiPanelMainChatSystem {
 
             @Override
             public void keyReleased(KeyEvent arg0) {
-                // Log.l("TYPED PRESSED: " + contactSearch.getText());
                 updateContactList();
                 maingui.refreshFrame();
             }
@@ -477,9 +481,6 @@ public class GuiPanelMainChatSystem {
         contactsList.setLayout(new BoxLayout(contactsList, BoxLayout.Y_AXIS));
         contactsList.setAlignmentY(Component.TOP_ALIGNMENT);
 
-        // Add some padding around each contact panel
-        // contactsList.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        // contactsList
         contactsList.setBackground(contactSectionBGColor);
         contactsListScroll.setViewportView(contactsList);
         contactsListScroll.setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -499,8 +500,6 @@ public class GuiPanelMainChatSystem {
                         null, null, null, 0, false));
         chatContent = new JPanel();
         chatContent.setLayout(new BorderLayout());
-        // .setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(3, 1, new
-        // Insets(0, 0, 0, 0), -1, -1));
         chatContent.setBackground(chatBGColor);
         chatSection.add(chatContent, "Card1");
         chatContactName = new JPanel();
@@ -550,7 +549,6 @@ public class GuiPanelMainChatSystem {
         if (sendMessageButtonFont != null)
             sendMessageButton.setFont(sendMessageButtonFont);
         sendMessageButton.setForeground(almostWhiteColor);
-        // sendMessageButton.setText("SEND >");
         SendMessageSection.add(sendMessageButton,
                 new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1,
                         com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
@@ -573,7 +571,6 @@ public class GuiPanelMainChatSystem {
                         null, null, null, 0, false));
         inputMessage = new JTextPane();
         inputMessage.setBackground(messageBGColor.brighter());
-        // inputMessage.setBorder(null);
         inputMessage.setBorder(new EmptyBorder(8, 8, 8, 8));
         inputMessage.setMargin(new Insets(8, 8, 8, 8));
         inputMessage.setCaretColor(carretColor);
@@ -616,7 +613,6 @@ public class GuiPanelMainChatSystem {
 
         messagesList.setLayout(new BoxLayout(messagesList, BoxLayout.Y_AXIS));
         messagesList.setAlignmentY(Component.TOP_ALIGNMENT);
-        // messagesList.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         messagesList.setBorder(null);
         messagesList.setBackground(chatBGColor);
         messagesList.setForeground(almostWhiteColor);

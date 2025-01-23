@@ -48,9 +48,7 @@ public class GUISectionLoading extends GUISection {
 
             JPanel panel0 = new JPanel();
             panel0.setOpaque(false);
-            // panel0.setOpaque(false);
             panel0.add(errorMessage);
-            // panel0.set
 
             JPanel panel1 = new JPanel();
             JPanel innerPanel1 = new JPanel();
@@ -67,7 +65,7 @@ public class GUISectionLoading extends GUISection {
             setLayout(new GridLayout(2, 0));
 
             add(JIRSendLogo);
-            add(panel1);// , BorderLayout.SOUTH);
+            add(panel1);
         }
     }
 }

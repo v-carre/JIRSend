@@ -29,8 +29,6 @@ public class GUISectionConnection extends GUISection {
     }
 
     protected void createActions() {
-        // subIcon = new
-        // ImageIcon(Connection.class.getResource("assets/connect-button.jpg"));
         submitAction = new SubmitConnectionAction();
         getmodsAction = new GetModsAction();
     }

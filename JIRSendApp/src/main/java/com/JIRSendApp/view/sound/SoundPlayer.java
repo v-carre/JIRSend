@@ -18,16 +18,12 @@ import com.JIRSendApp.view.cli.Log;
 public class SoundPlayer implements LineListener {
 
     static private String msgSoundPath = "assets/sound3.wav";
-    // static private String newContactSoundPath = "/assets/sound2.wav";
     private Clip msgSoundClip = getFileClip(msgSoundPath);
-    //private Clip newContactSoundClip = getFileClip(newContactSoundPath);
 
     public SoundPlayer() {
         MainController.messageReceived.subscribe((msg) -> {
             this.playMsgSound();
         });
-        // MainController.contactsChange.subscribe((str) ->
-        // {this.playNewContactSound();});
     }
 
     public void playMsgSound() {
@@ -37,16 +33,8 @@ public class SoundPlayer implements LineListener {
         msgSoundClip.start();
     }
 
-    // public void playNewContactSound() {
-    // newContactSoundClip.start();
-    // }
-
     @Override
-    public void update(LineEvent event) { // Not quite sure why I have to implement that to be honest..
-        //if(event.getType() == LineEvent.Type.START)
-        //    isplaying = true;
-        //else if (event.getType() == LineEvent.Type.STOP)
-        //    isplaying = false;
+    public void update(LineEvent event) { // Not quite sure why I have to implement that to be honest...
     }
 
     private Clip getFileClip(String path) {
