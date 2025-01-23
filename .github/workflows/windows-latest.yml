@@ -1,0 +1,12 @@
+name: windows-latest
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  windows-latest-build:
+    uses: ./.github/workflows/maven.yml
+    with:
+      os: windows-latest

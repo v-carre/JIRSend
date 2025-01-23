@@ -1,7 +1,10 @@
 # JIRSend
 <div style="text-align:center">
-<img src="JIRSendApp/assets/jirsend_logo.png" width="100"><br>
+<img src="JIRSendApp/assets/jirsend_logo.png" width="100"><br><br>
+<img alt="Ubuntu build" src="https://github.com/MagicTINTIN/JIRSend/actions/workflows/ubuntu-latest.yml/badge.svg">
+<img alt="Windows build" src="https://github.com/MagicTINTIN/JIRSend/actions/workflows/windows-latest.yml/badge.svg">
 </div>
+
 
 ## What is JIRSend ?
 JIRSend is a decentralized chatsystem working on local network.\
