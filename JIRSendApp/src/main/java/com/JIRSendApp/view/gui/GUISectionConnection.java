@@ -35,7 +35,12 @@ public class GUISectionConnection extends GUISection {
         getmodsAction = new GetModsAction();
     }
 
-    private class ConnectionPanel extends JPanel {
+    protected class ConnectionPanel extends JPanel {
+        public void focusInput() {
+            username.requestFocus();
+            username.requestFocusInWindow();
+        }
+
         public ConnectionPanel() {
             super(new BorderLayout());
             setBorder(new EmptyBorder(10, 40, 10, 40));
@@ -55,14 +60,8 @@ public class GUISectionConnection extends GUISection {
                     "<html><body><p style=\"width:180px; background:red; padding:10px; border-radius:10px; text-align:center;\">"
                             + window.lastError + "</p></body></html>",
                     SwingConstants.CENTER);
-            // errorMessage.setEditable(false);
-            // errorMessage.setBorder(new GuiRoundedBorder(0));
             errorMessage.setOpaque(false);
-            // errorMessage.setAlignmentX(0);
-            // errorMessage.setUI(MultilineLabelUI.labelUI);
             errorMessage.setForeground(new Color(255, 255, 255));
-            // errorMessage.setBackground();
-            // errorMessage.setBorder(new GuiRoundedBorder(20));
             username = new RoundJTextField(17);
             username.setHorizontalAlignment(SwingConstants.CENTER);
             username.setBorder(new GuiRoundedBorder(10));
@@ -88,15 +87,13 @@ public class GUISectionConnection extends GUISection {
                 }
             });
             username.requestFocus();
-            // ImageIcon image = new ImageIcon("");+
+            username.requestFocusInWindow();
             connect = new JButton(submitAction);
-            // connect.setBorder(BorderFactory.createEmptyBorder(10, 40, 10, 40));
             connect.setBorder(new GuiRoundedBorder(10, 0, 52, 0, 52));
             connect.setBackground(GuiPanelMainChatSystem.headerFooterBGColor);
             connect.setForeground(GuiPanelMainChatSystem.almostWhiteColor);
             connect.setMargin(new Insets(10, 10, 10, 10));
             connect.setFont(boldFont);
-            // connect.setSize(200,200);
             final JSButtonUI ui = new JSButtonUI();
             ui.setPressedColor(connect.getBackground().darker());
             connect.setUI(ui);
@@ -105,7 +102,6 @@ public class GUISectionConnection extends GUISection {
 
             // MODS
             mods = new JButton(getmodsAction);
-            // mods.setBorder(BorderFactory.createEmptyBorder(10, 40, 10, 40));
             mods.setBorder(new EmptyBorder(10, 10, 10, 10));
             mods.setBackground(GuiPanelMainChatSystem.headerFooterBGColor);
             mods.setForeground(GuiPanelMainChatSystem.almostWhiteColor);
@@ -119,9 +115,7 @@ public class GUISectionConnection extends GUISection {
 
             JPanel panel0 = new JPanel();
             panel0.setOpaque(false);
-            // panel0.setOpaque(false);
             panel0.add(errorMessage);
-            // panel0.set
 
             JPanel panel1 = new JPanel();
             JPanel innerPanel1 = new JPanel();
@@ -137,28 +131,20 @@ public class GUISectionConnection extends GUISection {
             panel2.setOpaque(false);
 
             JPanel panel3 = new JPanel();
-            // panel3.setLayout(new GridLayout(1, 0, 5, 5));
-            // panel3.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
             panel3.setOpaque(false);
             panel3.add(mods);
 
             setLayout(new GridLayout(4, 0));
 
-            add(JIRSendLogo);// , BorderLayout.CENTER);
-            // panel2.setLayout(new BoxLayout(panel2, BoxLayout.Y_AXIS));
+            add(JIRSendLogo);
             panel2.add(connect);
             if (window.lastError != "") {
-                // add(errorMessage);
-                panel2.add(errorMessage);// , BorderLayout.NORTH);
+                panel2.add(errorMessage);
                 errorMessage.setVisible(true);
                 window.lastError = "";
-            } else {
-                // errorMessage.setVisible(false);
-                // setLayout(new GridLayout(3, 1));
             }
-            // panel2.setHorizontalAlignment(SwingConstants.CENTER);
-            add(panel1);// , BorderLayout.SOUTH);
-            add(panel2);// , BorderLayout.SOUTH);
+            add(panel1);
+            add(panel2);
             add(panel3);
         }
     }

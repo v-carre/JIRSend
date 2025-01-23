@@ -11,6 +11,7 @@ import javax.swing.*;
 import com.JIRSendApp.controller.MainController;
 import com.JIRSendApp.view.MainAbstractView;
 import com.JIRSendApp.view.cli.Log;
+import com.JIRSendApp.view.gui.GUISectionConnection.ConnectionPanel;
 
 public class MainGUI extends MainAbstractView {
     private enum State {
@@ -132,6 +133,10 @@ public class MainGUI extends MainAbstractView {
         frame.add(currentPanel);
         frame.revalidate();
         frame.repaint();
+
+        if (currentPanel instanceof ConnectionPanel) {
+            ((ConnectionPanel) currentPanel).focusInput();
+        }
     }
 
     protected void refreshFrame() {
