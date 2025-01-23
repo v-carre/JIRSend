@@ -5,7 +5,6 @@ target/
 *.disabled
 *.jar
 .idea
-.vscode
 build.sh
 *.db
 *.db.old

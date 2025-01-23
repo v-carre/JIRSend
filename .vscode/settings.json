@@ -1,0 +1,13 @@
+{
+    "java.configuration.updateBuildConfiguration": "interactive",
+    // "java.project.referencedLibraries": [
+    //     "JIRSendAPI/target/classes",
+    //     "JIRSendApp/target/classes",
+    //     "JIRSendAPI/target/dependency/*.jar",
+    //     "JIRSendApp/target/dependency/*.jar"
+    // ],
+    // "java.project.sourcePaths": [
+    //     "JIRSendAPI/src/main/java",
+    //     "JIRSendApp/src/main/java"
+    // ]
+}
