@@ -1,0 +1,214 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class CliTools {
+  + CliTools(): 
+  + colorize(String): String
+  + coloredPrint(String, String): void
+  + clearConsole(): void
+  + printTitle(boolean): void
+  + printBigError(String): void
+  + coloredPrintln(String, String): void
+  + clearConsoleANSI(): void
+  + colorize(String, String): String
+  + printLogo(boolean): void
+  + printLogo(): void
+  + printTitle(boolean, boolean): void
+}
+class ConnectionPanel {
+  + ConnectionPanel(): 
+  + focusInput(): void
+}
+class ErrorPopup {
+  + ErrorPopup(): 
+  + show(String, String): void
+}
+class GUISection {
+  # GUISection(MainGUI, Frame, String): 
+  # createActions(): void
+  + createPanel(): JPanel
+   sectionName: String
+}
+class GUISectionConnection {
+  + GUISectionConnection(MainGUI, Frame): 
+  + createPanel(): JPanel
+  # createActions(): void
+}
+class GUISectionLoading {
+  + GUISectionLoading(MainGUI, Frame): 
+  + createPanel(): JPanel
+  # createActions(): void
+}
+class GUISectionMain {
+  + GUISectionMain(MainGUI, Frame): 
+  # createActions(): void
+  + createPanel(): JPanel
+}
+class GetModsAction {
+  + GetModsAction(): 
+  + actionPerformed(ActionEvent): void
+}
+class GuiPanelMainChatSystem {
+  + GuiPanelMainChatSystem(MainController, MainGUI): 
+  - setupUI(): void
+  - createMessageElement(String, String, String): void
+  - getFont(String, int, int, Font): Font
+  + $$$getRootComponent$$$(): JComponent
+  - displayStatus(Status): String
+  - createContactElement(String, Status, ImageIcon, boolean, boolean): void
+  - updateContactList(): void
+  - updateGUI(): void
+  - updateConversation(): void
+  - createUnreadBar(): void
+   panel: JPanel
+}
+class GuiRoundedBorder {
+  ~ GuiRoundedBorder(int, int, int, int, int): 
+  ~ GuiRoundedBorder(int): 
+  + paintBorder(Component, Graphics, int, int, int, int): void
+  + getBorderInsets(Component): Insets
+   borderOpaque: boolean
+}
+class GuiTools {
+  + GuiTools(): 
+  + getFont(String, int, int, Font): Font
+}
+class JSButtonUI {
+  + JSButtonUI(): 
+  # paintButtonPressed(Graphics, AbstractButton): void
+   pressedColor: Color
+}
+class JSScrollBarUI {
+  + JSScrollBarUI(): 
+  - createEmptyButton(): JButton
+  # paintTrack(Graphics, JComponent, Rectangle): void
+  # paintThumb(Graphics, JComponent, Rectangle): void
+  # createDecreaseButton(int): JButton
+  # createIncreaseButton(int): JButton
+}
+class LoadingPanel {
+  + LoadingPanel(): 
+}
+class Log {
+  + Log(): 
+  - printWithStack(boolean, String, int, StackTraceElement): String
+  + l(String): void
+  + l(String, int): void
+  - levelToString(int): String
+  + setVerbose(boolean, int): void
+  + e(String, int): void
+  + e(String): void
+   verbose: boolean
+   threshold: int
+}
+class MainAbstractView {
+  + MainAbstractView(): 
+  + open(): void
+  + start(): void
+}
+class MainCLI {
+  + MainCLI(MainController): 
+  - printIncomingMessage(String, boolean): void
+  - commandHelperPrint(String, String, String): void
+  - messageReceived(Message): void
+  - commandHelperPrint(String, String): void
+  - printIncomingMessage(String): void
+  - messageReceived(Message, boolean): void
+  + start(): void
+  + open(): void
+}
+class MainCliThread {
+  - MainCliThread(): 
+  - chooseUsername(boolean): void
+  - chooseUsername(boolean, String): void
+  - sendMessage(String[]): void
+  - getMessages(String[]): void
+  - readIn(): String
+  - commandHandler(String[]): void
+  - userStatus(Status): String
+  - oldReadIn(): String
+  + run(): void
+}
+class MainGUI {
+  + MainGUI(MainController): 
+  + open(): void
+  # switchToNextSection(): void
+  + updateIcon(): void
+  # refreshFrame(): void
+  - createWindow(): void
+  # refreshSection(): void
+  + start(): void
+}
+class ModsPopup {
+  + ModsPopup(): 
+  + show(ArrayList<JIRSendModInformation>): void
+  - createContactElement(JIRSendModInformation): void
+}
+class RoundJTextField {
+  + RoundJTextField(int): 
+  + RoundJTextField(String): 
+  # paintComponent(Graphics): void
+  # paintBorder(Graphics): void
+  + contains(int, int): boolean
+}
+class RoundedBorder {
+  ~ RoundedBorder(int): 
+  + getBorderInsets(Component): Insets
+  + paintBorder(Component, Graphics, int, int, int, int): void
+}
+class RoundedBorder {
+  ~ RoundedBorder(int): 
+  + paintBorder(Component, Graphics, int, int, int, int): void
+  + getBorderInsets(Component): Insets
+}
+class SoundPlayer {
+  + SoundPlayer(): 
+  + update(LineEvent): void
+  + playMsgSound(): void
+  - getFileClip(String): Clip
+}
+enum State << enumeration >> {
+  - State(): 
+  + valueOf(String): State
+  + values(): State[]
+}
+class SubmitConnectionAction {
+  + SubmitConnectionAction(): 
+  + actionPerformed(ActionEvent): void
+}
+class SubmitMessageAction {
+  + SubmitMessageAction(): 
+  + actionPerformed(ActionEvent): void
+  + sendMsg(String): void
+}
+class SubmitSwitchUsernameAction {
+  + SubmitSwitchUsernameAction(): 
+  + actionPerformed(ActionEvent): void
+}
+
+ConnectionPanel             +-[#820000,plain]-  GUISectionConnection       
+GUISection                 "1" *-[#595959,plain]-> "window\n1" MainGUI                    
+GUISectionConnection        -[#000082,plain]-^  GUISection                 
+GUISectionLoading           -[#000082,plain]-^  GUISection                 
+GUISectionMain              -[#000082,plain]-^  GUISection                 
+GUISectionMain             "1" *-[#595959,plain]-> "mainPanel\n1" GuiPanelMainChatSystem     
+GetModsAction               +-[#820000,plain]-  GUISectionConnection       
+GuiPanelMainChatSystem     "1" *-[#595959,plain]-> "maingui\n1" MainGUI                    
+GuiPanelMainChatSystem     "1" *-[#595959,plain]-> "contactSearch\n1" RoundJTextField            
+LoadingPanel                +-[#820000,plain]-  GUISectionLoading          
+MainCLI                     -[#000082,plain]-^  MainAbstractView           
+MainCLI                    "1" *-[#595959,plain]-> "thread\n1" MainCliThread              
+MainCliThread               +-[#820000,plain]-  MainCLI                    
+MainGUI                    "1" *-[#595959,plain]-> "currentSection\n1" GUISection                 
+MainGUI                     -[#000082,plain]-^  MainAbstractView           
+MainGUI                    "1" *-[#595959,plain]-> "state\n1" State                      
+RoundedBorder               +-[#820000,plain]-  ErrorPopup                 
+RoundedBorder               +-[#820000,plain]-  ModsPopup                  
+State                       +-[#820000,plain]-  MainGUI                    
+SubmitConnectionAction      +-[#820000,plain]-  GUISectionConnection       
+SubmitMessageAction         +-[#820000,plain]-  GuiPanelMainChatSystem     
+SubmitSwitchUsernameAction  +-[#820000,plain]-  GuiPanelMainChatSystem     
+@enduml

@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>U:/Documents/4A-ChatSystem-S1/JIRSendApp</OriginalElement>
+  <nodes>
+    <node x="-616.25" y="464.5">com.JIRSendApp.view.cli.MainCLI</node>
+    <node x="-346.6206477916194" y="1893.681100792752">com.JIRSendApp.view.gui.GUISectionMain</node>
+    <node x="-993.0" y="2089.418586636466">com.JIRSendApp.view.gui.GUISectionLoading.LoadingPanel</node>
+    <node x="286.0929331823329" y="2055.0392344280863">com.JIRSendApp.view.gui.RoundJTextField</node>
+    <node x="-171.5" y="452.5">com.JIRSendApp.view.cli.MainCLI.MainCliThread</node>
+    <node x="-703.3723886749718" y="1893.681100792752">com.JIRSendApp.view.gui.GUISectionConnection</node>
+    <node x="-1511.6276113250283" y="1955.4687338618344">com.JIRSendApp.view.gui.ModsPopup</node>
+    <node x="-907.8711257078144" y="2235.1560724801802">com.JIRSendApp.view.gui.GUISectionConnection.SubmitConnectionAction</node>
+    <node x="-1519.6276113250283" y="2181.5699379388443">com.JIRSendApp.view.gui.ErrorPopup.RoundedBorder</node>
+    <node x="-561.0" y="1094.324181200453">com.JIRSendApp.view.gui.MainGUI</node>
+    <node x="222.0929331823329" y="1303.1207383918468">com.JIRSendApp.view.gui.JSScrollBarUI</node>
+    <node x="-84.27758550396379" y="2545.578468856172">com.JIRSendApp.view.gui.GuiPanelMainChatSystem.SubmitSwitchUsernameAction</node>
+    <node x="-1425.1276113250283" y="2364.7118486976215">com.JIRSendApp.view.gui.ErrorPopup</node>
+    <node x="-1120.8711257078144" y="438.5">com.JIRSendApp.view.cli.Log</node>
+    <node x="-1383.9200588901472" y="796.5">com.JIRSendApp.view.sound.SoundPlayer</node>
+    <node x="-720.6991166477916" y="2390.2820022650058">com.JIRSendApp.view.gui.GUISectionConnection.GetModsAction</node>
+    <node x="-531.0" y="808.5">com.JIRSendApp.view.MainAbstractView</node>
+    <node x="-730.5799411098528" y="2120.5">com.JIRSendApp.view.gui.GUISectionConnection.ConnectionPanel</node>
+    <node x="-1249.7422514156287" y="1185.199723669309">com.JIRSendApp.view.gui.GuiTools</node>
+    <node x="-1055.5" y="1893.681100792752">com.JIRSendApp.view.gui.GUISectionLoading</node>
+    <node x="-153.5" y="84.76134541336353">com.JIRSendApp.view.cli.CliTools</node>
+    <node x="-373.25428765571905" y="2089.418586636466">com.JIRSendApp.view.gui.GuiPanelMainChatSystem</node>
+    <node x="-427.54793884484707" y="2521.578468856172">com.JIRSendApp.view.gui.GuiPanelMainChatSystem.SubmitMessageAction</node>
+    <node x="-863.8711257078144" y="1173.199723669309">com.JIRSendApp.view.gui.MainGUI.State</node>
+    <node x="213.0929331823329" y="1801.2587044167599">com.JIRSendApp.view.gui.GuiRoundedBorder</node>
+    <node x="-616.0" y="1500.148362400906">com.JIRSendApp.view.gui.GUISection</node>
+    <node x="-1519.6276113250283" y="1769.2150532276328">com.JIRSendApp.view.gui.ModsPopup.RoundedBorder</node>
+    <node x="224.5929331823329" y="1587.1897214043033">com.JIRSendApp.view.gui.JSButtonUI</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.JIRSendApp.view.gui.GuiPanelMainChatSystem.SubmitSwitchUsernameAction" target="com.JIRSendApp.view.gui.GuiPanelMainChatSystem" relationship="INNER_CLASS">
+      <point x="0.0" y="-44.5" />
+      <point x="58.22241449603621" y="2470.9985277463193" />
+      <point x="-142.25428765571905" y="2470.9985277463193" />
+      <point x="-142.25428765571905" y="2405.0" />
+      <point x="45.0" y="2405.0" />
+      <point x="45.0" y="2365.0" />
+      <point x="-142.25428765571905" y="2365.0" />
+      <point x="0.0" y="165.5" />
+    </edge>
+    <edge source="com.JIRSendApp.view.gui.MainGUI" target="com.JIRSendApp.view.gui.MainGUI.State" relationship="TO_ONE">
+      <point x="0.0" y="116.5" />
+      <point x="-450.0" y="1244.01948810872" />
+      <point x="-818.8711257078144" y="1244.01948810872" />
+      <point x="-45.0" y="56.5" />
+    </edge>
+    <edge source="com.JIRSendApp.view.cli.MainCLI" target="com.JIRSendApp.view.cli.MainCLI.MainCliThread" relationship="TO_ONE">
+      <point x="0.0" y="-128.5" />
+      <point x="-443.25" y="593.0" />
+      <point x="-98.25" y="593.0" />
+      <point x="-73.25" y="140.5" />
+    </edge>
+    <edge source="com.JIRSendApp.view.gui.GUISectionConnection.SubmitConnectionAction" target="com.JIRSendApp.view.gui.GUISectionConnection" relationship="INNER_CLASS">
+      <point x="0.0" y="-44.5" />
+      <point x="-773.8711257078144" y="2063.590550396376" />
+      <point x="-626.9091460928653" y="2063.590550396376" />
+      <point x="-626.9091460928653" y="1997.3988403171006" />
+      <point x="-551.3723886749718" y="1997.3988403171006" />
+      <point x="0.0" y="56.5" />
+    </edge>
+    <edge source="com.JIRSendApp.view.gui.GuiPanelMainChatSystem" target="com.JIRSendApp.view.gui.MainGUI" relationship="TO_ONE">
+      <point x="0.0" y="-165.5" />
+      <point x="-142.25428765571905" y="2147.7911845979615" />
+      <point x="2.7333272933183252" y="2147.7911845979615" />
+      <point x="2.7333272933183252" y="1293.5451234428085" />
+      <point x="-450.0" y="1293.5451234428085" />
+      <point x="0.0" y="116.5" />
+    </edge>
+    <edge source="com.JIRSendApp.view.gui.GUISectionLoading" target="com.JIRSendApp.view.gui.GUISection" relationship="GENERALIZATION">
+      <point x="0.0" y="-56.5" />
+      <point x="-915.0" y="1693.3077073612687" />
+      <point x="-551.3723886749718" y="1693.3077073612687" />
+      <point x="-551.3723886749718" y="1628.8328262740656" />
+      <point x="-477.5" y="1628.8328262740656" />
+      <point x="0.0" y="69.5" />
+    </edge>
+    <edge source="com.JIRSendApp.view.gui.GUISectionConnection.ConnectionPanel" target="com.JIRSendApp.view.gui.GUISectionConnection" relationship="INNER_CLASS">
+      <point x="0.0" y="-44.5" />
+      <point x="-551.3723886749718" y="2120.5" />
+      <point x="0.0" y="56.5" />
+    </edge>
+    <edge source="com.JIRSendApp.view.cli.MainCLI.MainCliThread" target="com.JIRSendApp.view.cli.MainCLI" relationship="INNER_CLASS">
+      <point x="73.25" y="140.5" />
+      <point x="48.25" y="632.9964484711212" />
+      <point x="-327.91666666666663" y="632.9964484711212" />
+      <point x="115.33333333333334" y="-128.5" />
+    </edge>
+    <edge source="com.JIRSendApp.view.gui.GUISectionLoading.LoadingPanel" target="com.JIRSendApp.view.gui.GUISectionLoading" relationship="INNER_CLASS">
+      <point x="0.0" y="-31.5" />
+      <point x="-915.0" y="2061.8725979614946" />
+      <point x="-915.0" y="2061.8725979614946" />
+      <point x="0.0" y="56.5" />
+    </edge>
+    <edge source="com.JIRSendApp.view.gui.GuiPanelMainChatSystem" target="com.JIRSendApp.view.gui.RoundJTextField" relationship="TO_ONE">
+      <point x="0.0" y="-165.5" />
+      <point x="-142.25428765571905" y="2129.6772910532272" />
+      <point x="409.5929331823329" y="2129.6772910532272" />
+      <point x="0.0" y="80.5" />
+    </edge>
+    <edge source="com.JIRSendApp.view.gui.GUISectionMain" target="com.JIRSendApp.view.gui.GUISection" relationship="GENERALIZATION">
+      <point x="-65.5" y="-56.5" />
+      <point x="-281.1206477916194" y="1731.9710713476788" />
+      <point x="-407.33315424688567" y="1731.9710713476788" />
+      <point x="-407.33315424688567" y="1605.0" />
+      <point x="-477.5" y="1605.0" />
+      <point x="0.0" y="69.5" />
+    </edge>
+    <edge source="com.JIRSendApp.view.gui.GUISectionMain" target="com.JIRSendApp.view.gui.GuiPanelMainChatSystem" relationship="TO_ONE">
+      <point x="65.5" y="-56.5" />
+      <point x="-150.12064779161938" y="1945.0" />
+      <point x="-142.25428765571905" y="1945.0" />
+      <point x="0.0" y="-165.5" />
+    </edge>
+    <edge source="com.JIRSendApp.view.gui.GUISection" target="com.JIRSendApp.view.gui.MainGUI" relationship="TO_ONE">
+      <point x="0.0" y="-69.5" />
+      <point x="-477.5" y="1605.0" />
+      <point x="-505.5" y="1605.0" />
+      <point x="-505.5" y="1305.32331596829" />
+      <point x="-450.0" y="1305.32331596829" />
+      <point x="0.0" y="116.5" />
+    </edge>
+    <edge source="com.JIRSendApp.view.gui.MainGUI" target="com.JIRSendApp.view.gui.GUISection" relationship="TO_ONE">
+      <point x="0.0" y="116.5" />
+      <point x="-450.0" y="1305.32331596829" />
+      <point x="-418.4309716874292" y="1305.32331596829" />
+      <point x="-418.4309716874292" y="1518.32981200453" />
+      <point x="-477.5" y="1518.32981200453" />
+      <point x="0.0" y="-69.5" />
+    </edge>
+    <edge source="com.JIRSendApp.view.gui.MainGUI.State" target="com.JIRSendApp.view.gui.MainGUI" relationship="INNER_CLASS">
+      <point x="45.0" y="56.5" />
+      <point x="-728.8711257078144" y="1210.824181200453" />
+      <point x="-505.5" y="1210.824181200453" />
+      <point x="-55.5" y="-116.5" />
+    </edge>
+    <edge source="com.JIRSendApp.view.gui.GuiPanelMainChatSystem.SubmitMessageAction" target="com.JIRSendApp.view.gui.GuiPanelMainChatSystem" relationship="INNER_CLASS">
+      <point x="0.0" y="-56.5" />
+      <point x="-293.54793884484707" y="2470.9985277463193" />
+      <point x="-171.8299411098526" y="2470.9985277463193" />
+      <point x="-171.8299411098526" y="2365.0" />
+      <point x="-142.25428765571905" y="2365.0" />
+      <point x="0.0" y="165.5" />
+    </edge>
+    <edge source="com.JIRSendApp.view.gui.ErrorPopup.RoundedBorder" target="com.JIRSendApp.view.gui.ErrorPopup" relationship="INNER_CLASS">
+      <point x="0.0" y="-56.5" />
+      <point x="0.0" y="44.5" />
+    </edge>
+    <edge source="com.JIRSendApp.view.gui.GUISectionConnection" target="com.JIRSendApp.view.gui.GUISection" relationship="GENERALIZATION">
+      <point x="0.0" y="-56.5" />
+      <point x="-551.3723886749718" y="1908.068232842582" />
+      <point x="-477.5" y="1908.068232842582" />
+      <point x="0.0" y="69.5" />
+    </edge>
+    <edge source="com.JIRSendApp.view.gui.MainGUI" target="com.JIRSendApp.view.MainAbstractView" relationship="GENERALIZATION">
+      <point x="55.5" y="-116.5" />
+      <point x="-435.0" y="1094.324181200453" />
+      <point x="0.0" y="56.5" />
+    </edge>
+    <edge source="com.JIRSendApp.view.gui.GUISectionConnection.GetModsAction" target="com.JIRSendApp.view.gui.GUISectionConnection" relationship="INNER_CLASS">
+      <point x="0.0" y="-44.5" />
+      <point x="-586.6991166477916" y="2345.2159184597963" />
+      <point x="-496.241295583239" y="2345.2159184597963" />
+      <point x="-496.241295583239" y="1997.3988403171006" />
+      <point x="-551.3723886749718" y="1997.3988403171006" />
+      <point x="0.0" y="56.5" />
+    </edge>
+    <edge source="com.JIRSendApp.view.gui.ModsPopup.RoundedBorder" target="com.JIRSendApp.view.gui.ModsPopup" relationship="INNER_CLASS">
+      <point x="0.0" y="-56.5" />
+      <point x="0.0" y="56.5" />
+    </edge>
+    <edge source="com.JIRSendApp.view.cli.MainCLI" target="com.JIRSendApp.view.MainAbstractView" relationship="GENERALIZATION">
+      <point x="-115.33333333333337" y="-128.5" />
+      <point x="-558.5833333333334" y="774.9527972819933" />
+      <point x="-435.0" y="774.9527972819933" />
+      <point x="0.0" y="56.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Compact" zoom="0.4469347262714611" showDependencies="true" x="-570.9284258210648" y="1958.0273159682897" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
