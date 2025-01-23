@@ -13,16 +13,19 @@ For this purpose, JIRSend must detect automatically all users on the network so 
 Here is a non-exaustive list of JIRSend features:
 - A pretty Graphical User Interface (GUI)
 - A pretty Command Line Interface (CLI) allowing to use JIRSend without a X11 Display (like most ssh connections)
-- Awesome logo 
 - Discover other users on the network
-- Change your username
-- Prevent two users from having the same name
 - Send any text-message to anyone connected
 - Autocompletion and history in the CLI!
-- Get visually notified when you get a message
-- ... and much more !
+- A Modding API and Loader, allowing to create mods
+- A Mod to communicate outside the LAN
+- A Mod to communicate with the ChatSystem of Jean-Philippe and Aurélien
+- And a lot more!
 
-## INSTALLATION
+## INSTALLATION (WITH NO MOD)
+
+> [!IMPORTANT]
+> If you want to use mods, you must build and install them first!\
+> For that, please refer to the [mod section](#to-build-mods)
 
 ### No compilation needed:
 
@@ -34,7 +37,7 @@ Here is a non-exaustive list of JIRSend features:
 ```bash
 git clone git@github.com:insa-4ir-chatsystem/chatsystem-lasserre-servieres.git
 cd chatsystem-lasserre-servieres
-mvn package clean
+mvn clean install
 ```
 This should create a .jar file *`JIRSendApp/target/JIRSendApplication-jar-with-dependencies.jar`*.
 
@@ -60,22 +63,6 @@ Enter the following command:
 java -jar path-to-file.jar --cli
 ```
 
-## Project Overview
-
-<div style="text-align:center">
-<img src="wiki/connection.png" width="45%">
-<img src="wiki/connection-cli-vscode.png" width="45%"><br>
-</div>
-<div style="text-align:center">
-<img src="wiki/SixClients.png" width="100%"><br>
-</div>
-<br>
-<div style="text-align:center">
-<img src="wiki/2CLI-2GUI.png" width="100%"><br>
-</div>
-
----
-
 ## To build mods
 
 ### Install JIRSendAPI
@@ -96,8 +83,24 @@ Copy the `target/*-jar-with-dependencies.jar` into your `mods/`.\
 Launch the app.\
 You will see a button `Mods`.\
 <img src="wiki/modsButton.jpg" width="30%">\
-Click on it, you should see your mod in it.\
+Click the button, you should see your mod in the list.\
 <img src="wiki/loadedMods.jpg" width="40%">
+
+## Project Overview
+
+<div style="text-align:center">
+<img src="wiki/connection.png" width="45%">
+<img src="wiki/connection-cli-vscode.png" width="45%"><br>
+</div>
+<div style="text-align:center">
+<img src="wiki/SixClients.png" width="100%"><br>
+</div>
+<br>
+<div style="text-align:center">
+<img src="wiki/2CLI-2GUI.png" width="100%"><br>
+</div>
+
+---
 
 ## To create mods
 
@@ -115,5 +118,5 @@ Once you installed the JIRSendAPI dependency, you will be able to import it in y
 The easiest way might be to look at the existing source of the mods in `mods/`
 
 ### Build
-Export your .jar, put it in `mods/`, enjoy !
+Export your .jar, put it in `mods/`, enjoy !\
 <img src="wiki/modloader.png" width="70%">
