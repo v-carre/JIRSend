@@ -60,7 +60,7 @@ public class MicaSend4JS implements JIRSendMod {
     public void sendMessage(String recipientID, String message) {
         // System.out.println("Sending message to " + recipientID + ": " + message);
         Connector.sendMessage(MICASEND_URL, controller.mainController.getUsername(), message, () -> {
-            ws.sendMessage("new micasend message");
+            ws.sendMessage("micasend:new micasend message");
             fetchMessages();
         });
         // fetchMessages();
