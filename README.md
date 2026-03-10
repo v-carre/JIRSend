@@ -32,14 +32,14 @@ Here is a non-exaustive list of JIRSend features:
 
 ### No compilation needed:
 
-1. go to the [releases section](https://github.com/insa-4ir-chatsystem/chatsystem-lasserre-servieres/releases)
+1. go to the [releases section](https://github.com/v-carre/JIRSend/releases)
 2. download the latest release
 
 ### Build from source
 
 ```bash
-git clone git@github.com:insa-4ir-chatsystem/chatsystem-lasserre-servieres.git
-cd chatsystem-lasserre-servieres
+git clone https://github.com/v-carre/JIRSend.git
+cd JIRSend
 mvn clean install
 ```
 This should create a .jar file *`JIRSendApp/target/JIRSendApplication-jar-with-dependencies.jar`*.
